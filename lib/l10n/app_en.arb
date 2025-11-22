@@ -1,0 +1,14 @@
+{
+  "appTitle": "Pixi Desk",
+  "dropImageHere": "Drop Image Here",
+  "orClickToUpload": "Or click to upload",
+  "convert": "Convert",
+  "compress": "Compress",
+  "quality": "Quality",
+  "save": "Save",
+  "selectFormat": "Select Format",
+  "success": "Success",
+  "error": "Error",
+  "imageSaved": "Image saved successfully",
+  "invalidPath": "Invalid path"
+}
