@@ -55,33 +55,31 @@ class _ImagePageViewState extends State<ImagePageView> {
             return Center(child: Image.file(image.file, fit: BoxFit.contain));
           },
         ),
-        Positioned(
-          left: 16,
-          top: 0,
-          bottom: 0,
-          child: Center(
-            child: IconButton(
-              icon: const Icon(Icons.arrow_back_ios, size: 32),
-              onPressed: _previousPage,
-              style: IconButton.styleFrom(
-                backgroundColor: Colors.black54,
-                foregroundColor: Colors.white,
-              ),
-            ),
-          ),
-        ),
-        Positioned(
-          right: 16,
-          top: 0,
-          bottom: 0,
-          child: Center(
-            child: IconButton(
-              icon: const Icon(Icons.arrow_forward_ios, size: 32),
-              onPressed: _nextPage,
-              style: IconButton.styleFrom(
-                backgroundColor: Colors.black54,
-                foregroundColor: Colors.white,
-              ),
+        Center(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                IconButton(
+                  icon: const Icon(Icons.arrow_back_ios_rounded, size: 32),
+                  onPressed: _previousPage,
+                  style: IconButton.styleFrom(
+                    backgroundColor: Colors.transparent,
+                    foregroundColor: Colors.white,
+                    alignment: Alignment.center,
+                  ),
+                ),
+                IconButton(
+                  icon: const Icon(Icons.arrow_forward_ios_rounded, size: 32),
+                  onPressed: _nextPage,
+                  style: IconButton.styleFrom(
+                    backgroundColor: Colors.transparent,
+                    foregroundColor: Colors.white,
+                    alignment: Alignment.center,
+                  ),
+                ),
+              ],
             ),
           ),
         ),
