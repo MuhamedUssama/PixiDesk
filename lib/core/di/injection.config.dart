@@ -11,6 +11,7 @@
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'package:get_it/get_it.dart' as _i174;
 import 'package:injectable/injectable.dart' as _i526;
+import 'package:shared_preferences/shared_preferences.dart' as _i460;
 
 import '../../features/image_processing/data/datasources/local_image_datasource.dart'
     as _i495;
@@ -26,16 +27,31 @@ import '../../features/image_processing/domain/usecases/convert_image_usecase.da
     as _i750;
 import '../../features/image_processing/presentation/cubit/image_cubit.dart'
     as _i743;
+import '../../features/settings/data/repositories/settings_repository_impl.dart'
+    as _i955;
+import '../../features/settings/domain/repositories/settings_repository.dart'
+    as _i674;
+import '../../features/settings/presentation/cubit/settings_cubit.dart'
+    as _i792;
+import 'register_module.dart' as _i291;
 
 extension GetItInjectableX on _i174.GetIt {
   // initializes the registration of main-scope dependencies inside of GetIt
-  _i174.GetIt init({
+  Future<_i174.GetIt> init({
     String? environment,
     _i526.EnvironmentFilter? environmentFilter,
-  }) {
+  }) async {
     final gh = _i526.GetItHelper(this, environment, environmentFilter);
+    final registerModule = _$RegisterModule();
+    await gh.factoryAsync<_i460.SharedPreferences>(
+      () => registerModule.prefs,
+      preResolve: true,
+    );
     gh.lazySingleton<_i495.LocalImageDataSource>(
       () => _i220.LocalImageDataSourceImpl(),
+    );
+    gh.lazySingleton<_i674.SettingsRepository>(
+      () => _i955.SettingsRepositoryImpl(gh<_i460.SharedPreferences>()),
     );
     gh.lazySingleton<_i280.ImageRepository>(
       () => _i246.ImageRepositoryImpl(gh<_i495.LocalImageDataSource>()),
@@ -52,6 +68,11 @@ extension GetItInjectableX on _i174.GetIt {
         gh<_i89.CompressImageUseCase>(),
       ),
     );
+    gh.factory<_i792.SettingsCubit>(
+      () => _i792.SettingsCubit(gh<_i674.SettingsRepository>()),
+    );
     return this;
   }
 }
+
+class _$RegisterModule extends _i291.RegisterModule {}

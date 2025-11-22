@@ -41,11 +41,13 @@ class ImageCubit extends Cubit<ImageState> {
     emit(state.copyWith(status: ImageStatus.loading));
 
     try {
+      final fileName = state.selectedImage!.name.split('.').first;
+      final extension = state.targetFormat!.extension;
+
       final savePath = await FilePicker.platform.saveFile(
         dialogTitle: 'Save Converted Image',
-        fileName:
-            '${state.selectedImage!.name.split('.').first}.${state.targetFormat!.extension}',
-        allowedExtensions: [state.targetFormat!.extension],
+        fileName: '$fileName.$extension',
+        allowedExtensions: [extension],
         type: FileType.custom,
       );
 
@@ -54,10 +56,15 @@ class ImageCubit extends Cubit<ImageState> {
         return;
       }
 
+      // Ensure the path has the correct extension
+      final finalPath = savePath.endsWith('.$extension')
+          ? savePath
+          : '$savePath.$extension';
+
       await _convertImageUseCase(
         image: state.selectedImage!.file,
         targetFormat: state.targetFormat!,
-        destinationPath: savePath,
+        destinationPath: finalPath,
       );
 
       emit(

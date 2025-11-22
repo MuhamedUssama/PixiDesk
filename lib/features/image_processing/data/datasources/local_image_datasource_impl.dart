@@ -64,15 +64,6 @@ class LocalImageDataSourceImpl implements LocalImageDataSource {
   }) async {
     // Try using flutter_image_compress first
     try {
-      // flutter_image_compress mainly supports jpg, png, webp, heic.
-      // It might not support windows directly in all versions.
-      // If it throws or returns null, fallback to image package.
-
-      // Note: flutter_image_compress might not work on Windows Desktop.
-      // If we are strictly on Windows, we should probably rely on `image` package for consistency.
-      // However, the user asked for `flutter_image_compress`.
-      // Let's try to use it for supported formats.
-
       final format = ImageFormat.fromPath(image.path);
       CompressFormat compressFormat;
 
@@ -100,7 +91,19 @@ class LocalImageDataSourceImpl implements LocalImageDataSource {
       );
 
       if (result != null) {
-        return File(result.path);
+        final compressedFile = File(result.path);
+        final originalSize = await image.length();
+        final compressedSize = await compressedFile.length();
+
+        if (compressedSize >= originalSize) {
+          // If compressed file is larger or equal, return original (copy to destination)
+          // But wait, destination might be different.
+          // If we just copy, we might overwrite.
+          // The user expects a file at destinationPath.
+          await image.copy(destinationPath);
+          return File(destinationPath);
+        }
+        return compressedFile;
       } else {
         return _compressWithImagePackage(image, quality, destinationPath);
       }

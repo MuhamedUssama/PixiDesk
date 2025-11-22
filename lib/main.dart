@@ -1,12 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:pixi_desk/l10n/localization/app_localizations.dart';
 import 'core/di/injection.dart';
 import 'core/theme/app_colors.dart';
 import 'features/image_processing/presentation/pages/home_page.dart';
+import 'features/settings/presentation/cubit/settings_cubit.dart';
+import 'features/settings/presentation/cubit/settings_state.dart';
 
-void main() {
-  configureDependencies();
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await configureDependencies();
   runApp(const MyApp());
 }
 
@@ -15,31 +19,55 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Pixi Desk',
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(
-          seedColor: AppColors.dark,
-          brightness: Brightness.dark,
-          surface: AppColors.dark,
-          // background is deprecated in newer Flutter versions, use surface or colorScheme.background if needed
-          // but surface is enough usually.
-        ),
-        useMaterial3: true,
-        scaffoldBackgroundColor: AppColors.dark,
+    return BlocProvider(
+      create: (context) => getIt<SettingsCubit>(),
+      child: BlocBuilder<SettingsCubit, SettingsState>(
+        builder: (context, state) {
+          return MaterialApp(
+            title: 'Pixi Desk',
+            debugShowCheckedModeBanner: false,
+            themeMode: state.themeMode,
+            theme: ThemeData(
+              colorScheme: ColorScheme.fromSeed(
+                seedColor: AppColors.light,
+                brightness: Brightness.light,
+                surface: AppColors.light,
+              ),
+              useMaterial3: true,
+              scaffoldBackgroundColor: AppColors.light,
+              appBarTheme: const AppBarTheme(
+                backgroundColor: AppColors.light,
+                foregroundColor: AppColors.lightHeadTextColor,
+              ),
+            ),
+            darkTheme: ThemeData(
+              colorScheme: ColorScheme.fromSeed(
+                seedColor: AppColors.dark,
+                brightness: Brightness.dark,
+                surface: AppColors.dark,
+              ),
+              useMaterial3: true,
+              scaffoldBackgroundColor: AppColors.dark,
+              appBarTheme: const AppBarTheme(
+                backgroundColor: AppColors.dark,
+                foregroundColor: AppColors.white,
+              ),
+            ),
+            localizationsDelegates: const [
+              AppLocalizations.delegate,
+              GlobalMaterialLocalizations.delegate,
+              GlobalWidgetsLocalizations.delegate,
+              GlobalCupertinoLocalizations.delegate,
+            ],
+            supportedLocales: const [
+              Locale('en'), // English
+              Locale('ar'), // Arabic
+            ],
+            locale: state.locale,
+            home: const HomePage(),
+          );
+        },
       ),
-      localizationsDelegates: const [
-        AppLocalizations.delegate,
-        GlobalMaterialLocalizations.delegate,
-        GlobalWidgetsLocalizations.delegate,
-        GlobalCupertinoLocalizations.delegate,
-      ],
-      supportedLocales: const [
-        Locale('en'), // English
-        Locale('ar'), // Arabic
-      ],
-      home: const HomePage(),
     );
   }
 }
