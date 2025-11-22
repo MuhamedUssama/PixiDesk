@@ -10,6 +10,7 @@ import '../widgets/drop_zone_widget.dart';
 import '../widgets/image_preview.dart';
 
 import '../../../../features/settings/presentation/cubit/settings_cubit.dart';
+import '../../../pdf_converter/presentation/pages/pdf_converter_page.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -34,6 +35,18 @@ class HomePage extends StatelessWidget {
                     : Icons.dark_mode,
               ),
               onPressed: () => context.read<SettingsCubit>().toggleTheme(),
+            ),
+            IconButton(
+              icon: const Icon(Icons.picture_as_pdf),
+              tooltip: 'Images to PDF',
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const PdfConverterPage(),
+                  ),
+                );
+              },
             ),
           ],
           bottom: PreferredSize(
