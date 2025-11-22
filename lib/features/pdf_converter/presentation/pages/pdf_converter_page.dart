@@ -10,6 +10,7 @@ import '../cubit/pdf_converter_state.dart';
 import '../widgets/image_grid_view.dart';
 import '../widgets/image_page_view.dart';
 import '../widgets/pdf_config_section.dart';
+import '../../../image_processing/presentation/widgets/drop_zone_widget.dart';
 
 class PdfConverterPage extends StatelessWidget {
   const PdfConverterPage({super.key});
@@ -59,44 +60,49 @@ class PdfConverterView extends StatelessWidget {
           if (state.status == PdfConverterStatus.loading) {
             return const Center(child: CircularProgressIndicator());
           }
-          return Column(
-            children: [
-              Expanded(
-                child: Container(
-                  color: isDark ? AppColors.dark : AppColors.light,
-                  child: state.isGridView
-                      ? ImageGridView(images: state.images)
-                      : ImagePageView(images: state.images),
-                ),
-              ),
-              Divider(color: Theme.of(context).dividerColor),
-              const PdfConfigSection(),
-              Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: SizedBox(
-                  width: double.infinity,
-                  child: ElevatedButton(
-                    onPressed: state.images.isNotEmpty
-                        ? () async {
-                            final outputPath = await FilePicker.platform
-                                .saveFile(
-                                  dialogTitle: l10n.saveAs,
-                                  fileName: 'images.pdf',
-                                  type: FileType.custom,
-                                  allowedExtensions: ['pdf'],
-                                );
-                            if (outputPath != null && context.mounted) {
-                              context.read<PdfConverterCubit>().generatePdf(
-                                outputPath,
-                              );
-                            }
-                          }
-                        : null,
-                    child: Text(l10n.generatePdf),
+          return DropZoneWidget(
+            onDropped: (files) {
+              context.read<PdfConverterCubit>().addImages(files);
+            },
+            child: Column(
+              children: [
+                Expanded(
+                  child: Container(
+                    color: isDark ? AppColors.dark : AppColors.light,
+                    child: state.isGridView
+                        ? ImageGridView(images: state.images)
+                        : ImagePageView(images: state.images),
                   ),
                 ),
-              ),
-            ],
+                Divider(color: Theme.of(context).dividerColor),
+                const PdfConfigSection(),
+                Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: SizedBox(
+                    width: double.infinity,
+                    child: ElevatedButton(
+                      onPressed: state.images.isNotEmpty
+                          ? () async {
+                              final outputPath = await FilePicker.platform
+                                  .saveFile(
+                                    dialogTitle: l10n.saveAs,
+                                    fileName: 'images.pdf',
+                                    type: FileType.custom,
+                                    allowedExtensions: ['pdf'],
+                                  );
+                              if (outputPath != null && context.mounted) {
+                                context.read<PdfConverterCubit>().generatePdf(
+                                  outputPath,
+                                );
+                              }
+                            }
+                          : null,
+                      child: Text(l10n.generatePdf),
+                    ),
+                  ),
+                ),
+              ],
+            ),
           );
         },
       ),

@@ -16,42 +16,56 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) => getIt<ImageCubit>(),
-      child: Scaffold(
-        appBar: const HomeAppbar(),
-        body: BlocListener<ImageCubit, ImageState>(
-          listener: (context, state) {
-            if (state.status == ImageStatus.success &&
-                state.successMessage != null) {
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  content: Text(state.successMessage!),
-                  backgroundColor: AppColors.darkHeadTextColor,
-                ),
-              );
-            } else if (state.status == ImageStatus.error &&
-                state.errorMessage != null) {
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  content: Text(state.errorMessage!),
-                  backgroundColor: AppColors.darkHeadTextColor,
-                ),
-              );
+      child: const HomeView(),
+    );
+  }
+}
+
+class HomeView extends StatelessWidget {
+  const HomeView({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: const HomeAppbar(),
+      body: BlocListener<ImageCubit, ImageState>(
+        listener: (context, state) {
+          if (state.status == ImageStatus.success &&
+              state.successMessage != null) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text(state.successMessage!),
+                backgroundColor: AppColors.darkHeadTextColor,
+              ),
+            );
+          } else if (state.status == ImageStatus.error &&
+              state.errorMessage != null) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text(state.errorMessage!),
+                backgroundColor: AppColors.darkHeadTextColor,
+              ),
+            );
+          }
+        },
+        child: DropZoneWidget(
+          onDropped: (files) {
+            if (files.isNotEmpty) {
+              context.read<ImageCubit>().selectImage(files.first);
             }
           },
-          child: DropZoneWidget(
-            child: Row(
-              children: [
-                const Expanded(flex: 2, child: ImagePreview()),
-                BlocBuilder<ImageCubit, ImageState>(
-                  builder: (context, state) {
-                    if (state.selectedImage != null) {
-                      return const SizedBox(width: 350, child: ControlPanel());
-                    }
-                    return const SizedBox.shrink();
-                  },
-                ),
-              ],
-            ),
+          child: Row(
+            children: [
+              const Expanded(flex: 2, child: ImagePreview()),
+              BlocBuilder<ImageCubit, ImageState>(
+                builder: (context, state) {
+                  if (state.selectedImage != null) {
+                    return const SizedBox(width: 350, child: ControlPanel());
+                  }
+                  return const SizedBox.shrink();
+                },
+              ),
+            ],
           ),
         ),
       ),
