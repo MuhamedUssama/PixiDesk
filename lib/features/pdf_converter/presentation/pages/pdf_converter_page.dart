@@ -1,7 +1,6 @@
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:get_it/get_it.dart';
 import 'package:pixi_desk/features/pdf_converter/presentation/widgets/empty_list_widget.dart';
 import 'package:pixi_desk/features/pdf_converter/presentation/widgets/pdf_converter_appbar.dart';
 import '../../../../core/theme/app_colors.dart';
@@ -15,18 +14,6 @@ import '../../../image_processing/presentation/widgets/drop_zone_widget.dart';
 
 class PdfConverterPage extends StatelessWidget {
   const PdfConverterPage({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => GetIt.I<PdfConverterCubit>(),
-      child: const PdfConverterView(),
-    );
-  }
-}
-
-class PdfConverterView extends StatelessWidget {
-  const PdfConverterView({super.key});
 
   @override
   Widget build(BuildContext context) {
