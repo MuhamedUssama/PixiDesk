@@ -77,11 +77,6 @@ class ControlPanel extends StatelessWidget {
                           state.status != ImageStatus.loading
                       ? () => context.read<ImageCubit>().convertImage()
                       : null,
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: AppColors.white,
-                    foregroundColor: AppColors.dark,
-                    padding: const EdgeInsets.symmetric(vertical: 16),
-                  ),
                   child:
                       state.status == ImageStatus.loading &&
                           state.targetFormat != null
@@ -126,11 +121,6 @@ class ControlPanel extends StatelessWidget {
                   onPressed: state.status != ImageStatus.loading
                       ? () => context.read<ImageCubit>().compressImage()
                       : null,
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: AppColors.white,
-                    foregroundColor: AppColors.dark,
-                    padding: const EdgeInsets.symmetric(vertical: 16),
-                  ),
                   child:
                       state.status == ImageStatus.loading &&
                           state.targetFormat == null

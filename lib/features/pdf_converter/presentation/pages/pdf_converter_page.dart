@@ -1,8 +1,8 @@
-import 'dart:io';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
+import 'package:pixi_desk/features/pdf_converter/presentation/widgets/pdf_converter_appbar.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../l10n/localization/app_localizations.dart';
 import '../cubit/pdf_converter_cubit.dart';
@@ -32,44 +32,7 @@ class PdfConverterView extends StatelessWidget {
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return Scaffold(
-      appBar: AppBar(
-        title: Text(l10n.pdfConverterTitle),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.add_photo_alternate),
-            tooltip: l10n.addPhotos,
-            onPressed: () async {
-              final result = await FilePicker.platform.pickFiles(
-                allowMultiple: true,
-                type: FileType.image,
-              );
-              if (result != null) {
-                final files = result.paths
-                    .where((path) => path != null)
-                    .map((path) => File(path!))
-                    .toList();
-                if (context.mounted) {
-                  context.read<PdfConverterCubit>().addImages(files);
-                }
-              }
-            },
-          ),
-          BlocBuilder<PdfConverterCubit, PdfConverterState>(
-            builder: (context, state) {
-              return IconButton(
-                icon: Icon(
-                  state.isGridView ? Icons.view_carousel : Icons.grid_view,
-                ),
-                onPressed: () {
-                  context.read<PdfConverterCubit>().changeViewMode(
-                    !state.isGridView,
-                  );
-                },
-              );
-            },
-          ),
-        ],
-      ),
+      appBar: const PdfConverterAppbar(),
       body: BlocConsumer<PdfConverterCubit, PdfConverterState>(
         listenWhen: (previous, current) =>
             previous.status != current.status &&
@@ -96,7 +59,6 @@ class PdfConverterView extends StatelessWidget {
           if (state.status == PdfConverterStatus.loading) {
             return const Center(child: CircularProgressIndicator());
           }
-
           return Column(
             children: [
               Expanded(
@@ -114,9 +76,6 @@ class PdfConverterView extends StatelessWidget {
                 child: SizedBox(
                   width: double.infinity,
                   child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      padding: const EdgeInsets.symmetric(vertical: 16),
-                    ),
                     onPressed: state.images.isNotEmpty
                         ? () async {
                             final outputPath = await FilePicker.platform
@@ -126,7 +85,6 @@ class PdfConverterView extends StatelessWidget {
                                   type: FileType.custom,
                                   allowedExtensions: ['pdf'],
                                 );
-
                             if (outputPath != null && context.mounted) {
                               context.read<PdfConverterCubit>().generatePdf(
                                 outputPath,
