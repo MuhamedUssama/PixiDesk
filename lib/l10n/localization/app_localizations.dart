@@ -101,8 +101,92 @@ abstract class AppLocalizations {
   /// No description provided for @appTitle.
   ///
   /// In en, this message translates to:
-  /// **'Pixi Desk'**
+  /// **'PixiDesk'**
   String get appTitle;
+
+  /// No description provided for @pdfConverterTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Images to PDF'**
+  String get pdfConverterTitle;
+
+  /// No description provided for @addPhotos.
+  ///
+  /// In en, this message translates to:
+  /// **'Add Photos'**
+  String get addPhotos;
+
+  /// No description provided for @generatePdf.
+  ///
+  /// In en, this message translates to:
+  /// **'Generate PDF'**
+  String get generatePdf;
+
+  /// No description provided for @pageSize.
+  ///
+  /// In en, this message translates to:
+  /// **'Page Size'**
+  String get pageSize;
+
+  /// No description provided for @quality.
+  ///
+  /// In en, this message translates to:
+  /// **'Quality'**
+  String get quality;
+
+  /// No description provided for @noImagesSelected.
+  ///
+  /// In en, this message translates to:
+  /// **'No images selected'**
+  String get noImagesSelected;
+
+  /// No description provided for @pdfGeneratedSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'PDF Generated Successfully'**
+  String get pdfGeneratedSuccess;
+
+  /// No description provided for @saveAs.
+  ///
+  /// In en, this message translates to:
+  /// **'Save PDF As'**
+  String get saveAs;
+
+  /// No description provided for @original.
+  ///
+  /// In en, this message translates to:
+  /// **'Original'**
+  String get original;
+
+  /// No description provided for @a4.
+  ///
+  /// In en, this message translates to:
+  /// **'A4'**
+  String get a4;
+
+  /// No description provided for @letter.
+  ///
+  /// In en, this message translates to:
+  /// **'Letter'**
+  String get letter;
+
+  /// No description provided for @high.
+  ///
+  /// In en, this message translates to:
+  /// **'High'**
+  String get high;
+
+  /// No description provided for @medium.
+  ///
+  /// In en, this message translates to:
+  /// **'Medium'**
+  String get medium;
+
+  /// No description provided for @low.
+  ///
+  /// In en, this message translates to:
+  /// **'Low'**
+  String get low;
 
   /// No description provided for @dropImageHere.
   ///
@@ -127,12 +211,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Compress'**
   String get compress;
-
-  /// No description provided for @quality.
-  ///
-  /// In en, this message translates to:
-  /// **'Quality'**
-  String get quality;
 
   /// No description provided for @save.
   ///
@@ -169,6 +247,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Invalid path'**
   String get invalidPath;
+
+  /// No description provided for @dragAndDropImages.
+  ///
+  /// In en, this message translates to:
+  /// **'Drag and drop images here to start'**
+  String get dragAndDropImages;
 }
 
 class _AppLocalizationsDelegate
