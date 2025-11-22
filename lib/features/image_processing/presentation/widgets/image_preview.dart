@@ -69,6 +69,7 @@ class ImagePreview extends StatelessWidget {
                   style: TextStyle(color: AppColors.white),
                 ),
               ),
+              const SizedBox(height: 16),
             ],
           ),
         );

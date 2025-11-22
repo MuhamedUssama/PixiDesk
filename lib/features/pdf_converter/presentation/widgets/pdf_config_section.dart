@@ -34,7 +34,7 @@ class PdfConfigSection extends StatelessWidget {
               ),
               const SizedBox(height: 16),
               DropdownButtonFormField<PdfPageFormatOption>(
-                value: state.config.pageFormat,
+                initialValue: state.config.pageFormat,
                 decoration: InputDecoration(
                   labelText: l10n.pageSize,
                   border: const OutlineInputBorder(),
