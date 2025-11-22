@@ -1,0 +1,14 @@
+{
+  "appTitle": "Pixi Desk",
+  "dropImageHere": "أفلت الصورة هنا",
+  "orClickToUpload": "أو انقر للتحميل",
+  "convert": "تحويل",
+  "compress": "ضغط",
+  "quality": "الجودة",
+  "save": "حفظ",
+  "selectFormat": "اختر الصيغة",
+  "success": "نجاح",
+  "error": "خطأ",
+  "imageSaved": "تم حفظ الصورة بنجاح",
+  "invalidPath": "مسار غير صالح"
+}
