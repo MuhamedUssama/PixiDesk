@@ -82,4 +82,7 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get invalidPath => 'مسار غير صالح';
+
+  @override
+  String get dragAndDropImages => 'اسحب وأفلت الصور هنا للبدء';
 }

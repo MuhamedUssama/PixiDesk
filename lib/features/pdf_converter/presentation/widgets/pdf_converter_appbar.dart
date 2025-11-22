@@ -16,6 +16,7 @@ class PdfConverterAppbar extends StatelessWidget
     final l10n = AppLocalizations.of(context)!;
 
     return AppBar(
+      elevation: 0,
       title: Text(l10n.pdfConverterTitle),
       actions: [
         IconButton(

@@ -23,5 +23,6 @@
   "success": "Success",
   "error": "Error",
   "imageSaved": "Image saved successfully",
-  "invalidPath": "Invalid path"
+  "invalidPath": "Invalid path",
+  "dragAndDropImages": "Drag and drop images here to start"
 }

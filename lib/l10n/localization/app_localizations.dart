@@ -247,6 +247,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Invalid path'**
   String get invalidPath;
+
+  /// No description provided for @dragAndDropImages.
+  ///
+  /// In en, this message translates to:
+  /// **'Drag and drop images here to start'**
+  String get dragAndDropImages;
 }
 
 class _AppLocalizationsDelegate

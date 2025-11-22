@@ -15,11 +15,13 @@ abstract class AppTheme {
     appBarTheme: const AppBarTheme(
       backgroundColor: AppColors.dark,
       foregroundColor: AppColors.white,
+      surfaceTintColor: Colors.transparent,
     ),
     elevatedButtonTheme: ElevatedButtonThemeData(
       style: ElevatedButton.styleFrom(
         backgroundColor: AppColors.white,
         foregroundColor: AppColors.dark,
+        minimumSize: const Size(double.infinity, 56),
         padding: const EdgeInsets.symmetric(vertical: 16),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
       ),
@@ -34,6 +36,10 @@ abstract class AppTheme {
     ),
     textTheme: const TextTheme(
       bodyLarge: TextStyle(color: AppColors.darkHeadTextColor),
+      headlineSmall: TextStyle(
+        color: AppColors.darkHeadTextColor,
+        fontSize: 18,
+      ),
     ),
   );
 
@@ -50,13 +56,15 @@ abstract class AppTheme {
     appBarTheme: const AppBarTheme(
       backgroundColor: AppColors.light,
       foregroundColor: AppColors.lightHeadTextColor,
+      surfaceTintColor: Colors.transparent,
     ),
     elevatedButtonTheme: ElevatedButtonThemeData(
       style: ElevatedButton.styleFrom(
         backgroundColor: AppColors.dark,
         foregroundColor: AppColors.light,
+        minimumSize: const Size(double.infinity, 56),
         padding: const EdgeInsets.symmetric(vertical: 16),
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(64)),
       ),
     ),
     cardTheme: CardThemeData(
@@ -68,7 +76,11 @@ abstract class AppTheme {
       color: AppColors.dark,
     ),
     textTheme: const TextTheme(
-      bodyLarge: TextStyle(color: AppColors.darkHeadTextColor),
+      bodyLarge: TextStyle(color: AppColors.lightHeadTextColor),
+      headlineSmall: TextStyle(
+        color: AppColors.lightHeadTextColor,
+        fontSize: 18,
+      ),
     ),
   );
 }

@@ -82,4 +82,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get invalidPath => 'Invalid path';
+
+  @override
+  String get dragAndDropImages => 'Drag and drop images here to start';
 }

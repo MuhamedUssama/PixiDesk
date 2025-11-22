@@ -2,6 +2,7 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
+import 'package:pixi_desk/features/pdf_converter/presentation/widgets/empty_list_widget.dart';
 import 'package:pixi_desk/features/pdf_converter/presentation/widgets/pdf_converter_appbar.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../l10n/localization/app_localizations.dart';
@@ -64,45 +65,47 @@ class PdfConverterView extends StatelessWidget {
             onDropped: (files) {
               context.read<PdfConverterCubit>().addImages(files);
             },
-            child: Column(
-              children: [
-                Expanded(
-                  child: Container(
-                    color: isDark ? AppColors.dark : AppColors.light,
-                    child: state.isGridView
-                        ? ImageGridView(images: state.images)
-                        : ImagePageView(images: state.images),
+            child: state.images.isEmpty
+                ? const EmptyListWidget()
+                : Column(
+                    children: [
+                      Expanded(
+                        child: Container(
+                          color: isDark ? AppColors.dark : AppColors.light,
+                          child: state.isGridView
+                              ? ImageGridView(images: state.images)
+                              : ImagePageView(images: state.images),
+                        ),
+                      ),
+                      Divider(color: Theme.of(context).dividerColor),
+                      const PdfConfigSection(),
+                      Padding(
+                        padding: const EdgeInsets.all(16.0),
+                        child: SizedBox(
+                          width: double.infinity,
+                          child: ElevatedButton(
+                            onPressed: state.images.isNotEmpty
+                                ? () async {
+                                    final outputPath = await FilePicker.platform
+                                        .saveFile(
+                                          dialogTitle: l10n.saveAs,
+                                          fileName: 'images.pdf',
+                                          type: FileType.custom,
+                                          allowedExtensions: ['pdf'],
+                                        );
+                                    if (outputPath != null && context.mounted) {
+                                      context
+                                          .read<PdfConverterCubit>()
+                                          .generatePdf(outputPath);
+                                    }
+                                  }
+                                : null,
+                            child: Text(l10n.generatePdf),
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
-                ),
-                Divider(color: Theme.of(context).dividerColor),
-                const PdfConfigSection(),
-                Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: SizedBox(
-                    width: double.infinity,
-                    child: ElevatedButton(
-                      onPressed: state.images.isNotEmpty
-                          ? () async {
-                              final outputPath = await FilePicker.platform
-                                  .saveFile(
-                                    dialogTitle: l10n.saveAs,
-                                    fileName: 'images.pdf',
-                                    type: FileType.custom,
-                                    allowedExtensions: ['pdf'],
-                                  );
-                              if (outputPath != null && context.mounted) {
-                                context.read<PdfConverterCubit>().generatePdf(
-                                  outputPath,
-                                );
-                              }
-                            }
-                          : null,
-                      child: Text(l10n.generatePdf),
-                    ),
-                  ),
-                ),
-              ],
-            ),
           );
         },
       ),

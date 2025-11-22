@@ -23,5 +23,6 @@
 "success": "نجاح",
 "error": "خطأ",
 "imageSaved": "تم حفظ الصورة بنجاح",
-"invalidPath": "مسار غير صالح"
+"invalidPath": "مسار غير صالح",
+"dragAndDropImages": "اسحب وأفلت الصور هنا للبدء"
 }
