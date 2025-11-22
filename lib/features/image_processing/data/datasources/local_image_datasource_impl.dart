@@ -1,9 +1,58 @@
 import 'dart:io';
+import 'package:flutter/foundation.dart';
 import 'package:image/image.dart' as img;
 import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:injectable/injectable.dart';
 import 'package:pixi_desk/features/image_processing/data/datasources/local_image_datasource.dart';
 import '../../domain/entities/image_format.dart';
+
+class ImageProcessingParams {
+  final List<int> imageBytes;
+  final ImageFormat targetFormat;
+  final int quality;
+
+  ImageProcessingParams({
+    required this.imageBytes,
+    required this.targetFormat,
+    this.quality = 100,
+  });
+}
+
+Future<List<int>> processImageInIsolate(ImageProcessingParams params) async {
+  final decodedImage = img.decodeImage(Uint8List.fromList(params.imageBytes));
+
+  if (decodedImage == null) {
+    throw Exception('Failed to decode image');
+  }
+
+  List<int> encodedBytes;
+  switch (params.targetFormat) {
+    case ImageFormat.png:
+      encodedBytes = img.encodePng(decodedImage);
+      break;
+    case ImageFormat.jpg:
+    case ImageFormat.jpeg:
+      encodedBytes = img.encodeJpg(decodedImage, quality: params.quality);
+      break;
+    case ImageFormat.webp:
+      throw Exception(
+        'WebP encoding is not supported by the fallback encoder.',
+      );
+    case ImageFormat.bmp:
+      encodedBytes = img.encodeBmp(decodedImage);
+      break;
+    case ImageFormat.tiff:
+      encodedBytes = img.encodeTiff(decodedImage);
+      break;
+    case ImageFormat.ico:
+      encodedBytes = img.encodeIco(decodedImage);
+      break;
+    case ImageFormat.gif:
+      encodedBytes = img.encodeGif(decodedImage);
+      break;
+  }
+  return encodedBytes;
+}
 
 @LazySingleton(as: LocalImageDataSource)
 class LocalImageDataSourceImpl implements LocalImageDataSource {
@@ -14,42 +63,11 @@ class LocalImageDataSourceImpl implements LocalImageDataSource {
     required String destinationPath,
   }) async {
     final bytes = await image.readAsBytes();
-    final decodedImage = img.decodeImage(bytes);
 
-    if (decodedImage == null) {
-      throw Exception('Failed to decode image');
-    }
-
-    List<int> encodedBytes;
-    switch (targetFormat) {
-      case ImageFormat.png:
-        encodedBytes = img.encodePng(decodedImage);
-        break;
-      case ImageFormat.jpg:
-      case ImageFormat.jpeg:
-        encodedBytes = img.encodeJpg(decodedImage);
-        break;
-      case ImageFormat.webp:
-        // image package supports webp
-        encodedBytes = img.encodePng(
-          decodedImage,
-        ); // Fallback if webp not available in this version or use specific encoder
-        // Checking image package version in pubspec... ^4.5.4 supports encodeWebP
-        encodedBytes = img.encodePng(decodedImage); // TODO: Fix WebP encoding
-        break;
-      case ImageFormat.bmp:
-        encodedBytes = img.encodeBmp(decodedImage);
-        break;
-      case ImageFormat.tiff:
-        encodedBytes = img.encodeTiff(decodedImage);
-        break;
-      case ImageFormat.ico:
-        encodedBytes = img.encodeIco(decodedImage);
-        break;
-      case ImageFormat.gif:
-        encodedBytes = img.encodeGif(decodedImage);
-        break;
-    }
+    final encodedBytes = await compute(
+      processImageInIsolate,
+      ImageProcessingParams(imageBytes: bytes, targetFormat: targetFormat),
+    );
 
     final newFile = File(destinationPath);
     await newFile.writeAsBytes(encodedBytes);
@@ -96,10 +114,6 @@ class LocalImageDataSourceImpl implements LocalImageDataSource {
         final compressedSize = await compressedFile.length();
 
         if (compressedSize >= originalSize) {
-          // If compressed file is larger or equal, return original (copy to destination)
-          // But wait, destination might be different.
-          // If we just copy, we might overwrite.
-          // The user expects a file at destinationPath.
           await image.copy(destinationPath);
           return File(destinationPath);
         }
@@ -119,53 +133,16 @@ class LocalImageDataSourceImpl implements LocalImageDataSource {
     String destinationPath,
   ) async {
     final bytes = await image.readAsBytes();
-    final decodedImage = img.decodeImage(bytes);
+    final format = ImageFormat.fromPath(destinationPath);
 
-    if (decodedImage == null) {
-      throw Exception('Failed to decode image for compression');
-    }
-
-    // For image package, quality is usually for Jpg/WebP. Png compression level is different.
-    // We will assume Jpg for generic compression if format allows, or just re-encode with quality if supported.
-
-    final format = ImageFormat.fromPath(
-      destinationPath,
-    ); // Use destination format
-    List<int> encodedBytes;
-
-    switch (format) {
-      case ImageFormat.jpg:
-      case ImageFormat.jpeg:
-        encodedBytes = img.encodeJpg(decodedImage, quality: quality);
-        break;
-      case ImageFormat.webp:
-        throw Exception(
-          'WebP encoding is not supported by the fallback encoder.',
-        );
-      case ImageFormat.png:
-        // PNG is lossless, quality might map to compression level (0-9) or ignored.
-        // We can't really "compress" PNG with a 0-100 quality slider in the same way as JPG.
-        // We'll just encode it.
-        encodedBytes = img.encodePng(decodedImage);
-        break;
-      default:
-        encodedBytes = img.encodeJpg(
-          decodedImage,
-          quality: quality,
-        ); // Default to jpg if unsure? No, respect format.
-        // If we are compressing, we usually imply lossy compression.
-        // If the user selected a format that doesn't support lossy compression (like BMP), we just save it.
-        if (format == ImageFormat.bmp) {
-          encodedBytes = img.encodeBmp(decodedImage);
-        } else if (format == ImageFormat.tiff) {
-          encodedBytes = img.encodeTiff(decodedImage);
-        } else if (format == ImageFormat.gif) {
-          encodedBytes = img.encodeGif(decodedImage);
-        } else {
-          encodedBytes = img.encodeJpg(decodedImage, quality: quality);
-        }
-        break;
-    }
+    final encodedBytes = await compute(
+      processImageInIsolate,
+      ImageProcessingParams(
+        imageBytes: bytes,
+        targetFormat: format,
+        quality: quality,
+      ),
+    );
 
     final newFile = File(destinationPath);
     await newFile.writeAsBytes(encodedBytes);
