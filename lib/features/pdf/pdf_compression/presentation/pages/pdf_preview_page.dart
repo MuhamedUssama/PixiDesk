@@ -1,14 +1,37 @@
 import 'dart:io';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pixi_desk/core/theme/app_colors.dart';
+import 'package:pixi_desk/features/pdf/pdf_compression/presentation/cubit/pdf_compression_cubit.dart';
+import 'package:pixi_desk/features/pdf/pdf_compression/presentation/cubit/pdf_compression_state.dart';
 import 'package:pixi_desk/l10n/localization/app_localizations.dart';
 import 'package:printing/printing.dart';
 
-class PdfPreviewPage extends StatelessWidget {
+class PdfPreviewArgs {
+  final File file;
+  final PdfCompressionCubit cubit;
+
+  PdfPreviewArgs({required this.file, required this.cubit});
+}
+
+class PdfPreviewPage extends StatefulWidget {
   final File pdfFile;
 
   const PdfPreviewPage({super.key, required this.pdfFile});
+
+  @override
+  State<PdfPreviewPage> createState() => _PdfPreviewPageState();
+}
+
+class _PdfPreviewPageState extends State<PdfPreviewPage> {
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      context.read<PdfCompressionCubit>().loadPreviewBytes(widget.pdfFile);
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -34,14 +57,21 @@ class PdfPreviewPage extends StatelessWidget {
         actions: [
           IconButton(
             onPressed: () async {
-              final outputPath = await FilePicker.platform.saveFile(
+              String? outputPath = await FilePicker.platform.saveFile(
                 dialogTitle: l10n.saveAs,
-                fileName: pdfFile.path.split(Platform.pathSeparator).last,
+                fileName: widget.pdfFile.path
+                    .split(Platform.pathSeparator)
+                    .last,
                 type: FileType.custom,
                 allowedExtensions: ['pdf'],
               );
+
               if (outputPath != null) {
-                await pdfFile.copy(outputPath);
+                if (!outputPath.toLowerCase().endsWith('.pdf')) {
+                  outputPath = '$outputPath.pdf';
+                }
+
+                await widget.pdfFile.copy(outputPath);
                 if (context.mounted) {
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
@@ -57,12 +87,30 @@ class PdfPreviewPage extends StatelessWidget {
           ),
         ],
       ),
-      body: PdfPreview(
-        build: (format) => pdfFile.readAsBytes(),
-        useActions: false, // We use our own save action
-        scrollViewDecoration: BoxDecoration(
-          color: isDark ? AppColors.dark : AppColors.light,
-        ),
+      body: BlocBuilder<PdfCompressionCubit, PdfCompressionState>(
+        builder: (context, state) {
+          if (state.previewStatus == PdfCompressionStatus.loading) {
+            return const Center(child: CircularProgressIndicator());
+          } else if (state.previewStatus == PdfCompressionStatus.success &&
+              state.previewBytes != null) {
+            return PdfPreview(
+              build: (format) => state.previewBytes!,
+              useActions: false,
+              scrollViewDecoration: BoxDecoration(
+                color: isDark ? AppColors.dark : AppColors.light,
+              ),
+            );
+          } else if (state.previewStatus == PdfCompressionStatus.error) {
+            return Center(
+              child: Text(
+                state.errorMessage ?? l10n.error,
+                style: const TextStyle(color: AppColors.error),
+              ),
+            );
+          } else {
+            return const SizedBox.shrink();
+          }
+        },
       ),
     );
   }

@@ -3,6 +3,8 @@ import 'package:injectable/injectable.dart';
 import 'package:pixi_desk/features/pdf/pdf_compression/domain/entities/compression_level.dart';
 import 'package:pixi_desk/features/pdf/pdf_compression/domain/repositories/pdf_compression_repository.dart';
 
+import 'dart:typed_data';
+
 @injectable
 class CompressPdfUseCase {
   final PdfCompressionRepository _repository;
@@ -13,11 +15,15 @@ class CompressPdfUseCase {
     required File input,
     required String outputPath,
     required CompressionLevel level,
-  }) {
+  }) async {
     return _repository.compressPdf(
       input: input,
       outputPath: outputPath,
       level: level,
     );
+  }
+
+  Future<Uint8List> getPdfBytes(File file) async {
+    return _repository.getPdfBytes(file);
   }
 }

@@ -112,3 +112,6 @@ install(FILES "${PROJECT_SOURCE_DIR}/../assets/bin/windows/gswin64c.exe"
               "${PROJECT_SOURCE_DIR}/../assets/bin/windows/gsdll64.dll"
         DESTINATION "${CMAKE_INSTALL_PREFIX}"
         COMPONENT Runtime)
+
+set(PDFIUM_VERSION "4929" CACHE STRING "" FORCE)
+set(PDFIUM_ARCH "x64" CACHE STRING "" FORCE)

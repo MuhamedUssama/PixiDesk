@@ -1,4 +1,3 @@
-import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pixi_desk/core/di/injection.dart';
@@ -48,9 +47,12 @@ class AppRouter {
           ),
         );
       case pdfPreviewRoute:
-        final args = settings.arguments as File;
+        final args = settings.arguments as PdfPreviewArgs;
         return MaterialPageRoute(
-          builder: (context) => PdfPreviewPage(pdfFile: args),
+          builder: (context) => BlocProvider.value(
+            value: args.cubit,
+            child: PdfPreviewPage(pdfFile: args.file),
+          ),
         );
       default:
         return MaterialPageRoute(builder: (context) => const MainLandingPage());

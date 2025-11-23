@@ -6,6 +6,7 @@ import 'package:pixi_desk/core/router/app_router.dart';
 import 'package:pixi_desk/core/theme/app_colors.dart';
 import 'package:pixi_desk/features/pdf/pdf_compression/presentation/cubit/pdf_compression_cubit.dart';
 import 'package:pixi_desk/features/pdf/pdf_compression/presentation/cubit/pdf_compression_state.dart';
+import 'package:pixi_desk/features/pdf/pdf_compression/presentation/pages/pdf_preview_page.dart';
 import 'package:pixi_desk/l10n/localization/app_localizations.dart';
 
 class CompressionResultWidget extends StatelessWidget {
@@ -17,16 +18,27 @@ class CompressionResultWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     final isDark = Theme.of(context).brightness == Brightness.dark;
+    final compressedFileName =
+        'compressed_${state.selectedFile!.path.split(Platform.pathSeparator).last}';
 
-    return Padding(
+    return Container(
+      width: double.infinity,
       padding: const EdgeInsets.all(24),
+      decoration: BoxDecoration(
+        color: isDark ? AppColors.dark : AppColors.light,
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: Theme.of(context).dividerColor),
+      ),
       child: Row(
         children: [
           Expanded(
             child: _buildFileDetails(
               context,
               title: l10n.originalFile,
-              file: state.selectedFile!,
+              fileName: state.selectedFile!.path
+                  .split(Platform.pathSeparator)
+                  .last,
+              fileSize: state.selectedFile!.lengthSync(),
               isDark: isDark,
             ),
           ),
@@ -38,22 +50,26 @@ class CompressionResultWidget extends StatelessWidget {
                 _buildFileDetails(
                   context,
                   title: l10n.compressedFile,
-                  file: state.compressedFile!,
+                  fileName: compressedFileName,
+                  fileSize: state.compressedFile!.lengthSync(),
                   isDark: isDark,
                   showRemove: false,
                 ),
                 const SizedBox(height: 24),
                 TextButton(
                   onPressed: () async {
-                    final outputPath = await FilePicker.platform.saveFile(
+                    String? outputPath = await FilePicker.platform.saveFile(
                       dialogTitle: l10n.saveAs,
-                      fileName: state.compressedFile!.path
-                          .split(Platform.pathSeparator)
-                          .last,
+                      fileName: compressedFileName,
                       type: FileType.custom,
                       allowedExtensions: ['pdf'],
                     );
+
                     if (outputPath != null) {
+                      if (!outputPath.toLowerCase().endsWith('.pdf')) {
+                        outputPath = '$outputPath.pdf';
+                      }
+
                       await state.compressedFile!.copy(outputPath);
                       if (context.mounted) {
                         ScaffoldMessenger.of(context).showSnackBar(
@@ -73,15 +89,18 @@ class CompressionResultWidget extends StatelessWidget {
                     Navigator.pushNamed(
                       context,
                       AppRouter.pdfPreviewRoute,
-                      arguments: state.compressedFile,
+                      arguments: PdfPreviewArgs(
+                        file: state.compressedFile!,
+                        cubit: context.read<PdfCompressionCubit>(),
+                      ),
                     );
                   },
                   style: ElevatedButton.styleFrom(
+                    minimumSize: const Size(0, 56),
                     padding: const EdgeInsets.symmetric(
                       horizontal: 24,
                       vertical: 12,
                     ),
-                    minimumSize: const Size(0, 56),
                   ),
                   child: Text(l10n.previewAndSave),
                 ),
@@ -96,7 +115,8 @@ class CompressionResultWidget extends StatelessWidget {
   Widget _buildFileDetails(
     BuildContext context, {
     required String title,
-    required File file,
+    required String fileName,
+    required int fileSize,
     required bool isDark,
     bool showRemove = true,
   }) {
@@ -108,10 +128,12 @@ class CompressionResultWidget extends StatelessWidget {
         Text(
           title,
           style: theme.textTheme.bodyLarge?.copyWith(
+            fontSize: 22,
+            color: isDark ? AppColors.white : AppColors.dark,
             fontWeight: FontWeight.bold,
           ),
         ),
-        const SizedBox(height: 16),
+        const SizedBox(height: 32),
         Icon(
           Icons.picture_as_pdf,
           size: 48,
@@ -121,12 +143,12 @@ class CompressionResultWidget extends StatelessWidget {
         ),
         const SizedBox(height: 16),
         Text(
-          file.path.split(Platform.pathSeparator).last,
+          fileName,
           style: theme.textTheme.titleMedium,
           textAlign: TextAlign.center,
         ),
         const SizedBox(height: 8),
-        Text(_formatBytes(file.lengthSync()), style: theme.textTheme.bodySmall),
+        Text(_formatBytes(fileSize), style: theme.textTheme.bodySmall),
         if (showRemove) ...[
           const SizedBox(height: 24),
           TextButton.icon(

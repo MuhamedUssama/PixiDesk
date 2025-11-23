@@ -15,15 +15,6 @@ class PdfCompressionRepositoryImpl implements PdfCompressionRepository {
     required String outputPath,
     required CompressionLevel level,
   }) async {
-    // We need to pass simple types to the isolate.
-    // Services cannot be passed directly if they contain non-sendable objects.
-    // However, GhostscriptCompressionService is stateless and only uses standard libraries.
-    // But to be safe and follow best practices, we'll create the service inside the isolate
-    // or pass the necessary data to a static function.
-
-    // Since we are using DI, we can't easily inject into the static function.
-    // We will pass the necessary paths and level string to the compute function.
-
     return compute(
       _compressInIsolate,
       _CompressionParams(
@@ -32,6 +23,11 @@ class PdfCompressionRepositoryImpl implements PdfCompressionRepository {
         level: level,
       ),
     );
+  }
+
+  @override
+  Future<Uint8List> getPdfBytes(File file) async {
+    return compute(_readBytesIsolate, file);
   }
 }
 
@@ -48,12 +44,14 @@ class _CompressionParams {
 }
 
 Future<File> _compressInIsolate(_CompressionParams params) async {
-  // We instantiate the service manually here since we are in a new Isolate
-  // and don't have access to the main GetIt instance.
   final service = GhostscriptCompressionService();
   return service.compressPdf(
     input: File(params.inputPath),
     outputPath: params.outputPath,
     level: params.level,
   );
+}
+
+Future<Uint8List> _readBytesIsolate(File file) async {
+  return file.readAsBytes();
 }

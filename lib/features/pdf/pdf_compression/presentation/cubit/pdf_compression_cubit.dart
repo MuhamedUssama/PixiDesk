@@ -65,4 +65,24 @@ class PdfCompressionCubit extends Cubit<PdfCompressionState> {
       );
     }
   }
+
+  Future<void> loadPreviewBytes(File file) async {
+    emit(state.copyWith(previewStatus: PdfCompressionStatus.loading));
+    try {
+      final bytes = await _compressPdfUseCase.getPdfBytes(file);
+      emit(
+        state.copyWith(
+          previewStatus: PdfCompressionStatus.success,
+          previewBytes: bytes,
+        ),
+      );
+    } catch (e) {
+      emit(
+        state.copyWith(
+          previewStatus: PdfCompressionStatus.error,
+          errorMessage: e.toString(),
+        ),
+      );
+    }
+  }
 }
