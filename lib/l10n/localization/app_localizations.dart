@@ -110,6 +110,12 @@ abstract class AppLocalizations {
   /// **'PDF Converter'**
   String get pdfConverterTitle;
 
+  /// No description provided for @pdfConverterSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Convert images to PDF documents'**
+  String get pdfConverterSubtitle;
+
   /// No description provided for @addPhotos.
   ///
   /// In en, this message translates to:
@@ -265,12 +271,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Compress and convert images efficiently'**
   String get imageProcessingSubtitle;
-
-  /// No description provided for @pdfConverterSubtitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Convert images to PDF documents'**
-  String get pdfConverterSubtitle;
 
   /// No description provided for @pdfTools.
   ///

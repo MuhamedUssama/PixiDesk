@@ -50,6 +50,11 @@ abstract class AppTheme {
     ),
     textTheme: const TextTheme(
       bodyLarge: TextStyle(color: AppColors.darkHeadTextColor),
+      bodySmall: TextStyle(
+        color: AppColors.darkTextColor,
+        fontSize: 14,
+        fontWeight: FontWeight.w400,
+      ),
       headlineSmall: TextStyle(
         color: AppColors.darkHeadTextColor,
         fontSize: 18,
@@ -178,6 +183,11 @@ abstract class AppTheme {
     ),
     textTheme: const TextTheme(
       bodyLarge: TextStyle(color: AppColors.lightHeadTextColor),
+      bodySmall: TextStyle(
+        color: AppColors.lightTextColor,
+        fontSize: 14,
+        fontWeight: FontWeight.w400,
+      ),
       headlineSmall: TextStyle(
         color: AppColors.lightHeadTextColor,
         fontSize: 18,

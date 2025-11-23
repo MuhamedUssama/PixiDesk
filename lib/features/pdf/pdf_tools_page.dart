@@ -31,12 +31,14 @@ class PdfToolsPage extends StatelessWidget {
                     Navigator.pushNamed(context, AppRouter.pdfConverterRoute);
                   },
                   toolName: l10n.pdfConverterTitle,
+                  toolDescription: l10n.pdfConverterSubtitle,
                   icon: Icons.file_open,
                 ),
                 const Divider(),
                 PdfToolItem(
                   onTap: () {},
                   toolName: l10n.compressPdf,
+                  toolDescription: l10n.compressPdfSubtitle,
                   icon: Icons.compress,
                 ),
               ],
