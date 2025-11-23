@@ -21,7 +21,9 @@ class PdfToolsPage extends StatelessWidget {
             height: 500,
             padding: const EdgeInsets.all(16),
             decoration: BoxDecoration(
-              color: isDark ? AppColors.card : AppColors.darkTextColor,
+              color: isDark
+                  ? AppColors.card
+                  : AppColors.darkTextColor.withValues(alpha: 0.4),
               borderRadius: BorderRadius.circular(24),
             ),
             child: Column(

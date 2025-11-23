@@ -170,7 +170,7 @@ abstract class AppTheme {
         foregroundColor: AppColors.light,
         minimumSize: const Size(double.infinity, 56),
         padding: const EdgeInsets.symmetric(vertical: 16),
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(64)),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
       ),
     ),
     cardTheme: CardThemeData(
