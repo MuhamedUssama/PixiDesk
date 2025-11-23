@@ -2,6 +2,8 @@ import 'dart:io';
 import 'package:equatable/equatable.dart';
 import 'package:pixi_desk/features/pdf/pdf_compression/domain/entities/compression_level.dart';
 
+import 'dart:typed_data';
+
 enum PdfCompressionStatus { initial, loading, success, error }
 
 class PdfCompressionState extends Equatable {
@@ -10,6 +12,8 @@ class PdfCompressionState extends Equatable {
   final File? compressedFile;
   final CompressionLevel compressionLevel;
   final String? errorMessage;
+  final Uint8List? previewBytes;
+  final PdfCompressionStatus previewStatus;
 
   const PdfCompressionState({
     this.status = PdfCompressionStatus.initial,
@@ -17,6 +21,8 @@ class PdfCompressionState extends Equatable {
     this.compressedFile,
     this.compressionLevel = CompressionLevel.ebook,
     this.errorMessage,
+    this.previewBytes,
+    this.previewStatus = PdfCompressionStatus.initial,
   });
 
   PdfCompressionState copyWith({
@@ -25,6 +31,8 @@ class PdfCompressionState extends Equatable {
     File? compressedFile,
     CompressionLevel? compressionLevel,
     String? errorMessage,
+    Uint8List? previewBytes,
+    PdfCompressionStatus? previewStatus,
   }) {
     return PdfCompressionState(
       status: status ?? this.status,
@@ -32,6 +40,8 @@ class PdfCompressionState extends Equatable {
       compressedFile: compressedFile ?? this.compressedFile,
       compressionLevel: compressionLevel ?? this.compressionLevel,
       errorMessage: errorMessage,
+      previewBytes: previewBytes ?? this.previewBytes,
+      previewStatus: previewStatus ?? this.previewStatus,
     );
   }
 
@@ -42,5 +52,7 @@ class PdfCompressionState extends Equatable {
     compressedFile,
     compressionLevel,
     errorMessage,
+    previewBytes,
+    previewStatus,
   ];
 }

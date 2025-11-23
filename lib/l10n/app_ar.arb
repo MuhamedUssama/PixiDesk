@@ -44,5 +44,12 @@
   "compressionEbook": "كتاب إلكتروني (150 dpi)",
   "compressionPrinter": "طابعة (300 dpi)",
   "compressionPrepress": "طباعة احترافية (300 dpi)",
-  "compressionDefault": "افتراضي"
+  "compressionDefault": "افتراضي",
+  "originalFile": "الملف الأصلي",
+  "compressedFile": "الملف المضغوط",
+  "quickSave": "حفظ سريع",
+  "previewAndSave": "معاينة وحفظ",
+  "size": "الحجم",
+  "previewPdf": "معاينة PDF",
+  "savePdf": "حفظ PDF"
 }

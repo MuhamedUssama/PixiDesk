@@ -323,7 +323,7 @@ abstract class AppLocalizations {
   /// No description provided for @dragDropPdf.
   ///
   /// In en, this message translates to:
-  /// **'Drag and drop PDF here'**
+  /// **'Drag and drop PDF here to start'**
   String get dragDropPdf;
 
   /// No description provided for @selectPdf.
@@ -373,6 +373,48 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Default'**
   String get compressionDefault;
+
+  /// No description provided for @originalFile.
+  ///
+  /// In en, this message translates to:
+  /// **'Original File'**
+  String get originalFile;
+
+  /// No description provided for @compressedFile.
+  ///
+  /// In en, this message translates to:
+  /// **'Compressed File'**
+  String get compressedFile;
+
+  /// No description provided for @quickSave.
+  ///
+  /// In en, this message translates to:
+  /// **'Quick Save'**
+  String get quickSave;
+
+  /// No description provided for @previewAndSave.
+  ///
+  /// In en, this message translates to:
+  /// **'Preview & Save'**
+  String get previewAndSave;
+
+  /// No description provided for @size.
+  ///
+  /// In en, this message translates to:
+  /// **'Size'**
+  String get size;
+
+  /// No description provided for @previewPdf.
+  ///
+  /// In en, this message translates to:
+  /// **'Preview PDF'**
+  String get previewPdf;
+
+  /// No description provided for @savePdf.
+  ///
+  /// In en, this message translates to:
+  /// **'Save PDF'**
+  String get savePdf;
 }
 
 class _AppLocalizationsDelegate
