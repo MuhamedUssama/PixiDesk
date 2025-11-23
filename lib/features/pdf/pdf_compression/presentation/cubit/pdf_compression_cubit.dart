@@ -31,6 +31,10 @@ class PdfCompressionCubit extends Cubit<PdfCompressionState> {
     emit(const PdfCompressionState());
   }
 
+  void resetStatus() {
+    emit(state.copyWith(status: PdfCompressionStatus.initial));
+  }
+
   Future<void> startCompression() async {
     if (state.selectedFile == null) return;
 
