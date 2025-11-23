@@ -3,8 +3,8 @@ import 'dart:io';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:pixi_desk/features/pdf_converter/presentation/cubit/pdf_converter_cubit.dart';
-import 'package:pixi_desk/features/pdf_converter/presentation/cubit/pdf_converter_state.dart';
+import 'package:pixi_desk/features/pdf/pdf_converter/presentation/cubit/pdf_converter_cubit.dart';
+import 'package:pixi_desk/features/pdf/pdf_converter/presentation/cubit/pdf_converter_state.dart';
 import 'package:pixi_desk/l10n/localization/app_localizations.dart';
 
 class PdfConverterAppbar extends StatelessWidget

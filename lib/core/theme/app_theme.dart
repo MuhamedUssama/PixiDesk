@@ -12,10 +12,24 @@ abstract class AppTheme {
     ),
     useMaterial3: true,
     scaffoldBackgroundColor: AppColors.dark,
+    dividerTheme: const DividerThemeData(color: AppColors.darkHeadTextColor),
+    textSelectionTheme: TextSelectionThemeData(
+      selectionColor: AppColors.darkHeadTextColor,
+      cursorColor: AppColors.darkHeadTextColor,
+      selectionHandleColor: AppColors.darkHeadTextColor,
+    ),
     appBarTheme: const AppBarTheme(
       backgroundColor: AppColors.dark,
       foregroundColor: AppColors.white,
       surfaceTintColor: Colors.transparent,
+    ),
+    textButtonTheme: TextButtonThemeData(
+      style: TextButton.styleFrom(
+        foregroundColor: AppColors.darkHeadTextColor,
+        minimumSize: const Size(0, 56),
+        padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+      ),
     ),
     elevatedButtonTheme: ElevatedButtonThemeData(
       style: ElevatedButton.styleFrom(
@@ -126,10 +140,24 @@ abstract class AppTheme {
     ),
     useMaterial3: true,
     scaffoldBackgroundColor: AppColors.light,
+    dividerTheme: const DividerThemeData(color: AppColors.lightHeadTextColor),
+    textSelectionTheme: TextSelectionThemeData(
+      selectionColor: AppColors.lightHeadTextColor,
+      cursorColor: AppColors.lightHeadTextColor,
+      selectionHandleColor: AppColors.lightHeadTextColor,
+    ),
     appBarTheme: const AppBarTheme(
       backgroundColor: AppColors.light,
       foregroundColor: AppColors.lightHeadTextColor,
       surfaceTintColor: Colors.transparent,
+    ),
+    textButtonTheme: TextButtonThemeData(
+      style: TextButton.styleFrom(
+        foregroundColor: AppColors.lightHeadTextColor,
+        minimumSize: const Size(0, 56),
+        padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+      ),
     ),
     elevatedButtonTheme: ElevatedButtonThemeData(
       style: ElevatedButton.styleFrom(

@@ -1,16 +1,16 @@
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:pixi_desk/features/pdf_converter/presentation/widgets/empty_list_widget.dart';
-import 'package:pixi_desk/features/pdf_converter/presentation/widgets/pdf_converter_appbar.dart';
-import '../../../../core/theme/app_colors.dart';
-import '../../../../l10n/localization/app_localizations.dart';
+import 'package:pixi_desk/features/pdf/pdf_converter/presentation/widgets/empty_list_widget.dart';
+import 'package:pixi_desk/features/pdf/pdf_converter/presentation/widgets/pdf_converter_appbar.dart';
+import '../../../../../core/theme/app_colors.dart';
+import '../../../../../l10n/localization/app_localizations.dart';
 import '../cubit/pdf_converter_cubit.dart';
 import '../cubit/pdf_converter_state.dart';
 import '../widgets/image_grid_view.dart';
 import '../widgets/image_page_view.dart';
 import '../widgets/pdf_config_section.dart';
-import '../../../image_processing/presentation/widgets/drop_zone_widget.dart';
+import '../../../../image_processing/presentation/widgets/drop_zone_widget.dart';
 
 class PdfConverterPage extends StatelessWidget {
   const PdfConverterPage({super.key});

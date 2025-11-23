@@ -289,6 +289,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Your all-in-one desktop utility for image and PDF processing.'**
   String get appSubtitle;
+
+  /// No description provided for @compressPdf.
+  ///
+  /// In en, this message translates to:
+  /// **'Compress PDF'**
+  String get compressPdf;
+
+  /// No description provided for @compressPdfSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Compress PDF files efficiently'**
+  String get compressPdfSubtitle;
 }
 
 class _AppLocalizationsDelegate

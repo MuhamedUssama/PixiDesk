@@ -93,7 +93,7 @@ class MainLandingPage extends StatelessWidget {
                   title: l10n.pdfTools,
                   subtitle: l10n.pdfToolsSubtitle,
                   onTap: () {
-                    Navigator.pushNamed(context, AppRouter.pdfConverterRoute);
+                    Navigator.pushNamed(context, AppRouter.pdfToolsRoute);
                   },
                 ),
               ]),

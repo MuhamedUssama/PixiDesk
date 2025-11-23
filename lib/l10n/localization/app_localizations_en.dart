@@ -105,4 +105,10 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get appSubtitle =>
       'Your all-in-one desktop utility for image and PDF processing.';
+
+  @override
+  String get compressPdf => 'Compress PDF';
+
+  @override
+  String get compressPdfSubtitle => 'Compress PDF files efficiently';
 }

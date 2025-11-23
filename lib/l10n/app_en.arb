@@ -30,5 +30,7 @@
   "pdfConverterSubtitle": "Convert images to PDF documents",
   "pdfTools": "PDF Tools",
   "pdfToolsSubtitle": "Convert, compress, manage PDFs efficiently",
-  "appSubtitle": "Your all-in-one desktop utility for image and PDF processing."
+  "appSubtitle": "Your all-in-one desktop utility for image and PDF processing.",
+  "compressPdf": "Compress PDF",
+  "compressPdfSubtitle": "Compress PDF files efficiently"
 }

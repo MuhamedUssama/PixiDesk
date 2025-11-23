@@ -30,5 +30,7 @@
   "pdfConverterSubtitle": "تحويل الصور إلى ملفات PDF",
   "pdfTools": "أدوات PDF",
   "pdfToolsSubtitle": "تحويل، ضغط، إدارة ملفات PDF بكفاءة",
-  "appSubtitle": "أداة متكاملة لمعالجة الصور والملفات PDF"
+  "appSubtitle": "أداة متكاملة لمعالجة الصور والملفات PDF",
+  "compressPdf": "ضغط PDF",
+  "compressPdfSubtitle": "ضغط ملفات PDF بكفاءة"
 }

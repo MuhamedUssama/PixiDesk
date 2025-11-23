@@ -8,6 +8,7 @@ abstract class AppColors {
   static const Color darkHeadTextColor = Color(0xFFE0E0E0);
   static const Color error = Color(0xFFCF6679);
   static const Color transparent = Colors.transparent;
+  static const Color card = Color.fromARGB(255, 45, 45, 45);
 
   // Light Theme Colors
   static const Color light = Color(0xFFF5F5F5);

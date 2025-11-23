@@ -103,4 +103,10 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get appSubtitle => 'أداة متكاملة لمعالجة الصور والملفات PDF';
+
+  @override
+  String get compressPdf => 'ضغط PDF';
+
+  @override
+  String get compressPdfSubtitle => 'ضغط ملفات PDF بكفاءة';
 }
