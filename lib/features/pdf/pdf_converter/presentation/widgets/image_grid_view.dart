@@ -28,6 +28,9 @@ class ImageGridView extends StatelessWidget {
           onRemove: () {
             context.read<PdfConverterCubit>().removeImage(image.id);
           },
+          onRotate: () {
+            context.read<PdfConverterCubit>().rotateImage(image.id);
+          },
         );
       },
     );
@@ -38,12 +41,14 @@ class GridItem extends StatelessWidget {
   final PdfImageItem image;
   final VoidCallback onToggleSelection;
   final VoidCallback onRemove;
+  final VoidCallback onRotate;
 
   const GridItem({
     super.key,
     required this.image,
     required this.onToggleSelection,
     required this.onRemove,
+    required this.onRotate,
   });
 
   @override
@@ -58,11 +63,17 @@ class GridItem extends StatelessWidget {
       color: cardColor,
       margin: const EdgeInsets.symmetric(vertical: 4),
       child: ListTile(
-        leading: Image.file(
-          image.file,
-          width: 50,
-          height: 50,
-          fit: BoxFit.cover,
+        leading: RotatedBox(
+          quarterTurns: image.quarterTurns,
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(8),
+            child: Image.file(
+              image.file,
+              width: 50,
+              height: 50,
+              fit: BoxFit.cover,
+            ),
+          ),
         ),
         title: Text(
           image.file.path.split('\\').last,
@@ -74,6 +85,10 @@ class GridItem extends StatelessWidget {
             Checkbox(
               value: image.isSelected,
               onChanged: (_) => onToggleSelection(),
+            ),
+            IconButton(
+              icon: const Icon(Icons.rotate_right),
+              onPressed: onRotate,
             ),
             IconButton(
               icon: Icon(Icons.delete, color: AppColors.error),
