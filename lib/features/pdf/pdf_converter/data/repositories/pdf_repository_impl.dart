@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:flutter/foundation.dart';
+import 'package:image/image.dart' as img;
 import 'package:injectable/injectable.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
@@ -20,6 +21,7 @@ class PdfRepositoryImpl implements PdfRepository {
       _generatePdfInIsolate,
       _PdfGenerationParams(
         imagePaths: images.map((e) => e.file.path).toList(),
+        rotations: images.map((e) => e.quarterTurns).toList(),
         config: config,
         outputPath: outputPath,
       ),
@@ -31,11 +33,13 @@ class PdfRepositoryImpl implements PdfRepository {
 
 class _PdfGenerationParams {
   final List<String> imagePaths;
+  final List<int> rotations;
   final PdfConfig config;
   final String outputPath;
 
   _PdfGenerationParams({
     required this.imagePaths,
+    required this.rotations,
     required this.config,
     required this.outputPath,
   });
@@ -44,11 +48,22 @@ class _PdfGenerationParams {
 Future<void> _generatePdfInIsolate(_PdfGenerationParams params) async {
   final pdf = pw.Document();
 
-  for (final imagePath in params.imagePaths) {
+  for (var i = 0; i < params.imagePaths.length; i++) {
+    final imagePath = params.imagePaths[i];
+    final rotation = params.rotations[i];
     final imageFile = File(imagePath);
     if (!imageFile.existsSync()) continue;
 
-    final imageBytes = await imageFile.readAsBytes();
+    Uint8List imageBytes = await imageFile.readAsBytes();
+
+    if (rotation > 0) {
+      final decodedImage = img.decodeImage(imageBytes);
+      if (decodedImage != null) {
+        final rotatedImage = img.copyRotate(decodedImage, angle: rotation * 90);
+        imageBytes = Uint8List.fromList(img.encodeJpg(rotatedImage));
+      }
+    }
+
     final image = pw.MemoryImage(imageBytes);
 
     PdfPageFormat pageFormat;
