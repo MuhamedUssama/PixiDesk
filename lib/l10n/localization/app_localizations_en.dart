@@ -111,4 +111,40 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get compressPdfSubtitle => 'Compress PDF files efficiently';
+
+  @override
+  String get pdfCompression => 'PDF Compression';
+
+  @override
+  String get compressionSuccess => 'PDF Compressed Successfully';
+
+  @override
+  String get invalidPdfFile => 'Invalid PDF file';
+
+  @override
+  String get dragDropPdf => 'Drag and drop PDF here';
+
+  @override
+  String get selectPdf => 'Select PDF';
+
+  @override
+  String get removeFile => 'Remove File';
+
+  @override
+  String get compressionLevel => 'Compression Level';
+
+  @override
+  String get compressionScreen => 'Screen (72 dpi)';
+
+  @override
+  String get compressionEbook => 'eBook (150 dpi)';
+
+  @override
+  String get compressionPrinter => 'Printer (300 dpi)';
+
+  @override
+  String get compressionPrepress => 'Prepress (300 dpi)';
+
+  @override
+  String get compressionDefault => 'Default';
 }

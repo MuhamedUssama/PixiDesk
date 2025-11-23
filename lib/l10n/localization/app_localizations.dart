@@ -301,6 +301,78 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Compress PDF files efficiently'**
   String get compressPdfSubtitle;
+
+  /// No description provided for @pdfCompression.
+  ///
+  /// In en, this message translates to:
+  /// **'PDF Compression'**
+  String get pdfCompression;
+
+  /// No description provided for @compressionSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'PDF Compressed Successfully'**
+  String get compressionSuccess;
+
+  /// No description provided for @invalidPdfFile.
+  ///
+  /// In en, this message translates to:
+  /// **'Invalid PDF file'**
+  String get invalidPdfFile;
+
+  /// No description provided for @dragDropPdf.
+  ///
+  /// In en, this message translates to:
+  /// **'Drag and drop PDF here'**
+  String get dragDropPdf;
+
+  /// No description provided for @selectPdf.
+  ///
+  /// In en, this message translates to:
+  /// **'Select PDF'**
+  String get selectPdf;
+
+  /// No description provided for @removeFile.
+  ///
+  /// In en, this message translates to:
+  /// **'Remove File'**
+  String get removeFile;
+
+  /// No description provided for @compressionLevel.
+  ///
+  /// In en, this message translates to:
+  /// **'Compression Level'**
+  String get compressionLevel;
+
+  /// No description provided for @compressionScreen.
+  ///
+  /// In en, this message translates to:
+  /// **'Screen (72 dpi)'**
+  String get compressionScreen;
+
+  /// No description provided for @compressionEbook.
+  ///
+  /// In en, this message translates to:
+  /// **'eBook (150 dpi)'**
+  String get compressionEbook;
+
+  /// No description provided for @compressionPrinter.
+  ///
+  /// In en, this message translates to:
+  /// **'Printer (300 dpi)'**
+  String get compressionPrinter;
+
+  /// No description provided for @compressionPrepress.
+  ///
+  /// In en, this message translates to:
+  /// **'Prepress (300 dpi)'**
+  String get compressionPrepress;
+
+  /// No description provided for @compressionDefault.
+  ///
+  /// In en, this message translates to:
+  /// **'Default'**
+  String get compressionDefault;
 }
 
 class _AppLocalizationsDelegate

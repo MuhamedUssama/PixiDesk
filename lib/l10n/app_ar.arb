@@ -32,5 +32,17 @@
   "pdfToolsSubtitle": "تحويل، ضغط، إدارة ملفات PDF بكفاءة",
   "appSubtitle": "أداة متكاملة لمعالجة الصور والملفات PDF",
   "compressPdf": "ضغط PDF",
-  "compressPdfSubtitle": "ضغط ملفات PDF بكفاءة"
+  "compressPdfSubtitle": "ضغط ملفات PDF بكفاءة",
+  "pdfCompression": "ضغط PDF",
+  "compressionSuccess": "تم ضغط ملف PDF بنجاح",
+  "invalidPdfFile": "ملف PDF غير صالح",
+  "dragDropPdf": "اسحب وأفلت ملف PDF هنا",
+  "selectPdf": "اختر ملف PDF",
+  "removeFile": "حذف الملف",
+  "compressionLevel": "مستوى الضغط",
+  "compressionScreen": "شاشة (72 dpi)",
+  "compressionEbook": "كتاب إلكتروني (150 dpi)",
+  "compressionPrinter": "طابعة (300 dpi)",
+  "compressionPrepress": "طباعة احترافية (300 dpi)",
+  "compressionDefault": "افتراضي"
 }

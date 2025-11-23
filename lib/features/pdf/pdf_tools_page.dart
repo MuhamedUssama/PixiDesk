@@ -36,7 +36,9 @@ class PdfToolsPage extends StatelessWidget {
                 ),
                 const Divider(),
                 PdfToolItem(
-                  onTap: () {},
+                  onTap: () {
+                    Navigator.pushNamed(context, AppRouter.pdfCompressionRoute);
+                  },
                   toolName: l10n.compressPdf,
                   toolDescription: l10n.compressPdfSubtitle,
                   icon: Icons.compress,

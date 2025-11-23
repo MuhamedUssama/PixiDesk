@@ -109,4 +109,40 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get compressPdfSubtitle => 'ضغط ملفات PDF بكفاءة';
+
+  @override
+  String get pdfCompression => 'ضغط PDF';
+
+  @override
+  String get compressionSuccess => 'تم ضغط ملف PDF بنجاح';
+
+  @override
+  String get invalidPdfFile => 'ملف PDF غير صالح';
+
+  @override
+  String get dragDropPdf => 'اسحب وأفلت ملف PDF هنا';
+
+  @override
+  String get selectPdf => 'اختر ملف PDF';
+
+  @override
+  String get removeFile => 'حذف الملف';
+
+  @override
+  String get compressionLevel => 'مستوى الضغط';
+
+  @override
+  String get compressionScreen => 'شاشة (72 dpi)';
+
+  @override
+  String get compressionEbook => 'كتاب إلكتروني (150 dpi)';
+
+  @override
+  String get compressionPrinter => 'طابعة (300 dpi)';
+
+  @override
+  String get compressionPrepress => 'طباعة احترافية (300 dpi)';
+
+  @override
+  String get compressionDefault => 'افتراضي';
 }
