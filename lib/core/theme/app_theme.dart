@@ -19,9 +19,15 @@ abstract class AppTheme {
       selectionHandleColor: AppColors.darkHeadTextColor,
     ),
     appBarTheme: const AppBarTheme(
+      elevation: 0,
       backgroundColor: AppColors.dark,
       foregroundColor: AppColors.white,
       surfaceTintColor: Colors.transparent,
+      titleTextStyle: TextStyle(
+        fontSize: 20,
+        color: AppColors.white,
+        fontWeight: FontWeight.w500,
+      ),
     ),
     textButtonTheme: TextButtonThemeData(
       style: TextButton.styleFrom(
@@ -152,9 +158,15 @@ abstract class AppTheme {
       selectionHandleColor: AppColors.lightHeadTextColor,
     ),
     appBarTheme: const AppBarTheme(
+      elevation: 0,
       backgroundColor: AppColors.light,
       foregroundColor: AppColors.lightHeadTextColor,
       surfaceTintColor: Colors.transparent,
+      titleTextStyle: TextStyle(
+        fontSize: 20,
+        color: AppColors.lightHeadTextColor,
+        fontWeight: FontWeight.w500,
+      ),
     ),
     textButtonTheme: TextButtonThemeData(
       style: TextButton.styleFrom(
