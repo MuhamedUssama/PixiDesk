@@ -1,5 +1,4 @@
 import 'dart:io';
-import 'package:flutter/foundation.dart';
 import 'package:injectable/injectable.dart';
 import 'package:path/path.dart' as path;
 import 'package:pixi_desk/features/pdf/pdf_compression/domain/entities/compression_level.dart';
@@ -49,17 +48,14 @@ class GhostscriptCompressionService {
   }
 
   String _getGhostscriptPath() {
-    if (kDebugMode) {
-      // In debug mode, we might need to point to the assets folder directly
-      // or rely on the build system copying it.
-      // For now, assuming the CMake copy command works for Debug builds too.
-      // If running from IDE without full build, this might be tricky.
-      // Fallback to looking in assets/bin/windows relative to project root if needed?
-      // But Platform.resolvedExecutable is usually in build/windows/runner/Debug/
-      // And we copied files there.
+    final executableDir = path.dirname(Platform.resolvedExecutable);
+
+    if (Platform.isWindows) {
+      return path.join(executableDir, 'gswin64c.exe');
+    } else if (Platform.isMacOS) {
+      return path.join(executableDir, 'gs');
     }
 
-    final executableDir = path.dirname(Platform.resolvedExecutable);
-    return path.join(executableDir, 'gswin64c.exe');
+    throw UnsupportedError('Platform not supported for PDF compression');
   }
 }
