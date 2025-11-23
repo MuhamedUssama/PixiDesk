@@ -3,6 +3,9 @@ import 'package:pixi_desk/core/router/app_router.dart';
 import 'package:pixi_desk/features/landing/presentation/widgets/feature_card_widget.dart';
 import 'package:pixi_desk/l10n/localization/app_localizations.dart';
 
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:pixi_desk/features/settings/presentation/cubit/settings_cubit.dart';
+
 class MainLandingPage extends StatelessWidget {
   const MainLandingPage({super.key});
 
@@ -15,7 +18,34 @@ class MainLandingPage extends StatelessWidget {
         slivers: [
           SliverToBoxAdapter(
             child: Padding(
-              padding: const EdgeInsets.fromLTRB(32, 64, 32, 32),
+              padding: const EdgeInsets.fromLTRB(32, 32, 32, 0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  IconButton(
+                    icon: const Icon(Icons.language),
+                    onPressed: () =>
+                        context.read<SettingsCubit>().toggleLocale(),
+                    tooltip: 'Change Language',
+                  ),
+                  const SizedBox(width: 8),
+                  IconButton(
+                    icon: Icon(
+                      Theme.of(context).brightness == Brightness.dark
+                          ? Icons.light_mode
+                          : Icons.dark_mode,
+                    ),
+                    onPressed: () =>
+                        context.read<SettingsCubit>().toggleTheme(),
+                    tooltip: 'Toggle Theme',
+                  ),
+                ],
+              ),
+            ),
+          ),
+          SliverToBoxAdapter(
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(32, 32, 32, 32),
               child: Column(
                 children: [
                   Text(

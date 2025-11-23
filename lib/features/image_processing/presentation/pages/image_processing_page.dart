@@ -14,7 +14,7 @@ class ImageProcessingPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const HomeAppbar(),
+      appBar: const ImageProcessingAppbar(),
       body: BlocListener<ImageCubit, ImageState>(
         listener: (context, state) {
           if (state.status == ImageStatus.success &&
