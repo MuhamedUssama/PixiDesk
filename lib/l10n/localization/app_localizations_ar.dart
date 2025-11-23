@@ -12,7 +12,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get appTitle => 'بيكسي ديسك';
 
   @override
-  String get pdfConverterTitle => 'تحويل الصور إلى PDF';
+  String get pdfConverterTitle => 'محول PDF';
 
   @override
   String get addPhotos => 'إضافة صور';
@@ -85,4 +85,22 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get dragAndDropImages => 'اسحب وأفلت الصور هنا للبدء';
+
+  @override
+  String get imageProcessingTitle => 'معالجة الصور';
+
+  @override
+  String get imageProcessingSubtitle => 'ضغط وتحويل الصور بكفاءة';
+
+  @override
+  String get pdfConverterSubtitle => 'تحويل الصور إلى ملفات PDF';
+
+  @override
+  String get pdfTools => 'أدوات PDF';
+
+  @override
+  String get pdfToolsSubtitle => 'تحويل، ضغط، إدارة ملفات PDF بكفاءة';
+
+  @override
+  String get appSubtitle => 'أداة متكاملة لمعالجة الصور والملفات PDF';
 }

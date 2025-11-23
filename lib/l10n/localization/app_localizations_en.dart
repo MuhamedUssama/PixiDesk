@@ -12,7 +12,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get appTitle => 'PixiDesk';
 
   @override
-  String get pdfConverterTitle => 'Images to PDF';
+  String get pdfConverterTitle => 'PDF Converter';
 
   @override
   String get addPhotos => 'Add Photos';
@@ -85,4 +85,24 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get dragAndDropImages => 'Drag and drop images here to start';
+
+  @override
+  String get imageProcessingTitle => 'Image Processing';
+
+  @override
+  String get imageProcessingSubtitle =>
+      'Compress and convert images efficiently';
+
+  @override
+  String get pdfConverterSubtitle => 'Convert images to PDF documents';
+
+  @override
+  String get pdfTools => 'PDF Tools';
+
+  @override
+  String get pdfToolsSubtitle => 'Convert, compress, manage PDFs efficiently';
+
+  @override
+  String get appSubtitle =>
+      'Your all-in-one desktop utility for image and PDF processing.';
 }

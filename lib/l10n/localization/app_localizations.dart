@@ -107,7 +107,7 @@ abstract class AppLocalizations {
   /// No description provided for @pdfConverterTitle.
   ///
   /// In en, this message translates to:
-  /// **'Images to PDF'**
+  /// **'PDF Converter'**
   String get pdfConverterTitle;
 
   /// No description provided for @addPhotos.
@@ -253,6 +253,42 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Drag and drop images here to start'**
   String get dragAndDropImages;
+
+  /// No description provided for @imageProcessingTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Image Processing'**
+  String get imageProcessingTitle;
+
+  /// No description provided for @imageProcessingSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Compress and convert images efficiently'**
+  String get imageProcessingSubtitle;
+
+  /// No description provided for @pdfConverterSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Convert images to PDF documents'**
+  String get pdfConverterSubtitle;
+
+  /// No description provided for @pdfTools.
+  ///
+  /// In en, this message translates to:
+  /// **'PDF Tools'**
+  String get pdfTools;
+
+  /// No description provided for @pdfToolsSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Convert, compress, manage PDFs efficiently'**
+  String get pdfToolsSubtitle;
+
+  /// No description provided for @appSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Your all-in-one desktop utility for image and PDF processing.'**
+  String get appSubtitle;
 }
 
 class _AppLocalizationsDelegate
