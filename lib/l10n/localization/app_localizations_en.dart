@@ -122,7 +122,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get invalidPdfFile => 'Invalid PDF file';
 
   @override
-  String get dragDropPdf => 'Drag and drop PDF here';
+  String get dragDropPdf => 'Drag and drop PDF here to start';
 
   @override
   String get selectPdf => 'Select PDF';
@@ -147,4 +147,25 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get compressionDefault => 'Default';
+
+  @override
+  String get originalFile => 'Original File';
+
+  @override
+  String get compressedFile => 'Compressed File';
+
+  @override
+  String get quickSave => 'Quick Save';
+
+  @override
+  String get previewAndSave => 'Preview & Save';
+
+  @override
+  String get size => 'Size';
+
+  @override
+  String get previewPdf => 'Preview PDF';
+
+  @override
+  String get savePdf => 'Save PDF';
 }

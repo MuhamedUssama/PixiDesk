@@ -145,4 +145,25 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get compressionDefault => 'افتراضي';
+
+  @override
+  String get originalFile => 'الملف الأصلي';
+
+  @override
+  String get compressedFile => 'الملف المضغوط';
+
+  @override
+  String get quickSave => 'حفظ سريع';
+
+  @override
+  String get previewAndSave => 'معاينة وحفظ';
+
+  @override
+  String get size => 'الحجم';
+
+  @override
+  String get previewPdf => 'معاينة PDF';
+
+  @override
+  String get savePdf => 'حفظ PDF';
 }

@@ -1,11 +1,10 @@
-import 'dart:io';
-import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pixi_desk/core/theme/app_colors.dart';
 import 'package:pixi_desk/features/image_processing/presentation/widgets/drop_zone_widget.dart';
 import 'package:pixi_desk/features/pdf/pdf_compression/presentation/cubit/pdf_compression_cubit.dart';
 import 'package:pixi_desk/features/pdf/pdf_compression/presentation/cubit/pdf_compression_state.dart';
+import 'package:pixi_desk/features/pdf/pdf_compression/presentation/widgets/compression_result_widget.dart';
 import 'package:pixi_desk/features/pdf/pdf_compression/presentation/widgets/compression_settings.dart';
 import 'package:pixi_desk/features/pdf/pdf_compression/presentation/widgets/empty_compress_pdf_state_widget.dart';
 import 'package:pixi_desk/features/pdf/pdf_compression/presentation/widgets/selected_files_widget.dart';
@@ -68,27 +67,19 @@ class PdfCompressionPage extends StatelessWidget {
                     },
                     child: state.selectedFile == null
                         ? const EmptyCompressPdfStateWidget()
+                        : state.compressedFile != null
+                        ? CompressionResultWidget(state: state)
                         : SelectedFilesWidget(state: state),
                   ),
                 ),
-                if (state.selectedFile != null) ...[
+                if (state.selectedFile != null &&
+                    state.compressedFile == null) ...[
                   const SizedBox(height: 16),
                   CompressionSettings(state: state, l10n: l10n),
                   const SizedBox(height: 16),
                   ElevatedButton(
-                    onPressed: () async {
-                      final outputPath = await FilePicker.platform.saveFile(
-                        dialogTitle: l10n.saveAs,
-                        fileName:
-                            'compressed_${state.selectedFile!.path.split(Platform.pathSeparator).last}',
-                        type: FileType.custom,
-                        allowedExtensions: ['pdf'],
-                      );
-                      if (outputPath != null && context.mounted) {
-                        context.read<PdfCompressionCubit>().compressPdf(
-                          outputPath,
-                        );
-                      }
+                    onPressed: () {
+                      context.read<PdfCompressionCubit>().startCompression();
                     },
                     child: Text(l10n.compressPdf),
                   ),

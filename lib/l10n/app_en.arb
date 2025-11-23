@@ -36,7 +36,7 @@
   "pdfCompression": "PDF Compression",
   "compressionSuccess": "PDF Compressed Successfully",
   "invalidPdfFile": "Invalid PDF file",
-  "dragDropPdf": "Drag and drop PDF here",
+  "dragDropPdf": "Drag and drop PDF here to start",
   "selectPdf": "Select PDF",
   "removeFile": "Remove File",
   "compressionLevel": "Compression Level",
@@ -44,5 +44,12 @@
   "compressionEbook": "eBook (150 dpi)",
   "compressionPrinter": "Printer (300 dpi)",
   "compressionPrepress": "Prepress (300 dpi)",
-  "compressionDefault": "Default"
+  "compressionDefault": "Default",
+  "originalFile": "Original File",
+  "compressedFile": "Compressed File",
+  "quickSave": "Quick Save",
+  "previewAndSave": "Preview & Save",
+  "size": "Size",
+  "previewPdf": "Preview PDF",
+  "savePdf": "Save PDF"
 }

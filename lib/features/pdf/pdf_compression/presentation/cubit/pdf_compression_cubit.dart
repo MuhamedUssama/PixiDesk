@@ -1,6 +1,8 @@
 import 'dart:io';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
+import 'package:path/path.dart' as path;
+import 'package:path_provider/path_provider.dart';
 import 'package:pixi_desk/features/pdf/pdf_compression/domain/entities/compression_level.dart';
 import 'package:pixi_desk/features/pdf/pdf_compression/domain/usecases/compress_pdf_usecase.dart';
 import 'package:pixi_desk/features/pdf/pdf_compression/presentation/cubit/pdf_compression_state.dart';
@@ -31,12 +33,17 @@ class PdfCompressionCubit extends Cubit<PdfCompressionState> {
     emit(const PdfCompressionState());
   }
 
-  Future<void> compressPdf(String outputPath) async {
+  Future<void> startCompression() async {
     if (state.selectedFile == null) return;
 
     emit(state.copyWith(status: PdfCompressionStatus.loading));
 
     try {
+      final tempDir = await getTemporaryDirectory();
+      final fileName =
+          'compressed_${DateTime.now().millisecondsSinceEpoch}.pdf';
+      final outputPath = path.join(tempDir.path, fileName);
+
       final compressedFile = await _compressPdfUseCase(
         input: state.selectedFile!,
         outputPath: outputPath,
