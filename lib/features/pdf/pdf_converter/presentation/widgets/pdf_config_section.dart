@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../../../../core/theme/app_colors.dart';
-import '../../../../l10n/localization/app_localizations.dart';
+import '../../../../../core/theme/app_colors.dart';
+import '../../../../../l10n/localization/app_localizations.dart';
 import '../../domain/entities/pdf_config.dart';
 import '../cubit/pdf_converter_cubit.dart';
 import '../cubit/pdf_converter_state.dart';

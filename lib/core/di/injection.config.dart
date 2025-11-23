@@ -27,14 +27,14 @@ import '../../features/image_processing/domain/usecases/convert_image_usecase.da
     as _i750;
 import '../../features/image_processing/presentation/cubit/image_cubit.dart'
     as _i743;
-import '../../features/pdf_converter/data/repositories/pdf_repository_impl.dart'
-    as _i844;
-import '../../features/pdf_converter/domain/repositories/pdf_repository.dart'
-    as _i224;
-import '../../features/pdf_converter/domain/usecases/generate_pdf_use_case.dart'
-    as _i196;
-import '../../features/pdf_converter/presentation/cubit/pdf_converter_cubit.dart'
-    as _i902;
+import '../../features/pdf/pdf_converter/data/repositories/pdf_repository_impl.dart'
+    as _i1022;
+import '../../features/pdf/pdf_converter/domain/repositories/pdf_repository.dart'
+    as _i347;
+import '../../features/pdf/pdf_converter/domain/usecases/generate_pdf_use_case.dart'
+    as _i796;
+import '../../features/pdf/pdf_converter/presentation/cubit/pdf_converter_cubit.dart'
+    as _i1023;
 import '../../features/settings/data/repositories/settings_repository_impl.dart'
     as _i955;
 import '../../features/settings/domain/repositories/settings_repository.dart'
@@ -55,10 +55,10 @@ extension GetItInjectableX on _i174.GetIt {
       () => registerModule.prefs,
       preResolve: true,
     );
+    gh.lazySingleton<_i347.PdfRepository>(() => _i1022.PdfRepositoryImpl());
     gh.lazySingleton<_i495.LocalImageDataSource>(
       () => _i220.LocalImageDataSourceImpl(),
     );
-    gh.lazySingleton<_i224.PdfRepository>(() => _i844.PdfRepositoryImpl());
     gh.lazySingleton<_i674.SettingsRepository>(
       () => _i955.SettingsRepositoryImpl(gh<_i460.SharedPreferences>()),
     );
@@ -77,11 +77,11 @@ extension GetItInjectableX on _i174.GetIt {
         gh<_i89.CompressImageUseCase>(),
       ),
     );
-    gh.factory<_i196.GeneratePdfUseCase>(
-      () => _i196.GeneratePdfUseCase(gh<_i224.PdfRepository>()),
+    gh.factory<_i796.GeneratePdfUseCase>(
+      () => _i796.GeneratePdfUseCase(gh<_i347.PdfRepository>()),
     );
-    gh.factory<_i902.PdfConverterCubit>(
-      () => _i902.PdfConverterCubit(gh<_i196.GeneratePdfUseCase>()),
+    gh.factory<_i1023.PdfConverterCubit>(
+      () => _i1023.PdfConverterCubit(gh<_i796.GeneratePdfUseCase>()),
     );
     gh.factory<_i792.SettingsCubit>(
       () => _i792.SettingsCubit(gh<_i674.SettingsRepository>()),

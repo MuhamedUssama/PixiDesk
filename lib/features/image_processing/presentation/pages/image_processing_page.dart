@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:pixi_desk/features/image_processing/presentation/widgets/home_appbar.dart';
-import '../../../../core/di/injection.dart';
+import 'package:pixi_desk/features/image_processing/presentation/widgets/image_processing_appbar.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../cubit/image_cubit.dart';
 import '../cubit/image_state.dart';
@@ -9,25 +8,13 @@ import '../widgets/control_panel.dart';
 import '../widgets/drop_zone_widget.dart';
 import '../widgets/image_preview.dart';
 
-class HomePage extends StatelessWidget {
-  const HomePage({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => getIt<ImageCubit>(),
-      child: const HomeView(),
-    );
-  }
-}
-
-class HomeView extends StatelessWidget {
-  const HomeView({super.key});
+class ImageProcessingPage extends StatelessWidget {
+  const ImageProcessingPage({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const HomeAppbar(),
+      appBar: const ImageProcessingAppbar(),
       body: BlocListener<ImageCubit, ImageState>(
         listener: (context, state) {
           if (state.status == ImageStatus.success &&

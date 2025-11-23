@@ -1,6 +1,6 @@
 {
   "appTitle": "PixiDesk",
-  "pdfConverterTitle": "Images to PDF",
+  "pdfConverterTitle": "PDF Converter",
   "addPhotos": "Add Photos",
   "generatePdf": "Generate PDF",
   "pageSize": "Page Size",
@@ -24,5 +24,13 @@
   "error": "Error",
   "imageSaved": "Image saved successfully",
   "invalidPath": "Invalid path",
-  "dragAndDropImages": "Drag and drop images here to start"
+  "dragAndDropImages": "Drag and drop images here to start",
+  "imageProcessingTitle": "Image Processing",
+  "imageProcessingSubtitle": "Compress and convert images efficiently",
+  "pdfConverterSubtitle": "Convert images to PDF documents",
+  "pdfTools": "PDF Tools",
+  "pdfToolsSubtitle": "Convert, compress, manage PDFs efficiently",
+  "appSubtitle": "Your all-in-one desktop utility for image and PDF processing.",
+  "compressPdf": "Compress PDF",
+  "compressPdfSubtitle": "Compress PDF files efficiently"
 }

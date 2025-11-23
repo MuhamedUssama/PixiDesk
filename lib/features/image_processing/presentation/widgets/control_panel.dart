@@ -34,7 +34,7 @@ class ControlPanel extends StatelessWidget {
               ),
               const SizedBox(height: 16),
               DropdownButtonFormField<ImageFormat>(
-                value: state.targetFormat,
+                initialValue: state.targetFormat,
                 dropdownColor: AppColors.dark,
                 style: const TextStyle(color: AppColors.white),
                 decoration: InputDecoration(
