@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:injectable/injectable.dart';
+import 'package:path/path.dart' as path;
 import 'package:pixi_desk/features/pdf/pdf_compression/data/datasources/ghostscript_compression_service.dart';
 import 'package:pixi_desk/features/pdf/pdf_compression/domain/entities/compression_level.dart';
 import 'package:pixi_desk/features/pdf/pdf_compression/domain/repositories/pdf_compression_repository.dart';
@@ -12,14 +13,19 @@ class PdfCompressionRepositoryImpl implements PdfCompressionRepository {
   @override
   Future<File> compressPdf({
     required File input,
-    required String outputPath,
     required CompressionLevel level,
   }) async {
+    final Directory tempDir = Directory.systemTemp;
+
+    final String originalFileName = path.basenameWithoutExtension(input.path);
+    final String tempFileName = 'compressed_$originalFileName.pdf';
+    final String tempOutputPath = path.join(tempDir.path, tempFileName);
+
     return compute(
       _compressInIsolate,
       _CompressionParams(
         inputPath: input.path,
-        outputPath: outputPath,
+        outputPath: tempOutputPath,
         level: level,
       ),
     );
