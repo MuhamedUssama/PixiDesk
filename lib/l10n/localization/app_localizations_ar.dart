@@ -15,6 +15,9 @@ class AppLocalizationsAr extends AppLocalizations {
   String get pdfConverterTitle => 'محول PDF';
 
   @override
+  String get pdfConverterSubtitle => 'تحويل الصور إلى ملفات PDF';
+
+  @override
   String get addPhotos => 'إضافة صور';
 
   @override
@@ -91,9 +94,6 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get imageProcessingSubtitle => 'ضغط وتحويل الصور بكفاءة';
-
-  @override
-  String get pdfConverterSubtitle => 'تحويل الصور إلى ملفات PDF';
 
   @override
   String get pdfTools => 'أدوات PDF';

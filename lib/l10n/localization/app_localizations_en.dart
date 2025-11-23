@@ -15,6 +15,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get pdfConverterTitle => 'PDF Converter';
 
   @override
+  String get pdfConverterSubtitle => 'Convert images to PDF documents';
+
+  @override
   String get addPhotos => 'Add Photos';
 
   @override
@@ -92,9 +95,6 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get imageProcessingSubtitle =>
       'Compress and convert images efficiently';
-
-  @override
-  String get pdfConverterSubtitle => 'Convert images to PDF documents';
 
   @override
   String get pdfTools => 'PDF Tools';

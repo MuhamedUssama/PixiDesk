@@ -43,6 +43,17 @@ class PdfConverterCubit extends Cubit<PdfConverterState> {
     emit(state.copyWith(images: newImages));
   }
 
+  void rotateImage(String id) {
+    final newImages = state.images.map((img) {
+      if (img.id == id) {
+        final newQuarterTurns = (img.quarterTurns + 1) % 4;
+        return img.copyWith(quarterTurns: newQuarterTurns);
+      }
+      return img;
+    }).toList();
+    emit(state.copyWith(images: newImages));
+  }
+
   void reorderImages(int oldIndex, int newIndex) {
     if (oldIndex < newIndex) {
       newIndex -= 1;

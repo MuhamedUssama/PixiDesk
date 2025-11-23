@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../domain/entities/pdf_image_item.dart';
+import '../cubit/pdf_converter_cubit.dart';
 
 class ImagePageView extends StatefulWidget {
   final List<PdfImageItem> images;
@@ -52,7 +54,12 @@ class _ImagePageViewState extends State<ImagePageView> {
           itemCount: widget.images.length,
           itemBuilder: (context, index) {
             final image = widget.images[index];
-            return Center(child: Image.file(image.file, fit: BoxFit.contain));
+            return Center(
+              child: RotatedBox(
+                quarterTurns: image.quarterTurns,
+                child: Image.file(image.file, fit: BoxFit.contain),
+              ),
+            );
           },
         ),
         Center(
@@ -66,6 +73,21 @@ class _ImagePageViewState extends State<ImagePageView> {
                   onPressed: _previousPage,
                   style: IconButton.styleFrom(
                     backgroundColor: Colors.transparent,
+                    foregroundColor: Colors.white,
+                    alignment: Alignment.center,
+                  ),
+                ),
+                IconButton(
+                  icon: const Icon(Icons.rotate_right, size: 32),
+                  onPressed: () {
+                    final currentImage =
+                        widget.images[_pageController.page!.round()];
+                    context.read<PdfConverterCubit>().rotateImage(
+                      currentImage.id,
+                    );
+                  },
+                  style: IconButton.styleFrom(
+                    backgroundColor: Colors.black54,
                     foregroundColor: Colors.white,
                     alignment: Alignment.center,
                   ),

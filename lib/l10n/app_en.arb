@@ -1,6 +1,7 @@
 {
   "appTitle": "PixiDesk",
   "pdfConverterTitle": "PDF Converter",
+  "pdfConverterSubtitle": "Convert images to PDF documents",
   "addPhotos": "Add Photos",
   "generatePdf": "Generate PDF",
   "pageSize": "Page Size",
@@ -27,7 +28,6 @@
   "dragAndDropImages": "Drag and drop images here to start",
   "imageProcessingTitle": "Image Processing",
   "imageProcessingSubtitle": "Compress and convert images efficiently",
-  "pdfConverterSubtitle": "Convert images to PDF documents",
   "pdfTools": "PDF Tools",
   "pdfToolsSubtitle": "Convert, compress, manage PDFs efficiently",
   "appSubtitle": "Your all-in-one desktop utility for image and PDF processing.",
