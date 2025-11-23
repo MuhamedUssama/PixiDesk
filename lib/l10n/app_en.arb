@@ -32,5 +32,17 @@
   "pdfToolsSubtitle": "Convert, compress, manage PDFs efficiently",
   "appSubtitle": "Your all-in-one desktop utility for image and PDF processing.",
   "compressPdf": "Compress PDF",
-  "compressPdfSubtitle": "Compress PDF files efficiently"
+  "compressPdfSubtitle": "Compress PDF files efficiently",
+  "pdfCompression": "PDF Compression",
+  "compressionSuccess": "PDF Compressed Successfully",
+  "invalidPdfFile": "Invalid PDF file",
+  "dragDropPdf": "Drag and drop PDF here",
+  "selectPdf": "Select PDF",
+  "removeFile": "Remove File",
+  "compressionLevel": "Compression Level",
+  "compressionScreen": "Screen (72 dpi)",
+  "compressionEbook": "eBook (150 dpi)",
+  "compressionPrinter": "Printer (300 dpi)",
+  "compressionPrepress": "Prepress (300 dpi)",
+  "compressionDefault": "Default"
 }
