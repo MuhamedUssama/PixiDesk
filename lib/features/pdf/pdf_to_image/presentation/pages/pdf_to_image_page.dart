@@ -11,6 +11,7 @@ import 'package:pixi_desk/features/pdf/pdf_to_image/presentation/cubit/pdf_to_im
 import 'package:pixi_desk/features/pdf/pdf_to_image/presentation/widgets/conversion_progress_widget.dart';
 import 'package:pixi_desk/features/pdf/pdf_to_image/presentation/widgets/conversion_settings_widget.dart';
 import 'package:pixi_desk/features/pdf/pdf_to_image/presentation/widgets/empty_state_widget.dart';
+import 'package:pixi_desk/features/pdf/pdf_to_image/presentation/widgets/pdf_to_image_appbar.dart';
 import 'package:pixi_desk/features/pdf/pdf_to_image/presentation/widgets/review_ui_widget.dart';
 import 'package:pixi_desk/features/pdf/pdf_to_image/presentation/widgets/selected_file_state.dart';
 import 'package:pixi_desk/l10n/localization/app_localizations.dart';
@@ -23,13 +24,7 @@ class PdfToImagePage extends StatelessWidget {
     final l10n = AppLocalizations.of(context)!;
 
     return Scaffold(
-      appBar: AppBar(
-        title: Text(l10n.pdfToImage),
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
-          onPressed: () => Navigator.of(context).pop(),
-        ),
-      ),
+      appBar: const PdfToImageAppbar(),
       body: BlocConsumer<PdfToImageCubit, PdfToImageState>(
         listener: (context, state) {
           if (state.status == PdfToImageStatus.error &&

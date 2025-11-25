@@ -32,23 +32,33 @@ class _ReviewUiWidgetState extends State<ReviewUiWidget> {
                 widget.l10n.conversionResult,
                 style: Theme.of(context).textTheme.titleLarge,
               ),
-              Row(
-                children: [
-                  IconButton(
-                    icon: Icon(_isGridView ? Icons.view_list : Icons.grid_view),
-                    onPressed: () {
-                      setState(() {
-                        _isGridView = !_isGridView;
-                      });
-                    },
-                  ),
-                  const SizedBox(width: 8),
-                  ElevatedButton.icon(
-                    onPressed: () => widget.onSaveAll(),
-                    icon: const Icon(Icons.save),
-                    label: Text(widget.l10n.saveAll),
-                  ),
-                ],
+              Flexible(
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    IconButton(
+                      icon: Icon(
+                        _isGridView ? Icons.view_list : Icons.grid_view,
+                      ),
+                      onPressed: () {
+                        setState(() {
+                          _isGridView = !_isGridView;
+                        });
+                      },
+                    ),
+                    const SizedBox(width: 8),
+                    Flexible(
+                      child: ElevatedButton.icon(
+                        onPressed: () => widget.onSaveAll(),
+                        icon: const Icon(Icons.save),
+                        label: Text(
+                          widget.l10n.saveAll,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ],
           ),

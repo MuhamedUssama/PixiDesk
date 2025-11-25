@@ -14,7 +14,7 @@ class PopplerService {
     final receivePort = ReceivePort();
 
     // We need to pass the binary path to the isolate
-    final binaryPath = await _getPopplerBinaryPath();
+    final binaryPath = _getPopplerBinaryPath('pdftoppm');
 
     await Isolate.spawn(
       _isolateEntryPoint,
@@ -31,9 +31,12 @@ class PopplerService {
   Future<int> getPageCount(File file) async {
     // Try to use pdfinfo if available
     try {
-      final binaryPath = await _getPopplerBinaryPath(binaryName: 'pdfinfo');
-      // If pdfinfo is not found, it might return 'pdfinfo' which might not be in PATH.
-      // We can check if it exists or just try running it.
+      final binaryPath = _getPopplerBinaryPath('pdfinfo');
+
+      if (!File(binaryPath).existsSync()) {
+        debugPrint('pdfinfo not found at $binaryPath');
+        return 0;
+      }
 
       final result = await Process.run(binaryPath, [file.path]);
       if (result.exitCode == 0) {
@@ -52,43 +55,13 @@ class PopplerService {
     return 0;
   }
 
-  Future<String> _getPopplerBinaryPath({String binaryName = 'pdftoppm'}) async {
-    String executable = binaryName;
+  String _getPopplerBinaryPath(String binaryName) {
+    final executableDir = path.dirname(Platform.resolvedExecutable);
+
     if (Platform.isWindows) {
-      if (binaryName == 'pdftoppm') executable = 'pdftoppm.exe';
-      if (binaryName == 'pdfinfo') executable = 'pdfinfo.exe';
-
-      final exeDir = File(Platform.resolvedExecutable).parent;
-      final localPath = path.join(
-        exeDir.path,
-        'data',
-        'flutter_assets',
-        'assets',
-        'bin',
-        'windows',
-        executable,
-      );
-
-      if (await File(localPath).exists()) {
-        return localPath;
-      }
+      return path.join(executableDir, 'poppler', '$binaryName.exe');
     } else if (Platform.isMacOS) {
-      final exeDir = File(Platform.resolvedExecutable).parent;
-      final localPath = path.join(
-        exeDir.path,
-        '..',
-        'Frameworks',
-        'App.framework',
-        'Resources',
-        'flutter_assets',
-        'assets',
-        'bin',
-        'macos',
-        binaryName,
-      );
-      if (await File(localPath).exists()) {
-        return localPath;
-      }
+      return path.join(executableDir, 'poppler', binaryName);
     }
     return binaryName;
   }
