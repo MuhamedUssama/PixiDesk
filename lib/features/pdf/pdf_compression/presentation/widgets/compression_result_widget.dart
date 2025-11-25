@@ -1,5 +1,4 @@
 import 'dart:io';
-import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pixi_desk/core/router/app_router.dart';
@@ -58,28 +57,20 @@ class CompressionResultWidget extends StatelessWidget {
                 const SizedBox(height: 24),
                 TextButton(
                   onPressed: () async {
-                    String? outputPath = await FilePicker.platform.saveFile(
-                      dialogTitle: l10n.saveAs,
-                      fileName: compressedFileName,
-                      type: FileType.custom,
-                      allowedExtensions: ['pdf'],
+                    await context.read<PdfCompressionCubit>().saveFile(
+                      state.compressedFile!,
+                      l10n,
+                      () {
+                        if (context.mounted) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text(l10n.imageSaved),
+                              backgroundColor: Colors.green,
+                            ),
+                          );
+                        }
+                      },
                     );
-
-                    if (outputPath != null) {
-                      if (!outputPath.toLowerCase().endsWith('.pdf')) {
-                        outputPath = '$outputPath.pdf';
-                      }
-
-                      await state.compressedFile!.copy(outputPath);
-                      if (context.mounted) {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
-                            content: Text(l10n.imageSaved),
-                            backgroundColor: Colors.green,
-                          ),
-                        );
-                      }
-                    }
                   },
                   child: Text(l10n.quickSave),
                 ),

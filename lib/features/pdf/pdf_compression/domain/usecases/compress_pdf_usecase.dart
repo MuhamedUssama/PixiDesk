@@ -13,14 +13,9 @@ class CompressPdfUseCase {
 
   Future<File> call({
     required File input,
-    required String outputPath,
     required CompressionLevel level,
   }) async {
-    return _repository.compressPdf(
-      input: input,
-      outputPath: outputPath,
-      level: level,
-    );
+    return _repository.compressPdf(input: input, level: level);
   }
 
   Future<Uint8List> getPdfBytes(File file) async {

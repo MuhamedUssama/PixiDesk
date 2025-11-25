@@ -12,22 +12,8 @@ class CompressPdfAppbar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    final isDark = Theme.of(context).brightness == Brightness.dark;
     return AppBar(
       title: Text(l10n.compressPdf),
-      backgroundColor: Colors.transparent,
-      elevation: 0,
-      leading: IconButton(
-        icon: Icon(
-          Icons.arrow_back,
-          color: isDark ? Colors.white : Colors.black,
-        ),
-        onPressed: () => Navigator.of(context).pop(),
-      ),
-      titleTextStyle: Theme.of(context).textTheme.titleLarge?.copyWith(
-        color: isDark ? Colors.white : Colors.black,
-        fontWeight: FontWeight.bold,
-      ),
       actions: [
         IconButton(
           onPressed: () async {

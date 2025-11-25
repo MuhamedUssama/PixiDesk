@@ -22,6 +22,7 @@ class PdfCompressionPage extends StatelessWidget {
     return Scaffold(
       appBar: const CompressPdfAppbar(),
       body: BlocConsumer<PdfCompressionCubit, PdfCompressionState>(
+        listenWhen: (previous, current) => previous.status != current.status,
         listener: (context, state) {
           if (state.status == PdfCompressionStatus.error) {
             ScaffoldMessenger.of(context).showSnackBar(
@@ -30,6 +31,7 @@ class PdfCompressionPage extends StatelessWidget {
                 backgroundColor: AppColors.error,
               ),
             );
+            context.read<PdfCompressionCubit>().resetStatus();
           } else if (state.status == PdfCompressionStatus.success) {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
@@ -37,6 +39,7 @@ class PdfCompressionPage extends StatelessWidget {
                 backgroundColor: Colors.green,
               ),
             );
+            context.read<PdfCompressionCubit>().resetStatus();
           }
         },
         builder: (context, state) {

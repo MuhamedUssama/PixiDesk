@@ -1,11 +1,12 @@
 import 'dart:io';
+import 'dart:ui';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
-import 'package:path/path.dart' as path;
-import 'package:path_provider/path_provider.dart';
 import 'package:pixi_desk/features/pdf/pdf_compression/domain/entities/compression_level.dart';
 import 'package:pixi_desk/features/pdf/pdf_compression/domain/usecases/compress_pdf_usecase.dart';
 import 'package:pixi_desk/features/pdf/pdf_compression/presentation/cubit/pdf_compression_state.dart';
+import 'package:pixi_desk/l10n/localization/app_localizations.dart';
 
 @injectable
 class PdfCompressionCubit extends Cubit<PdfCompressionState> {
@@ -33,20 +34,18 @@ class PdfCompressionCubit extends Cubit<PdfCompressionState> {
     emit(const PdfCompressionState());
   }
 
+  void resetStatus() {
+    emit(state.copyWith(status: PdfCompressionStatus.initial));
+  }
+
   Future<void> startCompression() async {
     if (state.selectedFile == null) return;
 
     emit(state.copyWith(status: PdfCompressionStatus.loading));
 
     try {
-      final tempDir = await getTemporaryDirectory();
-      final fileName =
-          'compressed_${DateTime.now().millisecondsSinceEpoch}.pdf';
-      final outputPath = path.join(tempDir.path, fileName);
-
       final compressedFile = await _compressPdfUseCase(
         input: state.selectedFile!,
-        outputPath: outputPath,
         level: state.compressionLevel,
       );
 
@@ -83,6 +82,28 @@ class PdfCompressionCubit extends Cubit<PdfCompressionState> {
           errorMessage: e.toString(),
         ),
       );
+    }
+  }
+
+  Future<void> saveFile(
+    File pdfFile,
+    AppLocalizations l10n,
+    VoidCallback onSaved,
+  ) async {
+    String? outputPath = await FilePicker.platform.saveFile(
+      dialogTitle: l10n.saveAs,
+      fileName: pdfFile.path.split(Platform.pathSeparator).last,
+      type: FileType.custom,
+      allowedExtensions: ['pdf'],
+    );
+
+    if (outputPath != null) {
+      if (!outputPath.toLowerCase().endsWith('.pdf')) {
+        outputPath = '$outputPath.pdf';
+      }
+
+      await pdfFile.copy(outputPath);
+      onSaved();
     }
   }
 }
