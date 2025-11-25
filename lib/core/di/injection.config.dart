@@ -45,6 +45,16 @@ import '../../features/pdf/pdf_converter/domain/usecases/generate_pdf_use_case.d
     as _i796;
 import '../../features/pdf/pdf_converter/presentation/cubit/pdf_converter_cubit.dart'
     as _i1023;
+import '../../features/pdf/pdf_to_image/data/datasources/poppler_service.dart'
+    as _i649;
+import '../../features/pdf/pdf_to_image/data/repositories/pdf_to_image_repository_impl.dart'
+    as _i850;
+import '../../features/pdf/pdf_to_image/domain/repositories/pdf_to_image_repository.dart'
+    as _i114;
+import '../../features/pdf/pdf_to_image/domain/usecases/convert_pdf_to_images_usecase.dart'
+    as _i45;
+import '../../features/pdf/pdf_to_image/presentation/cubit/pdf_to_image_cubit.dart'
+    as _i748;
 import '../../features/settings/data/repositories/settings_repository_impl.dart'
     as _i955;
 import '../../features/settings/domain/repositories/settings_repository.dart'
@@ -68,6 +78,7 @@ extension GetItInjectableX on _i174.GetIt {
     gh.factory<_i725.GhostscriptCompressionService>(
       () => _i725.GhostscriptCompressionService(),
     );
+    gh.factory<_i649.PopplerService>(() => _i649.PopplerService());
     gh.lazySingleton<_i457.PdfCompressionRepository>(
       () => _i561.PdfCompressionRepositoryImpl(),
     );
@@ -93,6 +104,9 @@ extension GetItInjectableX on _i174.GetIt {
     gh.factory<_i400.PdfCompressionCubit>(
       () => _i400.PdfCompressionCubit(gh<_i263.CompressPdfUseCase>()),
     );
+    gh.lazySingleton<_i114.PdfToImageRepository>(
+      () => _i850.PdfToImageRepositoryImpl(gh<_i649.PopplerService>()),
+    );
     gh.factory<_i743.ImageCubit>(
       () => _i743.ImageCubit(
         gh<_i750.ConvertImageUseCase>(),
@@ -105,8 +119,14 @@ extension GetItInjectableX on _i174.GetIt {
     gh.factory<_i1023.PdfConverterCubit>(
       () => _i1023.PdfConverterCubit(gh<_i796.GeneratePdfUseCase>()),
     );
+    gh.factory<_i45.ConvertPdfToImagesUseCase>(
+      () => _i45.ConvertPdfToImagesUseCase(gh<_i114.PdfToImageRepository>()),
+    );
     gh.factory<_i792.SettingsCubit>(
       () => _i792.SettingsCubit(gh<_i674.SettingsRepository>()),
+    );
+    gh.factory<_i748.PdfToImageCubit>(
+      () => _i748.PdfToImageCubit(gh<_i45.ConvertPdfToImagesUseCase>()),
     );
     return this;
   }

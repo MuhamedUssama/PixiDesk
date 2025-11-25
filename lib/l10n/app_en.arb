@@ -53,5 +53,25 @@
   "previewPdf": "Preview PDF",
   "savePdf": "Save PDF",
   "pdfToImages": "PDF To Images",
-  "pdfToImagesSubtitle": "Convert PDF documents to images"
+  "pdfToImagesSubtitle": "Convert PDF documents to images",
+  "pdfToImage": "PDF to Image",
+  "conversionSettings": "Conversion Settings",
+  "outputFormat": "Output Format",
+  "qualityDpi": "Quality (DPI)",
+  "convertingPageOf": "Converting page {currentPage} of {totalPages}",
+  "@convertingPageOf": {
+    "placeholders": {
+      "currentPage": {
+        "type": "int"
+      },
+      "totalPages": {
+        "type": "String"
+      }
+    }
+  },
+  "filesSaved": "Files saved successfully",
+  "conversionResult": "Conversion Result",
+  "saveAll": "Save All",
+  "dragPdfHere": "Drag PDF Here",
+  "selectPdfFile": "Select PDF File"
 }

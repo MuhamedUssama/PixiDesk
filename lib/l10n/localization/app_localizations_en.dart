@@ -174,4 +174,36 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get pdfToImagesSubtitle => 'Convert PDF documents to images';
+
+  @override
+  String get pdfToImage => 'PDF to Image';
+
+  @override
+  String get conversionSettings => 'Conversion Settings';
+
+  @override
+  String get outputFormat => 'Output Format';
+
+  @override
+  String get qualityDpi => 'Quality (DPI)';
+
+  @override
+  String convertingPageOf(int currentPage, String totalPages) {
+    return 'Converting page $currentPage of $totalPages';
+  }
+
+  @override
+  String get filesSaved => 'Files saved successfully';
+
+  @override
+  String get conversionResult => 'Conversion Result';
+
+  @override
+  String get saveAll => 'Save All';
+
+  @override
+  String get dragPdfHere => 'Drag PDF Here';
+
+  @override
+  String get selectPdfFile => 'Select PDF File';
 }

@@ -427,6 +427,66 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Convert PDF documents to images'**
   String get pdfToImagesSubtitle;
+
+  /// No description provided for @pdfToImage.
+  ///
+  /// In en, this message translates to:
+  /// **'PDF to Image'**
+  String get pdfToImage;
+
+  /// No description provided for @conversionSettings.
+  ///
+  /// In en, this message translates to:
+  /// **'Conversion Settings'**
+  String get conversionSettings;
+
+  /// No description provided for @outputFormat.
+  ///
+  /// In en, this message translates to:
+  /// **'Output Format'**
+  String get outputFormat;
+
+  /// No description provided for @qualityDpi.
+  ///
+  /// In en, this message translates to:
+  /// **'Quality (DPI)'**
+  String get qualityDpi;
+
+  /// No description provided for @convertingPageOf.
+  ///
+  /// In en, this message translates to:
+  /// **'Converting page {currentPage} of {totalPages}'**
+  String convertingPageOf(int currentPage, String totalPages);
+
+  /// No description provided for @filesSaved.
+  ///
+  /// In en, this message translates to:
+  /// **'Files saved successfully'**
+  String get filesSaved;
+
+  /// No description provided for @conversionResult.
+  ///
+  /// In en, this message translates to:
+  /// **'Conversion Result'**
+  String get conversionResult;
+
+  /// No description provided for @saveAll.
+  ///
+  /// In en, this message translates to:
+  /// **'Save All'**
+  String get saveAll;
+
+  /// No description provided for @dragPdfHere.
+  ///
+  /// In en, this message translates to:
+  /// **'Drag PDF Here'**
+  String get dragPdfHere;
+
+  /// No description provided for @selectPdfFile.
+  ///
+  /// In en, this message translates to:
+  /// **'Select PDF File'**
+  String get selectPdfFile;
 }
 
 class _AppLocalizationsDelegate

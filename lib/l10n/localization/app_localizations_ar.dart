@@ -172,4 +172,36 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get pdfToImagesSubtitle => 'تحويل ملفات PDF إلى صور بكفاءة';
+
+  @override
+  String get pdfToImage => 'PDF إلى صور';
+
+  @override
+  String get conversionSettings => 'إعدادات التحويل';
+
+  @override
+  String get outputFormat => 'صيغة الإخراج';
+
+  @override
+  String get qualityDpi => 'الجودة (DPI)';
+
+  @override
+  String convertingPageOf(int currentPage, String totalPages) {
+    return 'جاري تحويل الصفحة $currentPage من $totalPages';
+  }
+
+  @override
+  String get filesSaved => 'تم حفظ الملفات بنجاح';
+
+  @override
+  String get conversionResult => 'نتيجة التحويل';
+
+  @override
+  String get saveAll => 'حفظ الكل';
+
+  @override
+  String get dragPdfHere => 'اسحب وأفلت ملف PDF هنا';
+
+  @override
+  String get selectPdfFile => 'اختر ملف PDF';
 }
