@@ -168,4 +168,10 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get savePdf => 'Save PDF';
+
+  @override
+  String get pdfToImages => 'PDF To Images';
+
+  @override
+  String get pdfToImagesSubtitle => 'Convert PDF documents to images';
 }

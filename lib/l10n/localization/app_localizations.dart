@@ -415,6 +415,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Save PDF'**
   String get savePdf;
+
+  /// No description provided for @pdfToImages.
+  ///
+  /// In en, this message translates to:
+  /// **'PDF To Images'**
+  String get pdfToImages;
+
+  /// No description provided for @pdfToImagesSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Convert PDF documents to images'**
+  String get pdfToImagesSubtitle;
 }
 
 class _AppLocalizationsDelegate

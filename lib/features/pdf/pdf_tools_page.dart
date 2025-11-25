@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:pixi_desk/core/router/app_router.dart';
 import 'package:pixi_desk/core/theme/app_colors.dart';
+import 'package:pixi_desk/core/utils/app_assets.dart';
 import 'package:pixi_desk/features/pdf/widgets/pdf_tool_item.dart';
 import 'package:pixi_desk/l10n/localization/app_localizations.dart';
 
@@ -44,6 +45,17 @@ class PdfToolsPage extends StatelessWidget {
                   toolName: l10n.compressPdf,
                   toolDescription: l10n.compressPdfSubtitle,
                   icon: Icons.compress,
+                ),
+                const Divider(),
+                PdfToolItem(
+                  onTap: () {
+                    Navigator.pushNamed(context, AppRouter.pdfToImageRoute);
+                  },
+                  toolName: l10n.pdfToImages,
+                  toolDescription: l10n.pdfToImagesSubtitle,
+                  svg: isDark
+                      ? AppImages.pdfToImageDark
+                      : AppImages.pdfToImageLight,
                 ),
               ],
             ),

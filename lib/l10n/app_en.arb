@@ -51,5 +51,7 @@
   "previewAndSave": "Preview & Save",
   "size": "Size",
   "previewPdf": "Preview PDF",
-  "savePdf": "Save PDF"
+  "savePdf": "Save PDF",
+  "pdfToImages": "PDF To Images",
+  "pdfToImagesSubtitle": "Convert PDF documents to images"
 }

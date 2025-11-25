@@ -9,6 +9,7 @@ import 'package:pixi_desk/features/pdf/pdf_compression/presentation/pages/pdf_co
 import 'package:pixi_desk/features/pdf/pdf_compression/presentation/pages/pdf_preview_page.dart';
 import 'package:pixi_desk/features/pdf/pdf_converter/presentation/cubit/pdf_converter_cubit.dart';
 import 'package:pixi_desk/features/pdf/pdf_converter/presentation/pages/pdf_converter_page.dart';
+import 'package:pixi_desk/features/pdf/pdf_to_image/presentation/pages/pdf_to_image_page.dart';
 import 'package:pixi_desk/features/pdf/pdf_tools_page.dart';
 
 class AppRouter {
@@ -18,6 +19,7 @@ class AppRouter {
   static const String pdfToolsRoute = '/pdf-tools';
   static const String pdfCompressionRoute = '/pdf-compression';
   static const String pdfPreviewRoute = '/pdf-preview';
+  static const String pdfToImageRoute = '/pdf-to-image';
 
   static Route<dynamic> onGenerateRoute(RouteSettings settings) {
     switch (settings.name) {
@@ -54,6 +56,8 @@ class AppRouter {
             child: PdfPreviewPage(pdfFile: args.file),
           ),
         );
+      case pdfToImageRoute:
+        return MaterialPageRoute(builder: (context) => const PdfToImagePage());
       default:
         return MaterialPageRoute(builder: (context) => const MainLandingPage());
     }

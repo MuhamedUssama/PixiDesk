@@ -51,5 +51,7 @@
   "previewAndSave": "معاينة وحفظ",
   "size": "الحجم",
   "previewPdf": "معاينة PDF",
-  "savePdf": "حفظ PDF"
+  "savePdf": "حفظ PDF",
+  "pdfToImages": "PDF إلى صور",
+  "pdfToImagesSubtitle": "تحويل ملفات PDF إلى صور بكفاءة"
 }

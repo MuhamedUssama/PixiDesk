@@ -166,4 +166,10 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get savePdf => 'حفظ PDF';
+
+  @override
+  String get pdfToImages => 'PDF إلى صور';
+
+  @override
+  String get pdfToImagesSubtitle => 'تحويل ملفات PDF إلى صور بكفاءة';
 }
