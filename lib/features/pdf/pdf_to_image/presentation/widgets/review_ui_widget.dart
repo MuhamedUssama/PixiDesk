@@ -50,6 +50,10 @@ class _ReviewUiWidgetState extends State<ReviewUiWidget> {
                     Flexible(
                       child: ElevatedButton.icon(
                         onPressed: () => widget.onSaveAll(),
+                        style: ElevatedButton.styleFrom(
+                          minimumSize: const Size(0, 56),
+                          padding: const EdgeInsets.symmetric(horizontal: 16),
+                        ),
                         icon: const Icon(Icons.save),
                         label: Text(
                           widget.l10n.saveAll,

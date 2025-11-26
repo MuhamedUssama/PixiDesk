@@ -29,12 +29,14 @@ class SelectedFileState extends StatelessWidget {
         const SizedBox(height: 16),
         Text(
           state.selectedFile!.path.split(Platform.pathSeparator).last,
-          style: Theme.of(context).textTheme.titleMedium,
+          style: Theme.of(context).textTheme.headlineSmall,
         ),
         const SizedBox(height: 8),
-        TextButton(
+        TextButton.icon(
           onPressed: () => context.read<PdfToImageCubit>().clearFile(),
-          child: Text(l10n.removeFile),
+          style: TextButton.styleFrom(foregroundColor: AppColors.error),
+          icon: const Icon(Icons.delete, color: AppColors.error),
+          label: Text(l10n.removeFile),
         ),
       ],
     );

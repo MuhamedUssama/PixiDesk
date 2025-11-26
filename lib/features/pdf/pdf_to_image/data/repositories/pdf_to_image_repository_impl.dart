@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:io';
-import 'dart:developer';
 import 'package:injectable/injectable.dart';
 import 'package:pixi_desk/features/pdf/pdf_to_image/data/datasources/poppler_service.dart';
 import 'package:pixi_desk/features/pdf/pdf_to_image/domain/entities/conversion_progress.dart';
@@ -23,7 +22,6 @@ class PdfToImageRepositoryImpl implements PdfToImageRepository {
     final stream = await _popplerService.convertPdfToImages(params);
 
     await for (final event in stream) {
-      log('REPOSITORY: Received raw event: $event');
       if (event['type'] == 'progress') {
         final int page = event['page'] as int;
 
@@ -31,7 +29,6 @@ class PdfToImageRepositoryImpl implements PdfToImageRepository {
         if (totalPages > 0) {
           percentage = (page / totalPages).clamp(0.0, 1.0);
         }
-        log('REPOSITORY: Yielding progress event');
         yield PdfToImageProgress(
           ConversionProgress(
             currentPage: page,

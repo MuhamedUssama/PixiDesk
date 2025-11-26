@@ -1,4 +1,3 @@
-import 'dart:developer';
 import 'dart:io';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
@@ -49,9 +48,7 @@ class PdfToImageCubit extends Cubit<PdfToImageState> {
       final stream = _convertPdfToImagesUseCase(params);
 
       await for (final event in stream) {
-        log('CUBIT: Received domain event: $event');
         if (event is PdfToImageProgress) {
-          log(event.progress.toString());
           emit(state.copyWith(progress: event.progress));
         } else if (event is PdfToImageCompleted) {
           emit(
@@ -64,7 +61,6 @@ class PdfToImageCubit extends Cubit<PdfToImageState> {
         }
       }
     } catch (e) {
-      log('Error converting PDF to images: $e');
       emit(
         state.copyWith(
           status: PdfToImageStatus.error,

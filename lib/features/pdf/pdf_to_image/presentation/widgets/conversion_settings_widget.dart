@@ -20,15 +20,13 @@ class ConversionSettingsWidget extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  l10n.conversionSettings, // Need to add to arb
+                  l10n.conversionSettings,
                   style: Theme.of(context).textTheme.titleMedium,
                 ),
                 const SizedBox(height: 16),
                 DropdownButtonFormField<String>(
-                  decoration: InputDecoration(
-                    labelText: l10n.outputFormat,
-                  ), // Need to add
-                  value: state.outputFormat,
+                  decoration: InputDecoration(labelText: l10n.outputFormat),
+                  initialValue: state.outputFormat,
                   items: ['jpg', 'png', 'tiff'].map((format) {
                     return DropdownMenuItem(
                       value: format,
@@ -45,10 +43,8 @@ class ConversionSettingsWidget extends StatelessWidget {
                 ),
                 const SizedBox(height: 16),
                 DropdownButtonFormField<int>(
-                  decoration: InputDecoration(
-                    labelText: l10n.qualityDpi,
-                  ), // Need to add
-                  value: state.dpi,
+                  decoration: InputDecoration(labelText: l10n.qualityDpi),
+                  initialValue: state.dpi,
                   items: [72, 150, 300, 600].map((dpi) {
                     return DropdownMenuItem(
                       value: dpi,
