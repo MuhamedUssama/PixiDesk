@@ -85,6 +85,27 @@ Future<void> _isolateEntryPoint(_IsolateParams isolateParams) async {
   final binaryPath = isolateParams.binaryPath;
 
   Timer? flushTimer;
+  Process? process; // FIX 1: Define process in outer scope
+
+  // FIX 2: Cleanup old temporary directories
+  try {
+    final systemTemp = Directory.systemTemp;
+    if (systemTemp.existsSync()) {
+      final entities = systemTemp.listSync();
+      for (final entity in entities) {
+        if (entity is Directory &&
+            path.basename(entity.path).startsWith('pdf_to_image_')) {
+          try {
+            entity.deleteSync(recursive: true);
+          } catch (e) {
+            // Ignore errors (e.g. locked files)
+          }
+        }
+      }
+    }
+  } catch (e) {
+    // Ignore cleanup errors
+  }
 
   try {
     // Create a temporary directory for output
@@ -104,7 +125,7 @@ Future<void> _isolateEntryPoint(_IsolateParams isolateParams) async {
       outputPrefix,
     ];
 
-    final process = await Process.start(binaryPath, args, runInShell: false);
+    process = await Process.start(binaryPath, args, runInShell: false);
 
     // CRITICAL FIX 1: Actively drain stdout to prevent OS buffering issues on Windows.
     // We don't need the data, but we must keep the pipe flowing.
@@ -198,6 +219,8 @@ Future<void> _isolateEntryPoint(_IsolateParams isolateParams) async {
     });
   } finally {
     flushTimer?.cancel();
+    // FIX 1: Ensure process is killed to prevent zombies
+    process?.kill(ProcessSignal.sigkill);
     Isolate.exit();
   }
 }
