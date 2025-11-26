@@ -168,4 +168,73 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get savePdf => 'Save PDF';
+
+  @override
+  String get pdfToImages => 'PDF To Images';
+
+  @override
+  String get pdfToImagesSubtitle => 'Convert PDF documents to images';
+
+  @override
+  String get pdfToImage => 'PDF to Image';
+
+  @override
+  String get conversionSettings => 'Conversion Settings';
+
+  @override
+  String get outputFormat => 'Output Format';
+
+  @override
+  String get qualityDpi => 'Quality (DPI)';
+
+  @override
+  String convertingPageOf(int currentPage, String totalPages) {
+    return 'Converting page $currentPage of $totalPages';
+  }
+
+  @override
+  String get filesSaved => 'Files saved successfully';
+
+  @override
+  String get conversionResult => 'Conversion Result';
+
+  @override
+  String get saveAll => 'Save All';
+
+  @override
+  String get dragPdfHere => 'Drag PDF Here';
+
+  @override
+  String get selectPdfFile => 'Select PDF File';
+
+  @override
+  String get preparing => 'Preparing...';
+
+  @override
+  String get dpi1200Label => '1200 DPI (For Professional Users)';
+
+  @override
+  String get dpi1200Warning =>
+      'Note: 1200 DPI is resource-intensive and may take a significant amount of time to process.';
+
+  @override
+  String get deleteSelected => 'Delete Selected';
+
+  @override
+  String get rotateRight => 'Rotate Right';
+
+  @override
+  String get selected => 'Selected';
+
+  @override
+  String get previous => 'Previous';
+
+  @override
+  String get next => 'Next';
+
+  @override
+  String get gridView => 'Grid View';
+
+  @override
+  String get saveAsZip => 'Save As Zip';
 }

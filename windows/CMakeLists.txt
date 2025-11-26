@@ -115,3 +115,10 @@ install(FILES "${PROJECT_SOURCE_DIR}/../assets/bin/windows/gswin64c.exe"
 
 set(PDFIUM_VERSION "4929" CACHE STRING "" FORCE)
 set(PDFIUM_ARCH "x64" CACHE STRING "" FORCE)
+
+# Copy Poppler binaries
+set(POPPLER_SOURCE_DIR "${CMAKE_SOURCE_DIR}/../assets/bin/windows/poppler")
+install(DIRECTORY "${POPPLER_SOURCE_DIR}"
+        DESTINATION "${CMAKE_INSTALL_PREFIX}"
+        COMPONENT Runtime
+        USE_SOURCE_PERMISSIONS)

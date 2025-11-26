@@ -51,5 +51,37 @@
   "previewAndSave": "Preview & Save",
   "size": "Size",
   "previewPdf": "Preview PDF",
-  "savePdf": "Save PDF"
+  "savePdf": "Save PDF",
+  "pdfToImages": "PDF To Images",
+  "pdfToImagesSubtitle": "Convert PDF documents to images",
+  "pdfToImage": "PDF to Image",
+  "conversionSettings": "Conversion Settings",
+  "outputFormat": "Output Format",
+  "qualityDpi": "Quality (DPI)",
+  "convertingPageOf": "Converting page {currentPage} of {totalPages}",
+  "@convertingPageOf": {
+    "placeholders": {
+      "currentPage": {
+        "type": "int"
+      },
+      "totalPages": {
+        "type": "String"
+      }
+    }
+  },
+  "filesSaved": "Files saved successfully",
+  "conversionResult": "Conversion Result",
+  "saveAll": "Save All",
+  "dragPdfHere": "Drag PDF Here",
+  "selectPdfFile": "Select PDF File",
+  "preparing": "Preparing...",
+  "dpi1200Label": "1200 DPI (For Professional Users)",
+  "dpi1200Warning": "Note: 1200 DPI is resource-intensive and may take a significant amount of time to process.",
+  "deleteSelected": "Delete Selected",
+  "rotateRight": "Rotate Right",
+  "selected": "Selected",
+  "previous": "Previous",
+  "next": "Next",
+  "gridView": "Grid View",
+  "saveAsZip": "Save As Zip"
 }
