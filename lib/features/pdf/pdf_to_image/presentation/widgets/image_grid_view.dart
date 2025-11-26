@@ -61,7 +61,9 @@ class ImageGridView extends StatelessWidget {
                               color: Theme.of(context).primaryColor,
                               width: 3,
                             )
-                          : Border.all(color: Colors.grey.withOpacity(0.3)),
+                          : Border.all(
+                              color: Colors.grey.withValues(alpha: 0.3),
+                            ),
                       borderRadius: BorderRadius.circular(8),
                     ),
                     child: ClipRRect(
@@ -71,7 +73,7 @@ class ImageGridView extends StatelessWidget {
                         child: Image.file(
                           file,
                           fit: BoxFit.contain,
-                          cacheWidth: 400, // Performance optimization
+                          cacheWidth: 400,
                         ),
                       ),
                     ),
@@ -90,7 +92,7 @@ class ImageGridView extends StatelessWidget {
                       decoration: BoxDecoration(
                         color: isSelected
                             ? Theme.of(context).primaryColor
-                            : Colors.black.withOpacity(0.3),
+                            : Colors.black.withValues(alpha: 0.3),
                         shape: BoxShape.circle,
                         border: Border.all(color: Colors.white, width: 2),
                       ),

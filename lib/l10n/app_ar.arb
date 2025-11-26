@@ -72,5 +72,6 @@
   "selected": "محدد",
   "previous": "السابق",
   "next": "التالي",
-  "gridView": "عرض الشاشة"
+  "gridView": "عرض الشاشة",
+  "saveAsZip": "حفظ كأرشيف"
 }

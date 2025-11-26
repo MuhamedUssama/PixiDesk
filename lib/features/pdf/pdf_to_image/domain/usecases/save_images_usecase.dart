@@ -13,6 +13,10 @@ class SaveImagesUseCase {
     String destinationPath,
     Map<String, int> rotations,
   ) {
-    return _repository.saveImages(images, destinationPath, rotations);
+    return _repository.saveImages(
+      images,
+      destinationPath,
+      rotations: rotations,
+    );
   }
 }

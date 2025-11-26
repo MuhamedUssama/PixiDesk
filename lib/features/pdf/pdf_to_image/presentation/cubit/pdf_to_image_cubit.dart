@@ -5,6 +5,7 @@ import 'package:pixi_desk/features/pdf/pdf_to_image/domain/entities/pdf_to_image
 import 'package:pixi_desk/features/pdf/pdf_to_image/domain/entities/pdf_to_image_params.dart';
 import 'package:pixi_desk/features/pdf/pdf_to_image/domain/usecases/convert_pdf_to_images_usecase.dart';
 import 'package:pixi_desk/features/pdf/pdf_to_image/domain/usecases/save_images_usecase.dart';
+import 'package:pixi_desk/features/pdf/pdf_to_image/domain/usecases/save_as_zip_usecase.dart';
 import 'package:pixi_desk/features/pdf/pdf_to_image/presentation/cubit/pdf_to_image_state.dart';
 import 'package:file_picker/file_picker.dart';
 
@@ -12,9 +13,13 @@ import 'package:file_picker/file_picker.dart';
 class PdfToImageCubit extends Cubit<PdfToImageState> {
   final ConvertPdfToImagesUseCase _convertPdfToImagesUseCase;
   final SaveImagesUseCase _saveImagesUseCase;
+  final SaveAsZipUseCase _saveAsZipUseCase;
 
-  PdfToImageCubit(this._convertPdfToImagesUseCase, this._saveImagesUseCase)
-    : super(const PdfToImageState());
+  PdfToImageCubit(
+    this._convertPdfToImagesUseCase,
+    this._saveImagesUseCase,
+    this._saveAsZipUseCase,
+  ) : super(const PdfToImageState());
 
   void selectFile(File file) {
     emit(
@@ -108,6 +113,46 @@ class PdfToImageCubit extends Cubit<PdfToImageState> {
         state.copyWith(
           status: PdfToImageStatus.error,
           errorMessage: 'Error saving files: $e',
+        ),
+      );
+    }
+  }
+
+  Future<void> saveAsZip() async {
+    if (state.generatedImages == null || state.generatedImages!.isEmpty) return;
+
+    final String? filePath = await FilePicker.platform.saveFile(
+      dialogTitle: 'Save as ZIP',
+      fileName: 'converted_images.zip',
+      type: FileType.custom,
+      allowedExtensions: ['zip'],
+    );
+
+    if (filePath == null) return;
+
+    emit(state.copyWith(status: PdfToImageStatus.saving));
+
+    try {
+      await _saveAsZipUseCase(
+        images: state.generatedImages!,
+        destinationPath: filePath,
+        rotations: state.imageRotations,
+      );
+      emit(
+        state.copyWith(
+          status: PdfToImageStatus.savedSuccess,
+          successMessage: 'ZIP file saved successfully',
+        ),
+      );
+      // Reset status back to review after showing success
+      emit(
+        state.copyWith(status: PdfToImageStatus.review, successMessage: null),
+      );
+    } catch (e) {
+      emit(
+        state.copyWith(
+          status: PdfToImageStatus.error,
+          errorMessage: 'Error saving ZIP file: $e',
         ),
       );
     }

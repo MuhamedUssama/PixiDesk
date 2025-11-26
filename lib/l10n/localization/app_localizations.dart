@@ -541,6 +541,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Grid View'**
   String get gridView;
+
+  /// No description provided for @saveAsZip.
+  ///
+  /// In en, this message translates to:
+  /// **'Save As Zip'**
+  String get saveAsZip;
 }
 
 class _AppLocalizationsDelegate

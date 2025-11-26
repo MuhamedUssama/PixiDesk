@@ -64,6 +64,17 @@ class _ReviewUiWidgetState extends State<ReviewUiWidget> {
                           },
                         ),
                       ElevatedButton.icon(
+                        onPressed: () {
+                          context.read<PdfToImageCubit>().saveAsZip();
+                        },
+                        style: ElevatedButton.styleFrom(
+                          minimumSize: const Size(0, 48),
+                          padding: const EdgeInsets.symmetric(horizontal: 24),
+                        ),
+                        icon: const Icon(Icons.archive),
+                        label: Text(widget.l10n.saveAsZip),
+                      ),
+                      ElevatedButton.icon(
                         onPressed: widget.onSaveAll,
                         style: ElevatedButton.styleFrom(
                           minimumSize: const Size(0, 48),

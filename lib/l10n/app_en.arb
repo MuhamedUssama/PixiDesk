@@ -82,5 +82,6 @@
   "selected": "Selected",
   "previous": "Previous",
   "next": "Next",
-  "gridView": "Grid View"
+  "gridView": "Grid View",
+  "saveAsZip": "Save As Zip"
 }

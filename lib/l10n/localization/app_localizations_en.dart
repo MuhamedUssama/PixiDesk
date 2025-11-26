@@ -234,4 +234,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get gridView => 'Grid View';
+
+  @override
+  String get saveAsZip => 'Save As Zip';
 }

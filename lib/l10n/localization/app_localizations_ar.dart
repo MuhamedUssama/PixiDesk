@@ -232,4 +232,7 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get gridView => 'عرض الشاشة';
+
+  @override
+  String get saveAsZip => 'حفظ كأرشيف';
 }

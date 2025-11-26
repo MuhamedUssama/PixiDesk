@@ -6,7 +6,13 @@ abstract class PdfToImageRepository {
   Stream<PdfToImageEvent> convert(PdfToImageParams params);
   Future<void> saveImages(
     List<File> images,
-    String destinationPath,
-    Map<String, int> rotations,
-  );
+    String destinationDirectory, {
+    Map<String, int>? rotations,
+  });
+
+  Future<void> saveAsZip(
+    List<File> images,
+    String destinationPath, {
+    Map<String, int>? rotations,
+  });
 }
