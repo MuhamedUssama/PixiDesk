@@ -63,5 +63,6 @@
   "conversionResult": "نتيجة التحويل",
   "saveAll": "حفظ الكل",
   "dragPdfHere": "اسحب وأفلت ملف PDF هنا",
-  "selectPdfFile": "اختر ملف PDF"
+  "selectPdfFile": "اختر ملف PDF",
+  "preparing": "جاري التحضير..."
 }

@@ -13,29 +13,50 @@ class ConversionProgressWidget extends StatelessWidget {
 
     return BlocBuilder<PdfToImageCubit, PdfToImageState>(
       builder: (context, state) {
-        if (state.progress == null) return const SizedBox.shrink();
+        final progress = state.progress;
+        final isPreparing = progress == null;
 
-        final progress = state.progress!;
-
-        return Card(
-          child: Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Column(
-              children: [
-                LinearProgressIndicator(
-                  value: progress.percentage > 0 ? progress.percentage : null,
+        return Center(
+          child: SizedBox(
+            width: 400,
+            child: Card(
+              child: Padding(
+                padding: const EdgeInsets.all(24.0),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    LinearProgressIndicator(
+                      value: isPreparing
+                          ? null
+                          : (progress.percentage > 0
+                                ? progress.percentage
+                                : null),
+                    ),
+                    const SizedBox(height: 16),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          isPreparing
+                              ? l10n.preparing
+                              : l10n.convertingPageOf(
+                                  progress.currentPage,
+                                  progress.totalPages > 0
+                                      ? progress.totalPages.toString()
+                                      : '?',
+                                ),
+                          style: Theme.of(context).textTheme.bodyMedium,
+                        ),
+                        if (!isPreparing)
+                          Text(
+                            '${(progress.percentage * 100).toInt()}%',
+                            style: Theme.of(context).textTheme.bodyMedium,
+                          ),
+                      ],
+                    ),
+                  ],
                 ),
-                const SizedBox(height: 8),
-                Text(
-                  l10n.convertingPageOf(
-                    progress.currentPage,
-                    progress.totalPages > 0
-                        ? progress.totalPages.toString()
-                        : '?',
-                  ),
-                  // Need to add convertingPageOf(int, String) to arb
-                ),
-              ],
+              ),
             ),
           ),
         );

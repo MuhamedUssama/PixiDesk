@@ -47,6 +47,10 @@ class PdfToImagePage extends StatelessWidget {
             );
           }
 
+          if (state.status == PdfToImageStatus.converting) {
+            return const ConversionProgressWidget();
+          }
+
           return Row(
             children: [
               Expanded(
@@ -84,23 +88,18 @@ class PdfToImagePage extends StatelessWidget {
                     children: [
                       const ConversionSettingsWidget(),
                       const Spacer(),
-                      if (state.status == PdfToImageStatus.converting)
-                        const ConversionProgressWidget()
-                      else
-                        Padding(
-                          padding: const EdgeInsets.all(16.0),
-                          child: SizedBox(
-                            width: double.infinity,
-                            child: ElevatedButton(
-                              onPressed: () {
-                                context
-                                    .read<PdfToImageCubit>()
-                                    .startConversion();
-                              },
-                              child: Text(l10n.convert),
-                            ),
+                      Padding(
+                        padding: const EdgeInsets.all(16.0),
+                        child: SizedBox(
+                          width: double.infinity,
+                          child: ElevatedButton(
+                            onPressed: () {
+                              context.read<PdfToImageCubit>().startConversion();
+                            },
+                            child: Text(l10n.convert),
                           ),
                         ),
+                      ),
                     ],
                   ),
                 ),

@@ -73,5 +73,6 @@
   "conversionResult": "Conversion Result",
   "saveAll": "Save All",
   "dragPdfHere": "Drag PDF Here",
-  "selectPdfFile": "Select PDF File"
+  "selectPdfFile": "Select PDF File",
+  "preparing": "Preparing..."
 }

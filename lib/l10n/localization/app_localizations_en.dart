@@ -206,4 +206,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get selectPdfFile => 'Select PDF File';
+
+  @override
+  String get preparing => 'Preparing...';
 }

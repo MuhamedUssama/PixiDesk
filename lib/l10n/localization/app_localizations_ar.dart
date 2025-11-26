@@ -204,4 +204,7 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get selectPdfFile => 'اختر ملف PDF';
+
+  @override
+  String get preparing => 'جاري التحضير...';
 }
