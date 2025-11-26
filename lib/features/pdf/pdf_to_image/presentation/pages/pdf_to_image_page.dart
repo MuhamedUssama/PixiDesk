@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:desktop_drop/desktop_drop.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pixi_desk/core/theme/app_colors.dart';
 import 'package:pixi_desk/features/pdf/pdf_to_image/presentation/cubit/pdf_to_image_cubit.dart';
@@ -42,73 +43,91 @@ class PdfToImagePage extends StatelessWidget {
           }
         },
         builder: (context, state) {
-          if (state.status == PdfToImageStatus.review &&
-              state.generatedImages != null) {
-            return ReviewUiWidget(
-              state: state,
-              l10n: l10n,
-              onSaveAll: () => context.read<PdfToImageCubit>().triggerSaveAll(),
-            );
-          }
-
-          return Row(
-            children: [
-              Expanded(
-                flex: 2,
-                child: DropTarget(
-                  onDragDone: (details) {
-                    if (details.files.isNotEmpty) {
-                      final file = File(details.files.first.path);
-                      if (file.path.toLowerCase().endsWith('.pdf')) {
-                        context.read<PdfToImageCubit>().selectFile(file);
-                      } else {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
-                            content: Text(l10n.invalidPdfFile),
-                            backgroundColor: AppColors.error,
-                          ),
-                        );
-                      }
-                    }
-                  },
-                  child: Container(
-                    color: Colors.transparent,
-                    child: Center(
-                      child: state.selectedFile == null
-                          ? EmptyStateWidget(l10n: l10n)
-                          : SelectedFileState(state: state, l10n: l10n),
-                    ),
-                  ),
-                ),
-              ),
-              if (state.selectedFile != null)
-                SizedBox(
-                  width: 300,
-                  child: Column(
+          return AnimatedSwitcher(
+            duration: const Duration(milliseconds: 500),
+            switchInCurve: Curves.easeInOut,
+            switchOutCurve: Curves.easeInOut,
+            child:
+                (state.status == PdfToImageStatus.review &&
+                    state.generatedImages != null)
+                ? ReviewUiWidget(
+                    key: const ValueKey('review'),
+                    state: state,
+                    l10n: l10n,
+                    onSaveAll: () =>
+                        context.read<PdfToImageCubit>().triggerSaveAll(),
+                  )
+                : Row(
+                    key: const ValueKey('main'),
                     children: [
-                      const ConversionSettingsWidget(),
-                      const Spacer(),
-                      Padding(
-                        padding: const EdgeInsets.all(16.0),
-                        child: SizedBox(
-                          width: double.infinity,
-                          child: ElevatedButton(
-                            onPressed:
-                                state.status == PdfToImageStatus.converting
-                                ? null
-                                : () {
-                                    context
-                                        .read<PdfToImageCubit>()
-                                        .startConversion();
-                                  },
-                            child: Text(l10n.convert),
+                      Expanded(
+                        flex: 2,
+                        child: DropTarget(
+                          onDragDone: (details) {
+                            if (details.files.isNotEmpty) {
+                              final file = File(details.files.first.path);
+                              if (file.path.toLowerCase().endsWith('.pdf')) {
+                                context.read<PdfToImageCubit>().selectFile(
+                                  file,
+                                );
+                              } else {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                    content: Text(l10n.invalidPdfFile),
+                                    backgroundColor: AppColors.error,
+                                  ),
+                                );
+                              }
+                            }
+                          },
+                          child: Container(
+                            color: Colors.transparent,
+                            child: Center(
+                              child: state.selectedFile == null
+                                  ? EmptyStateWidget(l10n: l10n)
+                                  : SelectedFileState(state: state, l10n: l10n),
+                            ),
                           ),
                         ),
                       ),
+                      if (state.selectedFile != null)
+                        SizedBox(
+                              width: 300,
+                              child: Column(
+                                children: [
+                                  const ConversionSettingsWidget(),
+                                  const Spacer(),
+                                  Padding(
+                                    padding: const EdgeInsets.all(16.0),
+                                    child: SizedBox(
+                                      width: double.infinity,
+                                      child: ElevatedButton(
+                                        onPressed:
+                                            state.status ==
+                                                PdfToImageStatus.converting
+                                            ? null
+                                            : () {
+                                                context
+                                                    .read<PdfToImageCubit>()
+                                                    .startConversion();
+                                              },
+                                        child: Text(l10n.convert),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            )
+                            .animate()
+                            .slideX(
+                              begin: 1,
+                              end: 0,
+                              duration: 400.ms,
+                              curve: Curves.easeOutQuart,
+                            )
+                            .fadeIn(duration: 300.ms),
                     ],
                   ),
-                ),
-            ],
           );
         },
       ),

@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pixi_desk/core/theme/app_colors.dart';
 import 'package:pixi_desk/features/pdf/pdf_to_image/presentation/cubit/pdf_to_image_cubit.dart';
@@ -26,12 +27,20 @@ class SelectedFileState extends StatelessWidget {
           color: isDark
               ? AppColors.darkHeadTextColor
               : AppColors.lightHeadTextColor,
-        ),
+        ).animate().scale(duration: 400.ms, curve: Curves.easeOutBack),
         const SizedBox(height: 16),
         Text(
-          state.selectedFile!.path.split(Platform.pathSeparator).last,
-          style: Theme.of(context).textTheme.headlineSmall,
-        ),
+              state.selectedFile!.path.split(Platform.pathSeparator).last,
+              style: Theme.of(context).textTheme.headlineSmall,
+            )
+            .animate()
+            .fadeIn(duration: 400.ms)
+            .slideY(
+              begin: 0.5,
+              end: 0,
+              duration: 400.ms,
+              curve: Curves.easeOutQuad,
+            ),
         const SizedBox(height: 16),
         AnimatedSwitcher(
           duration: const Duration(milliseconds: 300),

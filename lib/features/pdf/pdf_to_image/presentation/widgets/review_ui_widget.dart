@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pixi_desk/core/theme/app_colors.dart';
 import 'package:pixi_desk/features/pdf/pdf_to_image/presentation/cubit/pdf_to_image_cubit.dart';
@@ -48,7 +49,9 @@ class _ReviewUiWidgetState extends State<ReviewUiWidget> {
                 children: [
                   Text(
                     widget.l10n.conversionResult,
-                    style: Theme.of(context).textTheme.titleLarge,
+                    style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                      fontWeight: FontWeight.w600,
+                    ),
                   ),
                   Row(
                     spacing: 12,
@@ -92,20 +95,25 @@ class _ReviewUiWidgetState extends State<ReviewUiWidget> {
 
           // Main Content
           Expanded(
-            child: _isGridView
-                ? ImageGridView(
-                    images: widget.state.generatedImages!,
-                    onImageTap: (index) {
-                      setState(() {
-                        _initialPageIndex = index;
-                        _isGridView = false;
-                      });
-                    },
-                  )
-                : ImagePageView(
-                    images: widget.state.generatedImages!,
-                    initialIndex: _initialPageIndex,
-                  ),
+            child: AnimatedSwitcher(
+              duration: const Duration(milliseconds: 300),
+              child: _isGridView
+                  ? ImageGridView(
+                      key: const ValueKey('gridView'),
+                      images: widget.state.generatedImages!,
+                      onImageTap: (index) {
+                        setState(() {
+                          _initialPageIndex = index;
+                          _isGridView = false;
+                        });
+                      },
+                    )
+                  : ImagePageView(
+                      key: const ValueKey('pageView'),
+                      images: widget.state.generatedImages!,
+                      initialIndex: _initialPageIndex,
+                    ),
+            ),
           ),
         ],
       ),
@@ -121,7 +129,7 @@ class _ReviewUiWidgetState extends State<ReviewUiWidget> {
                 widget.l10n.deleteSelected,
                 style: const TextStyle(color: Colors.white),
               ),
-            )
+            ).animate().scale(duration: 300.ms, curve: Curves.easeOutBack)
           : null,
     );
   }

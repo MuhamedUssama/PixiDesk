@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pixi_desk/features/pdf/pdf_to_image/presentation/cubit/pdf_to_image_cubit.dart';
 import 'package:pixi_desk/features/pdf/pdf_to_image/presentation/cubit/pdf_to_image_state.dart';
@@ -66,28 +67,36 @@ class ConversionSettingsWidget extends StatelessWidget {
                 if (state.dpi == 1200) ...[
                   const SizedBox(height: 16),
                   Container(
-                    padding: const EdgeInsets.all(8),
-                    decoration: BoxDecoration(
-                      color: Colors.amber.withValues(alpha: 0.1),
-                      borderRadius: BorderRadius.circular(16),
-                      border: Border.all(color: Colors.amber),
-                    ),
-                    child: Row(
-                      children: [
-                        const Icon(
-                          Icons.warning_amber_rounded,
-                          color: Colors.amber,
+                        padding: const EdgeInsets.all(8),
+                        decoration: BoxDecoration(
+                          color: Colors.amber.withValues(alpha: 0.1),
+                          borderRadius: BorderRadius.circular(16),
+                          border: Border.all(color: Colors.amber),
                         ),
-                        const SizedBox(width: 8),
-                        Expanded(
-                          child: Text(
-                            l10n.dpi1200Warning,
-                            style: Theme.of(context).textTheme.bodySmall,
-                          ),
+                        child: Row(
+                          children: [
+                            const Icon(
+                              Icons.warning_amber_rounded,
+                              color: Colors.amber,
+                            ),
+                            const SizedBox(width: 8),
+                            Expanded(
+                              child: Text(
+                                l10n.dpi1200Warning,
+                                style: Theme.of(context).textTheme.bodySmall,
+                              ),
+                            ),
+                          ],
                         ),
-                      ],
-                    ),
-                  ),
+                      )
+                      .animate()
+                      .fadeIn(duration: 300.ms)
+                      .slideY(
+                        begin: -0.2,
+                        end: 0,
+                        duration: 300.ms,
+                        curve: Curves.easeOut,
+                      ),
                 ],
               ],
             ),
