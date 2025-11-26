@@ -78,8 +78,10 @@ class _ImagePageViewState extends State<ImagePageView> {
                       final rotation = state.imageRotations[file.path] ?? 0;
 
                       return Center(
-                        child: RotatedBox(
-                          quarterTurns: rotation,
+                        child: AnimatedRotation(
+                          turns: rotation / 4.0,
+                          duration: const Duration(milliseconds: 300),
+                          curve: Curves.easeInOut,
                           child: Image.file(file, fit: BoxFit.contain),
                         ),
                       );
