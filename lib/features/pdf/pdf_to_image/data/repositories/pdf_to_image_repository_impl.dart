@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:io';
+import 'package:image/image.dart' as img;
 import 'package:injectable/injectable.dart';
 import 'package:pixi_desk/features/pdf/pdf_to_image/data/datasources/poppler_service.dart';
 import 'package:pixi_desk/features/pdf/pdf_to_image/domain/entities/conversion_progress.dart';
@@ -46,10 +47,53 @@ class PdfToImageRepositoryImpl implements PdfToImageRepository {
   }
 
   @override
-  Future<void> saveImages(List<File> images, String destinationPath) async {
+  Future<void> saveImages(
+    List<File> images,
+    String destinationPath,
+    Map<String, int> rotations,
+  ) async {
     for (final file in images) {
       final fileName = file.path.split(Platform.pathSeparator).last;
-      await file.copy('$destinationPath${Platform.pathSeparator}$fileName');
+      final destinationFile = File(
+        '$destinationPath${Platform.pathSeparator}$fileName',
+      );
+      final rotation = rotations[file.path] ?? 0;
+
+      if (rotation == 0) {
+        // Path A: No rotation, simple copy
+        await file.copy(destinationFile.path);
+      } else {
+        // Path B: Needs rotation
+        try {
+          final bytes = await file.readAsBytes();
+          final image = img.decodeImage(bytes);
+
+          if (image != null) {
+            // Rotate the image (90 degrees * quarterTurns)
+            final rotatedImage = img.copyRotate(image, angle: rotation * 90);
+
+            // Encode back to original format (assuming JPG for now based on typical usage,
+            // but ideally we should check extension)
+            final extension = fileName.split('.').last.toLowerCase();
+            List<int> encodedBytes;
+
+            if (extension == 'png') {
+              encodedBytes = img.encodePng(rotatedImage);
+            } else {
+              // Default to JPG
+              encodedBytes = img.encodeJpg(rotatedImage, quality: 100);
+            }
+
+            await destinationFile.writeAsBytes(encodedBytes);
+          } else {
+            // Fallback if decoding fails
+            await file.copy(destinationFile.path);
+          }
+        } catch (e) {
+          // Fallback on error
+          await file.copy(destinationFile.path);
+        }
+      }
     }
   }
 }

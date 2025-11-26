@@ -8,7 +8,11 @@ class SaveImagesUseCase {
 
   SaveImagesUseCase(this._repository);
 
-  Future<void> call(List<File> images, String destinationPath) {
-    return _repository.saveImages(images, destinationPath);
+  Future<void> call(
+    List<File> images,
+    String destinationPath,
+    Map<String, int> rotations,
+  ) {
+    return _repository.saveImages(images, destinationPath, rotations);
   }
 }

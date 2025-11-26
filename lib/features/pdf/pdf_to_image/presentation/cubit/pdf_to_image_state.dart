@@ -20,6 +20,8 @@ class PdfToImageState extends Equatable {
   final List<File>? generatedImages;
   final String? errorMessage;
   final String? successMessage;
+  final Set<String> selectedImagePaths;
+  final Map<String, int> imageRotations;
 
   const PdfToImageState({
     this.status = PdfToImageStatus.initial,
@@ -30,6 +32,8 @@ class PdfToImageState extends Equatable {
     this.generatedImages,
     this.errorMessage,
     this.successMessage,
+    this.selectedImagePaths = const {},
+    this.imageRotations = const {},
   });
 
   PdfToImageState copyWith({
@@ -41,6 +45,8 @@ class PdfToImageState extends Equatable {
     List<File>? generatedImages,
     String? errorMessage,
     String? successMessage,
+    Set<String>? selectedImagePaths,
+    Map<String, int>? imageRotations,
   }) {
     return PdfToImageState(
       status: status ?? this.status,
@@ -51,6 +57,8 @@ class PdfToImageState extends Equatable {
       generatedImages: generatedImages ?? this.generatedImages,
       errorMessage: errorMessage,
       successMessage: successMessage,
+      selectedImagePaths: selectedImagePaths ?? this.selectedImagePaths,
+      imageRotations: imageRotations ?? this.imageRotations,
     );
   }
 
@@ -64,5 +72,7 @@ class PdfToImageState extends Equatable {
     generatedImages,
     errorMessage,
     successMessage,
+    selectedImagePaths,
+    imageRotations,
   ];
 }

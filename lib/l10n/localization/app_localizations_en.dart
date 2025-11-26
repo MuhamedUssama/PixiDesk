@@ -216,4 +216,19 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get dpi1200Warning =>
       'Note: 1200 DPI is resource-intensive and may take a significant amount of time to process.';
+
+  @override
+  String get deleteSelected => 'Delete Selected';
+
+  @override
+  String get rotateRight => 'Rotate Right';
+
+  @override
+  String get selected => 'Selected';
+
+  @override
+  String get previous => 'Previous';
+
+  @override
+  String get next => 'Next';
 }

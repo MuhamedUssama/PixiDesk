@@ -76,5 +76,10 @@
   "selectPdfFile": "Select PDF File",
   "preparing": "Preparing...",
   "dpi1200Label": "1200 DPI (For Professional Users)",
-  "dpi1200Warning": "Note: 1200 DPI is resource-intensive and may take a significant amount of time to process."
+  "dpi1200Warning": "Note: 1200 DPI is resource-intensive and may take a significant amount of time to process.",
+  "deleteSelected": "Delete Selected",
+  "rotateRight": "Rotate Right",
+  "selected": "Selected",
+  "previous": "Previous",
+  "next": "Next"
 }

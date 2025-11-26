@@ -214,4 +214,19 @@ class AppLocalizationsAr extends AppLocalizations {
   @override
   String get dpi1200Warning =>
       'ملاحظة: دقة 1200 تتطلب موارد عالية من النظام وقد تستغرق وقتاً طويلاً في المعالجة.';
+
+  @override
+  String get deleteSelected => 'حذف المحدد';
+
+  @override
+  String get rotateRight => 'تدوير يمين';
+
+  @override
+  String get selected => 'محدد';
+
+  @override
+  String get previous => 'السابق';
+
+  @override
+  String get next => 'التالي';
 }

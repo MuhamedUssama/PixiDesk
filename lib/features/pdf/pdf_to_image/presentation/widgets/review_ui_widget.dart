@@ -1,5 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:pixi_desk/core/theme/app_colors.dart';
+import 'package:pixi_desk/features/pdf/pdf_to_image/presentation/cubit/pdf_to_image_cubit.dart';
 import 'package:pixi_desk/features/pdf/pdf_to_image/presentation/cubit/pdf_to_image_state.dart';
+import 'package:pixi_desk/features/pdf/pdf_to_image/presentation/widgets/image_grid_view.dart';
+import 'package:pixi_desk/features/pdf/pdf_to_image/presentation/widgets/image_page_view.dart';
 import 'package:pixi_desk/l10n/localization/app_localizations.dart';
 
 class ReviewUiWidget extends StatefulWidget {
@@ -18,85 +23,90 @@ class ReviewUiWidget extends StatefulWidget {
 }
 
 class _ReviewUiWidgetState extends State<ReviewUiWidget> {
-  bool _isGridView = false;
+  bool _isGridView = true;
+  int _initialPageIndex = 0;
+
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                widget.l10n.conversionResult,
-                style: Theme.of(context).textTheme.titleLarge,
-              ),
-              Flexible(
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
+    // If no images, show nothing (shouldn't happen in this state but good for safety)
+    if (widget.state.generatedImages == null ||
+        widget.state.generatedImages!.isEmpty) {
+      return const SizedBox.shrink();
+    }
+
+    return Scaffold(
+      backgroundColor: Colors.transparent,
+      body: Column(
+        children: [
+          // Top Bar
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Row(
                   children: [
-                    IconButton(
-                      icon: Icon(
-                        _isGridView ? Icons.view_list : Icons.grid_view,
+                    if (!_isGridView)
+                      IconButton(
+                        icon: const Icon(Icons.arrow_back),
+                        onPressed: () {
+                          setState(() {
+                            _isGridView = true;
+                          });
+                        },
                       ),
-                      onPressed: () {
-                        setState(() {
-                          _isGridView = !_isGridView;
-                        });
-                      },
-                    ),
-                    const SizedBox(width: 8),
-                    Flexible(
-                      child: ElevatedButton.icon(
-                        onPressed: () => widget.onSaveAll(),
-                        style: ElevatedButton.styleFrom(
-                          minimumSize: const Size(0, 56),
-                          padding: const EdgeInsets.symmetric(horizontal: 16),
-                        ),
-                        icon: const Icon(Icons.save),
-                        label: Text(
-                          widget.l10n.saveAll,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      ),
+                    Text(
+                      widget.l10n.conversionResult,
+                      style: Theme.of(context).textTheme.titleLarge,
                     ),
                   ],
                 ),
-              ),
-            ],
-          ),
-        ),
-        Expanded(
-          child: _isGridView
-              ? GridView.builder(
-                  padding: const EdgeInsets.all(8.0),
-                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 4,
-                    crossAxisSpacing: 8,
-                    mainAxisSpacing: 8,
+                ElevatedButton.icon(
+                  onPressed: widget.onSaveAll,
+                  style: ElevatedButton.styleFrom(
+                    minimumSize: const Size(0, 48),
+                    padding: const EdgeInsets.symmetric(horizontal: 24),
                   ),
-                  itemCount: widget.state.generatedImages!.length,
-                  itemBuilder: (context, index) {
-                    final file = widget.state.generatedImages![index];
-                    return Card(
-                      clipBehavior: Clip.antiAlias,
-                      child: Image.file(file, fit: BoxFit.cover),
-                    );
-                  },
-                )
-              : PageView.builder(
-                  itemCount: widget.state.generatedImages!.length,
-                  itemBuilder: (context, index) {
-                    final file = widget.state.generatedImages![index];
-                    return Padding(
-                      padding: const EdgeInsets.all(16.0),
-                      child: Image.file(file, fit: BoxFit.contain),
-                    );
-                  },
+                  icon: const Icon(Icons.save),
+                  label: Text(widget.l10n.saveAll),
                 ),
-        ),
-      ],
+              ],
+            ),
+          ),
+
+          // Main Content
+          Expanded(
+            child: _isGridView
+                ? ImageGridView(
+                    images: widget.state.generatedImages!,
+                    onImageTap: (index) {
+                      setState(() {
+                        _initialPageIndex = index;
+                        _isGridView = false;
+                      });
+                    },
+                  )
+                : ImagePageView(
+                    images: widget.state.generatedImages!,
+                    initialIndex: _initialPageIndex,
+                  ),
+          ),
+        ],
+      ),
+      floatingActionButton:
+          _isGridView && widget.state.selectedImagePaths.isNotEmpty
+          ? FloatingActionButton.extended(
+              onPressed: () {
+                context.read<PdfToImageCubit>().deleteSelectedImages();
+              },
+              backgroundColor: AppColors.error,
+              icon: const Icon(Icons.delete, color: Colors.white),
+              label: Text(
+                widget.l10n.deleteSelected,
+                style: const TextStyle(color: Colors.white),
+              ),
+            )
+          : null,
     );
   }
 }

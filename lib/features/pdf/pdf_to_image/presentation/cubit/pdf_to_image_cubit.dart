@@ -36,6 +36,49 @@ class PdfToImageCubit extends Cubit<PdfToImageState> {
     emit(const PdfToImageState());
   }
 
+  void toggleImageSelection(String path) {
+    final currentSelection = Set<String>.from(state.selectedImagePaths);
+    if (currentSelection.contains(path)) {
+      currentSelection.remove(path);
+    } else {
+      currentSelection.add(path);
+    }
+    emit(state.copyWith(selectedImagePaths: currentSelection));
+  }
+
+  void rotateImage(String path) {
+    final currentRotations = Map<String, int>.from(state.imageRotations);
+    final currentRotation = currentRotations[path] ?? 0;
+    currentRotations[path] = (currentRotation + 1) % 4;
+    emit(state.copyWith(imageRotations: currentRotations));
+  }
+
+  void deleteSelectedImages() {
+    if (state.generatedImages == null) return;
+
+    final remainingImages = state.generatedImages!
+        .where((file) => !state.selectedImagePaths.contains(file.path))
+        .toList();
+
+    // Clean up rotations for deleted images
+    final currentRotations = Map<String, int>.from(state.imageRotations);
+    for (final path in state.selectedImagePaths) {
+      currentRotations.remove(path);
+    }
+
+    emit(
+      state.copyWith(
+        generatedImages: remainingImages,
+        selectedImagePaths: {},
+        imageRotations: currentRotations,
+      ),
+    );
+  }
+
+  void clearSelection() {
+    emit(state.copyWith(selectedImagePaths: {}));
+  }
+
   Future<void> triggerSaveAll() async {
     if (state.generatedImages == null || state.generatedImages!.isEmpty) return;
 
@@ -45,7 +88,11 @@ class PdfToImageCubit extends Cubit<PdfToImageState> {
     emit(state.copyWith(status: PdfToImageStatus.saving));
 
     try {
-      await _saveImagesUseCase(state.generatedImages!, directoryPath);
+      await _saveImagesUseCase(
+        state.generatedImages!,
+        directoryPath,
+        state.imageRotations,
+      );
       emit(
         state.copyWith(
           status: PdfToImageStatus.savedSuccess,
