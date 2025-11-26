@@ -43,12 +43,16 @@ class ConversionSettingsWidget extends StatelessWidget {
                 ),
                 const SizedBox(height: 16),
                 DropdownButtonFormField<int>(
+                  isExpanded: true,
                   decoration: InputDecoration(labelText: l10n.qualityDpi),
                   initialValue: state.dpi,
-                  items: [72, 150, 300, 600].map((dpi) {
+                  items: [72, 150, 300, 600, 1200].map((dpi) {
                     return DropdownMenuItem(
                       value: dpi,
-                      child: Text('$dpi DPI'),
+                      child: Text(
+                        dpi == 1200 ? l10n.dpi1200Label : '$dpi DPI',
+                        overflow: TextOverflow.ellipsis,
+                      ),
                     );
                   }).toList(),
                   onChanged: (value) {
@@ -59,6 +63,32 @@ class ConversionSettingsWidget extends StatelessWidget {
                     }
                   },
                 ),
+                if (state.dpi == 1200) ...[
+                  const SizedBox(height: 8),
+                  Container(
+                    padding: const EdgeInsets.all(8),
+                    decoration: BoxDecoration(
+                      color: Colors.amber.withValues(alpha: 0.1),
+                      borderRadius: BorderRadius.circular(4),
+                      border: Border.all(color: Colors.amber),
+                    ),
+                    child: Row(
+                      children: [
+                        const Icon(
+                          Icons.warning_amber_rounded,
+                          color: Colors.amber,
+                        ),
+                        const SizedBox(width: 8),
+                        Expanded(
+                          child: Text(
+                            l10n.dpi1200Warning,
+                            style: Theme.of(context).textTheme.bodySmall,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
               ],
             ),
           ),

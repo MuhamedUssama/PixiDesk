@@ -207,4 +207,11 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get preparing => 'جاري التحضير...';
+
+  @override
+  String get dpi1200Label => '1200 نقطة في البوصة (للمستخدمين المحترفين)';
+
+  @override
+  String get dpi1200Warning =>
+      'ملاحظة: دقة 1200 تتطلب موارد عالية من النظام وقد تستغرق وقتاً طويلاً في المعالجة.';
 }

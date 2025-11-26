@@ -493,6 +493,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Preparing...'**
   String get preparing;
+
+  /// No description provided for @dpi1200Label.
+  ///
+  /// In en, this message translates to:
+  /// **'1200 DPI (For Professional Users)'**
+  String get dpi1200Label;
+
+  /// No description provided for @dpi1200Warning.
+  ///
+  /// In en, this message translates to:
+  /// **'Note: 1200 DPI is resource-intensive and may take a significant amount of time to process.'**
+  String get dpi1200Warning;
 }
 
 class _AppLocalizationsDelegate

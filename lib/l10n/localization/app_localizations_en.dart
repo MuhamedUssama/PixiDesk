@@ -209,4 +209,11 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get preparing => 'Preparing...';
+
+  @override
+  String get dpi1200Label => '1200 DPI (For Professional Users)';
+
+  @override
+  String get dpi1200Warning =>
+      'Note: 1200 DPI is resource-intensive and may take a significant amount of time to process.';
 }
