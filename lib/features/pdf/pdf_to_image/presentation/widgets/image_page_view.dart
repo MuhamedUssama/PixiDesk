@@ -44,72 +44,70 @@ class _ImagePageViewState extends State<ImagePageView> {
       builder: (context, state) {
         return Stack(
           children: [
-            PageView.builder(
-              controller: _pageController,
-              itemCount: widget.images.length,
-              onPageChanged: (index) {
-                setState(() {
-                  _currentIndex = index;
-                });
-              },
-              itemBuilder: (context, index) {
-                final file = widget.images[index];
-                final rotation = state.imageRotations[file.path] ?? 0;
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                if (_currentIndex > 0)
+                  Padding(
+                    padding: const EdgeInsets.only(left: 16.0),
+                    child: IconButton(
+                      icon: const Icon(Icons.arrow_back_ios_rounded, size: 32),
 
-                return Center(
-                  child: RotatedBox(
-                    quarterTurns: rotation,
-                    child: Image.file(file, fit: BoxFit.contain),
+                      onPressed: () {
+                        _pageController.previousPage(
+                          duration: const Duration(milliseconds: 300),
+                          curve: Curves.easeInOut,
+                        );
+                      },
+                      tooltip: l10n.previous,
+                    ),
+                  )
+                else
+                  const SizedBox(width: 64),
+                Expanded(
+                  child: PageView.builder(
+                    controller: _pageController,
+                    itemCount: widget.images.length,
+                    onPageChanged: (index) {
+                      setState(() {
+                        _currentIndex = index;
+                      });
+                    },
+                    itemBuilder: (context, index) {
+                      final file = widget.images[index];
+                      final rotation = state.imageRotations[file.path] ?? 0;
+
+                      return Center(
+                        child: RotatedBox(
+                          quarterTurns: rotation,
+                          child: Image.file(file, fit: BoxFit.contain),
+                        ),
+                      );
+                    },
                   ),
-                );
-              },
+                ),
+
+                if (_currentIndex < widget.images.length - 1)
+                  Padding(
+                    padding: const EdgeInsets.only(right: 16.0),
+                    child: IconButton(
+                      icon: const Icon(
+                        Icons.arrow_forward_ios_rounded,
+                        size: 32,
+                      ),
+                      onPressed: () {
+                        _pageController.nextPage(
+                          duration: const Duration(milliseconds: 300),
+                          curve: Curves.easeInOut,
+                        );
+                      },
+                      tooltip: l10n.next,
+                    ),
+                  )
+                else
+                  const SizedBox(width: 64),
+              ],
             ),
-
-            if (_currentIndex > 0)
-              Positioned(
-                left: 16,
-                top: 0,
-                bottom: 0,
-                child: Center(
-                  child: IconButton(
-                    icon: const Icon(Icons.arrow_back_ios, size: 32),
-                    style: IconButton.styleFrom(
-                      backgroundColor: Colors.black26,
-                      foregroundColor: Colors.white,
-                    ),
-                    onPressed: () {
-                      _pageController.previousPage(
-                        duration: const Duration(milliseconds: 300),
-                        curve: Curves.easeInOut,
-                      );
-                    },
-                    tooltip: l10n.previous,
-                  ),
-                ),
-              ),
-            if (_currentIndex < widget.images.length - 1)
-              Positioned(
-                right: 16,
-                top: 0,
-                bottom: 0,
-                child: Center(
-                  child: IconButton(
-                    icon: const Icon(Icons.arrow_forward_ios, size: 32),
-                    style: IconButton.styleFrom(
-                      backgroundColor: Colors.black26,
-                      foregroundColor: Colors.white,
-                    ),
-                    onPressed: () {
-                      _pageController.nextPage(
-                        duration: const Duration(milliseconds: 300),
-                        curve: Curves.easeInOut,
-                      );
-                    },
-                    tooltip: l10n.next,
-                  ),
-                ),
-              ),
-            // Central Rotate Button
             Positioned(
               bottom: 32,
               left: 0,

@@ -41,36 +41,41 @@ class _ReviewUiWidgetState extends State<ReviewUiWidget> {
           // Top Bar
           Padding(
             padding: const EdgeInsets.all(8.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Row(
-                  children: [
-                    if (!_isGridView)
-                      IconButton(
-                        icon: const Icon(Icons.arrow_back),
-                        onPressed: () {
-                          setState(() {
-                            _isGridView = true;
-                          });
-                        },
-                      ),
-                    Text(
-                      widget.l10n.conversionResult,
-                      style: Theme.of(context).textTheme.titleLarge,
-                    ),
-                  ],
-                ),
-                ElevatedButton.icon(
-                  onPressed: widget.onSaveAll,
-                  style: ElevatedButton.styleFrom(
-                    minimumSize: const Size(0, 48),
-                    padding: const EdgeInsets.symmetric(horizontal: 24),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 12),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    widget.l10n.conversionResult,
+                    style: Theme.of(context).textTheme.titleLarge,
                   ),
-                  icon: const Icon(Icons.save),
-                  label: Text(widget.l10n.saveAll),
-                ),
-              ],
+                  Row(
+                    spacing: 12,
+                    children: [
+                      if (!_isGridView)
+                        IconButton(
+                          icon: const Icon(Icons.grid_view_rounded),
+                          tooltip: widget.l10n.gridView,
+                          onPressed: () {
+                            setState(() {
+                              _isGridView = true;
+                            });
+                          },
+                        ),
+                      ElevatedButton.icon(
+                        onPressed: widget.onSaveAll,
+                        style: ElevatedButton.styleFrom(
+                          minimumSize: const Size(0, 48),
+                          padding: const EdgeInsets.symmetric(horizontal: 24),
+                        ),
+                        icon: const Icon(Icons.save),
+                        label: Text(widget.l10n.saveAll),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
             ),
           ),
 

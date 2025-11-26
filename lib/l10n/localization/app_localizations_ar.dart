@@ -229,4 +229,7 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get next => 'التالي';
+
+  @override
+  String get gridView => 'عرض الشاشة';
 }

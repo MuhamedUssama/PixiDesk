@@ -71,5 +71,6 @@
   "rotateRight": "تدوير يمين",
   "selected": "محدد",
   "previous": "السابق",
-  "next": "التالي"
+  "next": "التالي",
+  "gridView": "عرض الشاشة"
 }

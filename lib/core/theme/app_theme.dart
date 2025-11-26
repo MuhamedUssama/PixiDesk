@@ -46,6 +46,11 @@ abstract class AppTheme {
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
       ),
     ),
+    floatingActionButtonTheme: FloatingActionButtonThemeData(
+      backgroundColor: AppColors.white,
+      foregroundColor: AppColors.dark,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+    ),
     cardTheme: CardThemeData(
       color: AppColors.dark,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
@@ -185,6 +190,11 @@ abstract class AppTheme {
         padding: const EdgeInsets.symmetric(vertical: 16),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
       ),
+    ),
+    floatingActionButtonTheme: FloatingActionButtonThemeData(
+      backgroundColor: AppColors.dark,
+      foregroundColor: AppColors.light,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
     ),
     cardTheme: CardThemeData(
       color: AppColors.light,
