@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pixi_desk/core/theme/app_colors.dart';
 import 'package:pixi_desk/features/pdf/pdf_to_image/presentation/cubit/pdf_to_image_cubit.dart';
 import 'package:pixi_desk/features/pdf/pdf_to_image/presentation/cubit/pdf_to_image_state.dart';
+import 'package:pixi_desk/features/pdf/pdf_to_image/presentation/widgets/conversion_progress_widget.dart';
 import 'package:pixi_desk/l10n/localization/app_localizations.dart';
 
 class SelectedFileState extends StatelessWidget {
@@ -31,14 +32,22 @@ class SelectedFileState extends StatelessWidget {
           state.selectedFile!.path.split(Platform.pathSeparator).last,
           style: Theme.of(context).textTheme.headlineSmall,
         ),
-        const SizedBox(height: 8),
-        if (state.status != PdfToImageStatus.converting)
-          TextButton.icon(
-            onPressed: () => context.read<PdfToImageCubit>().clearFile(),
-            style: TextButton.styleFrom(foregroundColor: AppColors.error),
-            icon: const Icon(Icons.delete, color: AppColors.error),
-            label: Text(l10n.removeFile),
-          ),
+        const SizedBox(height: 16),
+        AnimatedSwitcher(
+          duration: const Duration(milliseconds: 300),
+          child: state.status == PdfToImageStatus.converting
+              ? SizedBox(
+                  width: MediaQuery.of(context).size.width * .4,
+                  child: const ConversionProgressWidget(),
+                )
+              : TextButton.icon(
+                  key: const ValueKey('removeButton'),
+                  onPressed: () => context.read<PdfToImageCubit>().clearFile(),
+                  style: TextButton.styleFrom(foregroundColor: AppColors.error),
+                  icon: const Icon(Icons.delete, color: AppColors.error),
+                  label: Text(l10n.removeFile),
+                ),
+        ),
       ],
     );
   }

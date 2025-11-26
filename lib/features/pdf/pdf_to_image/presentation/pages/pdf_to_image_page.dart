@@ -5,7 +5,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pixi_desk/core/theme/app_colors.dart';
 import 'package:pixi_desk/features/pdf/pdf_to_image/presentation/cubit/pdf_to_image_cubit.dart';
 import 'package:pixi_desk/features/pdf/pdf_to_image/presentation/cubit/pdf_to_image_state.dart';
-import 'package:pixi_desk/features/pdf/pdf_to_image/presentation/widgets/conversion_progress_widget.dart';
 import 'package:pixi_desk/features/pdf/pdf_to_image/presentation/widgets/conversion_settings_widget.dart';
 import 'package:pixi_desk/features/pdf/pdf_to_image/presentation/widgets/empty_state_widget.dart';
 import 'package:pixi_desk/features/pdf/pdf_to_image/presentation/widgets/pdf_to_image_appbar.dart';
@@ -93,16 +92,17 @@ class PdfToImagePage extends StatelessWidget {
                         padding: const EdgeInsets.all(16.0),
                         child: SizedBox(
                           width: double.infinity,
-                          child: state.status == PdfToImageStatus.converting
-                              ? const ConversionProgressWidget()
-                              : ElevatedButton(
-                                  onPressed: () {
+                          child: ElevatedButton(
+                            onPressed:
+                                state.status == PdfToImageStatus.converting
+                                ? null
+                                : () {
                                     context
                                         .read<PdfToImageCubit>()
                                         .startConversion();
                                   },
-                                  child: Text(l10n.convert),
-                                ),
+                            child: Text(l10n.convert),
+                          ),
                         ),
                       ),
                     ],

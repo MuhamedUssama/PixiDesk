@@ -64,12 +64,12 @@ class ConversionSettingsWidget extends StatelessWidget {
                   },
                 ),
                 if (state.dpi == 1200) ...[
-                  const SizedBox(height: 8),
+                  const SizedBox(height: 16),
                   Container(
                     padding: const EdgeInsets.all(8),
                     decoration: BoxDecoration(
                       color: Colors.amber.withValues(alpha: 0.1),
-                      borderRadius: BorderRadius.circular(4),
+                      borderRadius: BorderRadius.circular(16),
                       border: Border.all(color: Colors.amber),
                     ),
                     child: Row(
