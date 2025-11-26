@@ -32,12 +32,13 @@ class SelectedFileState extends StatelessWidget {
           style: Theme.of(context).textTheme.headlineSmall,
         ),
         const SizedBox(height: 8),
-        TextButton.icon(
-          onPressed: () => context.read<PdfToImageCubit>().clearFile(),
-          style: TextButton.styleFrom(foregroundColor: AppColors.error),
-          icon: const Icon(Icons.delete, color: AppColors.error),
-          label: Text(l10n.removeFile),
-        ),
+        if (state.status != PdfToImageStatus.converting)
+          TextButton.icon(
+            onPressed: () => context.read<PdfToImageCubit>().clearFile(),
+            style: TextButton.styleFrom(foregroundColor: AppColors.error),
+            icon: const Icon(Icons.delete, color: AppColors.error),
+            label: Text(l10n.removeFile),
+          ),
       ],
     );
   }

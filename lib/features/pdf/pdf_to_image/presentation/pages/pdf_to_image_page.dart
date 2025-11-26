@@ -47,10 +47,6 @@ class PdfToImagePage extends StatelessWidget {
             );
           }
 
-          if (state.status == PdfToImageStatus.converting) {
-            return const ConversionProgressWidget();
-          }
-
           return Row(
             children: [
               Expanded(
@@ -92,12 +88,16 @@ class PdfToImagePage extends StatelessWidget {
                         padding: const EdgeInsets.all(16.0),
                         child: SizedBox(
                           width: double.infinity,
-                          child: ElevatedButton(
-                            onPressed: () {
-                              context.read<PdfToImageCubit>().startConversion();
-                            },
-                            child: Text(l10n.convert),
-                          ),
+                          child: state.status == PdfToImageStatus.converting
+                              ? const ConversionProgressWidget()
+                              : ElevatedButton(
+                                  onPressed: () {
+                                    context
+                                        .read<PdfToImageCubit>()
+                                        .startConversion();
+                                  },
+                                  child: Text(l10n.convert),
+                                ),
                         ),
                       ),
                     ],
