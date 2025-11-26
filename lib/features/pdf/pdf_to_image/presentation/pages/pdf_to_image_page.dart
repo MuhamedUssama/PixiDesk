@@ -1,8 +1,5 @@
-import 'dart:developer';
 import 'dart:io';
-
 import 'package:desktop_drop/desktop_drop.dart';
-import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pixi_desk/core/theme/app_colors.dart';
@@ -35,6 +32,14 @@ class PdfToImagePage extends StatelessWidget {
                 backgroundColor: AppColors.error,
               ),
             );
+          } else if (state.status == PdfToImageStatus.savedSuccess &&
+              state.successMessage != null) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text(state.successMessage!),
+                backgroundColor: Colors.green,
+              ),
+            );
           }
         },
         builder: (context, state) {
@@ -43,7 +48,7 @@ class PdfToImagePage extends StatelessWidget {
             return ReviewUiWidget(
               state: state,
               l10n: l10n,
-              onSaveAll: () => _saveAll(context, state.generatedImages!),
+              onSaveAll: () => context.read<PdfToImageCubit>().triggerSaveAll(),
             );
           }
 
@@ -108,36 +113,5 @@ class PdfToImagePage extends StatelessWidget {
         },
       ),
     );
-  }
-
-  Future<void> _saveAll(BuildContext context, List<File> files) async {
-    final String? directoryPath = await FilePicker.platform.getDirectoryPath();
-    if (directoryPath != null) {
-      // Copy files to directory
-      try {
-        for (final file in files) {
-          final fileName = file.path.split(Platform.pathSeparator).last;
-          await file.copy('$directoryPath${Platform.pathSeparator}$fileName');
-        }
-        if (context.mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text(AppLocalizations.of(context)!.filesSaved),
-              backgroundColor: Colors.green,
-            ),
-          );
-        }
-      } catch (e) {
-        if (context.mounted) {
-          log('Error saving files: $e');
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text('Error saving files'),
-              backgroundColor: AppColors.error,
-            ),
-          );
-        }
-      }
-    }
   }
 }

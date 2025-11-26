@@ -15,9 +15,8 @@ class PdfToImageRepositoryImpl implements PdfToImageRepository {
 
   @override
   Stream<PdfToImageEvent> convert(PdfToImageParams params) async* {
-    // Try to get total pages (optional, for better progress)
     int totalPages = await _popplerService.getPageCount(params.inputFile);
-    if (totalPages == 0) totalPages = 1; // Avoid division by zero
+    if (totalPages == 0) totalPages = 1;
 
     final stream = await _popplerService.convertPdfToImages(params);
 
@@ -43,6 +42,14 @@ class PdfToImageRepositoryImpl implements PdfToImageRepository {
       } else if (event['type'] == 'error') {
         throw Exception(event['message']);
       }
+    }
+  }
+
+  @override
+  Future<void> saveImages(List<File> images, String destinationPath) async {
+    for (final file in images) {
+      final fileName = file.path.split(Platform.pathSeparator).last;
+      await file.copy('$destinationPath${Platform.pathSeparator}$fileName');
     }
   }
 }

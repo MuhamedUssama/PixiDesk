@@ -4,13 +4,16 @@ import 'package:injectable/injectable.dart';
 import 'package:pixi_desk/features/pdf/pdf_to_image/domain/entities/pdf_to_image_event.dart';
 import 'package:pixi_desk/features/pdf/pdf_to_image/domain/entities/pdf_to_image_params.dart';
 import 'package:pixi_desk/features/pdf/pdf_to_image/domain/usecases/convert_pdf_to_images_usecase.dart';
+import 'package:pixi_desk/features/pdf/pdf_to_image/domain/usecases/save_images_usecase.dart';
 import 'package:pixi_desk/features/pdf/pdf_to_image/presentation/cubit/pdf_to_image_state.dart';
+import 'package:file_picker/file_picker.dart';
 
 @injectable
 class PdfToImageCubit extends Cubit<PdfToImageState> {
   final ConvertPdfToImagesUseCase _convertPdfToImagesUseCase;
+  final SaveImagesUseCase _saveImagesUseCase;
 
-  PdfToImageCubit(this._convertPdfToImagesUseCase)
+  PdfToImageCubit(this._convertPdfToImagesUseCase, this._saveImagesUseCase)
     : super(const PdfToImageState());
 
   void selectFile(File file) {
@@ -31,6 +34,36 @@ class PdfToImageCubit extends Cubit<PdfToImageState> {
 
   void clearFile() {
     emit(const PdfToImageState());
+  }
+
+  Future<void> triggerSaveAll() async {
+    if (state.generatedImages == null || state.generatedImages!.isEmpty) return;
+
+    final String? directoryPath = await FilePicker.platform.getDirectoryPath();
+    if (directoryPath == null) return;
+
+    emit(state.copyWith(status: PdfToImageStatus.saving));
+
+    try {
+      await _saveImagesUseCase(state.generatedImages!, directoryPath);
+      emit(
+        state.copyWith(
+          status: PdfToImageStatus.savedSuccess,
+          successMessage: 'Files saved successfully',
+        ),
+      );
+      // Reset status back to review after showing success
+      emit(
+        state.copyWith(status: PdfToImageStatus.review, successMessage: null),
+      );
+    } catch (e) {
+      emit(
+        state.copyWith(
+          status: PdfToImageStatus.error,
+          errorMessage: 'Error saving files: $e',
+        ),
+      );
+    }
   }
 
   Future<void> startConversion() async {
