@@ -46,13 +46,19 @@ abstract class AppTheme {
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
       ),
     ),
+    floatingActionButtonTheme: FloatingActionButtonThemeData(
+      backgroundColor: AppColors.white,
+      foregroundColor: AppColors.dark,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+    ),
     cardTheme: CardThemeData(
       color: AppColors.dark,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
       elevation: 0,
     ),
-    progressIndicatorTheme: const ProgressIndicatorThemeData(
+    progressIndicatorTheme: ProgressIndicatorThemeData(
       color: AppColors.darkHeadTextColor,
+      borderRadius: BorderRadius.circular(16),
     ),
     textTheme: const TextTheme(
       bodyLarge: TextStyle(color: AppColors.darkHeadTextColor),
@@ -185,13 +191,19 @@ abstract class AppTheme {
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
       ),
     ),
+    floatingActionButtonTheme: FloatingActionButtonThemeData(
+      backgroundColor: AppColors.dark,
+      foregroundColor: AppColors.light,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+    ),
     cardTheme: CardThemeData(
       color: AppColors.light,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
       elevation: 0,
     ),
-    progressIndicatorTheme: const ProgressIndicatorThemeData(
+    progressIndicatorTheme: ProgressIndicatorThemeData(
       color: AppColors.dark,
+      borderRadius: BorderRadius.circular(16),
     ),
     textTheme: const TextTheme(
       bodyLarge: TextStyle(color: AppColors.lightHeadTextColor),

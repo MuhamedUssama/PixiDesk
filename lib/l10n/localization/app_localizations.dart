@@ -415,6 +415,138 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Save PDF'**
   String get savePdf;
+
+  /// No description provided for @pdfToImages.
+  ///
+  /// In en, this message translates to:
+  /// **'PDF To Images'**
+  String get pdfToImages;
+
+  /// No description provided for @pdfToImagesSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Convert PDF documents to images'**
+  String get pdfToImagesSubtitle;
+
+  /// No description provided for @pdfToImage.
+  ///
+  /// In en, this message translates to:
+  /// **'PDF to Image'**
+  String get pdfToImage;
+
+  /// No description provided for @conversionSettings.
+  ///
+  /// In en, this message translates to:
+  /// **'Conversion Settings'**
+  String get conversionSettings;
+
+  /// No description provided for @outputFormat.
+  ///
+  /// In en, this message translates to:
+  /// **'Output Format'**
+  String get outputFormat;
+
+  /// No description provided for @qualityDpi.
+  ///
+  /// In en, this message translates to:
+  /// **'Quality (DPI)'**
+  String get qualityDpi;
+
+  /// No description provided for @convertingPageOf.
+  ///
+  /// In en, this message translates to:
+  /// **'Converting page {currentPage} of {totalPages}'**
+  String convertingPageOf(int currentPage, String totalPages);
+
+  /// No description provided for @filesSaved.
+  ///
+  /// In en, this message translates to:
+  /// **'Files saved successfully'**
+  String get filesSaved;
+
+  /// No description provided for @conversionResult.
+  ///
+  /// In en, this message translates to:
+  /// **'Conversion Result'**
+  String get conversionResult;
+
+  /// No description provided for @saveAll.
+  ///
+  /// In en, this message translates to:
+  /// **'Save All'**
+  String get saveAll;
+
+  /// No description provided for @dragPdfHere.
+  ///
+  /// In en, this message translates to:
+  /// **'Drag PDF Here'**
+  String get dragPdfHere;
+
+  /// No description provided for @selectPdfFile.
+  ///
+  /// In en, this message translates to:
+  /// **'Select PDF File'**
+  String get selectPdfFile;
+
+  /// No description provided for @preparing.
+  ///
+  /// In en, this message translates to:
+  /// **'Preparing...'**
+  String get preparing;
+
+  /// No description provided for @dpi1200Label.
+  ///
+  /// In en, this message translates to:
+  /// **'1200 DPI (For Professional Users)'**
+  String get dpi1200Label;
+
+  /// No description provided for @dpi1200Warning.
+  ///
+  /// In en, this message translates to:
+  /// **'Note: 1200 DPI is resource-intensive and may take a significant amount of time to process.'**
+  String get dpi1200Warning;
+
+  /// No description provided for @deleteSelected.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete Selected'**
+  String get deleteSelected;
+
+  /// No description provided for @rotateRight.
+  ///
+  /// In en, this message translates to:
+  /// **'Rotate Right'**
+  String get rotateRight;
+
+  /// No description provided for @selected.
+  ///
+  /// In en, this message translates to:
+  /// **'Selected'**
+  String get selected;
+
+  /// No description provided for @previous.
+  ///
+  /// In en, this message translates to:
+  /// **'Previous'**
+  String get previous;
+
+  /// No description provided for @next.
+  ///
+  /// In en, this message translates to:
+  /// **'Next'**
+  String get next;
+
+  /// No description provided for @gridView.
+  ///
+  /// In en, this message translates to:
+  /// **'Grid View'**
+  String get gridView;
+
+  /// No description provided for @saveAsZip.
+  ///
+  /// In en, this message translates to:
+  /// **'Save As Zip'**
+  String get saveAsZip;
 }
 
 class _AppLocalizationsDelegate
