@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:image/image.dart' as img;
 import 'package:archive/archive_io.dart';
 import 'package:injectable/injectable.dart';
+import 'package:path/path.dart' as path;
 import 'package:pixi_desk/features/pdf/pdf_to_image/data/datasources/poppler_service.dart';
 import 'package:pixi_desk/features/pdf/pdf_to_image/domain/entities/conversion_progress.dart';
 import 'package:pixi_desk/features/pdf/pdf_to_image/domain/entities/pdf_to_image_event.dart';
@@ -17,30 +18,51 @@ class PdfToImageRepositoryImpl implements PdfToImageRepository {
 
   @override
   Stream<PdfToImageEvent> convert(PdfToImageParams params) async* {
-    int totalPages = await _popplerService.getPageCount(params.inputFile);
+    int totalPages = 0;
+    for (final file in params.inputFiles) {
+      totalPages += await _popplerService.getPageCount(file);
+    }
     if (totalPages == 0) totalPages = 1;
 
     final stream = await _popplerService.convertPdfToImages(params);
+    final Map<int, int> pagesProcessedPerFile = {};
 
     await for (final event in stream) {
       if (event['type'] == 'progress') {
         final int page = event['page'] as int;
+        final int fileIndex = event['fileIndex'] as int;
+
+        pagesProcessedPerFile[fileIndex] = page;
+        final int totalProcessed = pagesProcessedPerFile.values.fold(
+          0,
+          (a, b) => a + b,
+        );
 
         double percentage = 0.0;
         if (totalPages > 0) {
-          percentage = (page / totalPages).clamp(0.0, 1.0);
+          percentage = (totalProcessed / totalPages).clamp(0.0, 1.0);
         }
         yield PdfToImageProgress(
           ConversionProgress(
-            currentPage: page,
+            currentPage: totalProcessed,
             totalPages: totalPages,
             percentage: percentage,
           ),
         );
       } else if (event['type'] == 'done') {
         final List<String> paths = (event['files'] as List).cast<String>();
+        final Map<String, dynamic> groupedPathsRaw =
+            event['groupedFiles'] as Map<String, dynamic>;
+        final Map<String, List<String>> groupedPaths = groupedPathsRaw.map(
+          (key, value) => MapEntry(key, (value as List).cast<String>()),
+        );
+
         final files = paths.map((p) => File(p)).toList();
-        yield PdfToImageCompleted(files);
+        final groupedFiles = groupedPaths.map(
+          (k, v) => MapEntry(k, v.map((p) => File(p)).toList()),
+        );
+
+        yield PdfToImageCompleted(files, groupedImages: groupedFiles);
       } else if (event['type'] == 'error') {
         throw Exception(event['message']);
       }
@@ -79,36 +101,69 @@ class PdfToImageRepositoryImpl implements PdfToImageRepository {
     encoder.create(destinationPath);
 
     try {
-      for (final file in images) {
-        final fileName = file.path.split(Platform.pathSeparator).last;
-        final rotation = rotations?[file.path] ?? 0;
+      await _addImagesToZip(encoder, images, rotations);
+    } finally {
+      encoder.close();
+    }
+  }
 
-        if (rotation == 0) {
-          await encoder.addFile(file, fileName);
-        } else {
-          // For rotated images, we need to process them first
-          // We'll create a temporary file for the rotated version
-          final tempDir = await Directory.systemTemp.createTemp('rotated_');
-          final tempFile = File(
-            '${tempDir.path}${Platform.pathSeparator}$fileName',
-          );
+  @override
+  Future<void> saveAsSeparateZips(
+    Map<String, List<File>> groupedImages,
+    String destinationDirectory, {
+    Map<String, int>? rotations,
+  }) async {
+    for (final entry in groupedImages.entries) {
+      final sourceFilePath = entry.key;
+      final images = entry.value;
 
-          try {
-            await _saveRotatedImage(file, tempFile.path, rotation);
-            await encoder.addFile(tempFile, fileName);
-          } finally {
-            // Cleanup temp file immediately after adding to zip
-            if (await tempFile.exists()) {
-              await tempFile.delete();
-            }
-            if (await tempDir.exists()) {
-              await tempDir.delete();
-            }
+      final sourceFileName = sourceFilePath.split(Platform.pathSeparator).last;
+      final zipFileName = '${path.withoutExtension(sourceFileName)}.zip';
+      final zipFilePath = path.join(destinationDirectory, zipFileName);
+
+      final encoder = ZipFileEncoder();
+      encoder.create(zipFilePath);
+
+      try {
+        await _addImagesToZip(encoder, images, rotations);
+      } finally {
+        encoder.close();
+      }
+    }
+  }
+
+  Future<void> _addImagesToZip(
+    ZipFileEncoder encoder,
+    List<File> images,
+    Map<String, int>? rotations,
+  ) async {
+    for (final file in images) {
+      final fileName = file.path.split(Platform.pathSeparator).last;
+      final rotation = rotations?[file.path] ?? 0;
+
+      if (rotation == 0) {
+        await encoder.addFile(file, fileName);
+      } else {
+        // For rotated images, we need to process them first
+        // We'll create a temporary file for the rotated version
+        final tempDir = await Directory.systemTemp.createTemp('rotated_');
+        final tempFile = File(
+          '${tempDir.path}${Platform.pathSeparator}$fileName',
+        );
+
+        try {
+          await _saveRotatedImage(file, tempFile.path, rotation);
+          await encoder.addFile(tempFile, fileName);
+        } finally {
+          // Cleanup temp file immediately after adding to zip
+          if (await tempFile.exists()) {
+            await tempFile.delete();
+          }
+          if (await tempDir.exists()) {
+            await tempDir.delete();
           }
         }
       }
-    } finally {
-      encoder.close();
     }
   }
 

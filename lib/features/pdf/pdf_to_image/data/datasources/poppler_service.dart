@@ -85,9 +85,9 @@ Future<void> _isolateEntryPoint(_IsolateParams isolateParams) async {
   final binaryPath = isolateParams.binaryPath;
 
   Timer? flushTimer;
-  Process? process; // FIX 1: Define process in outer scope
+  Process? process;
 
-  // FIX 2: Cleanup old temporary directories
+  // Cleanup old temporary directories
   try {
     final systemTemp = Directory.systemTemp;
     if (systemTemp.existsSync()) {
@@ -108,108 +108,123 @@ Future<void> _isolateEntryPoint(_IsolateParams isolateParams) async {
   }
 
   try {
-    // Create a temporary directory for output
-    final tempDir = await Directory.systemTemp.createTemp('pdf_to_image_');
-    final outputPrefix = path.join(tempDir.path, 'page');
+    final allGeneratedFiles = <String>[];
+    final groupedFiles = <String, List<String>>{};
 
-    // Determine format flag
-    String formatFlag = '-jpeg'; // Default
-    if (params.outputFormat.toLowerCase() == 'png') formatFlag = '-png';
-    if (params.outputFormat.toLowerCase() == 'tiff') formatFlag = '-tiff';
+    for (int i = 0; i < params.inputFiles.length; i++) {
+      final inputFile = params.inputFiles[i];
 
-    final args = [
-      formatFlag,
-      '-r', params.dpi.toString(),
-      '-progress', // Report progress
-      params.inputFile.path,
-      outputPrefix,
-    ];
+      // Create a temporary directory for output for THIS file
+      final tempDir = await Directory.systemTemp.createTemp(
+        'pdf_to_image_${i}_',
+      );
+      final outputPrefix = path.join(tempDir.path, 'page');
 
-    process = await Process.start(binaryPath, args, runInShell: false);
+      // Determine format flag
+      String formatFlag = '-jpeg'; // Default
+      if (params.outputFormat.toLowerCase() == 'png') formatFlag = '-png';
+      if (params.outputFormat.toLowerCase() == 'tiff') formatFlag = '-tiff';
 
-    // CRITICAL FIX 1: Actively drain stdout to prevent OS buffering issues on Windows.
-    // We don't need the data, but we must keep the pipe flowing.
-    process.stdout.drain();
+      final args = [
+        formatFlag,
+        '-r', params.dpi.toString(),
+        '-progress', // Report progress
+        inputFile.path,
+        outputPrefix,
+      ];
 
-    // CRITICAL FIX 2: Use an active listen subscription for stderr progress.
-    StreamSubscription<String>? stderrSubscription;
-    stderrSubscription = process.stderr
-        .transform(utf8.decoder)
-        .transform(const LineSplitter())
-        .listen((line) {
-          if (line.trim().startsWith('Page ')) {
-            final parts = line.trim().split(' ');
-            if (parts.length >= 2) {
-              final pageNum = int.tryParse(parts[1]);
-              if (pageNum != null) {
-                sendPort.send({'type': 'progress', 'page': pageNum});
+      process = await Process.start(binaryPath, args, runInShell: false);
+
+      // Actively drain stdout
+      process.stdout.drain();
+
+      // Listen to stderr for progress
+      StreamSubscription<String>? stderrSubscription;
+      stderrSubscription = process.stderr
+          .transform(utf8.decoder)
+          .transform(const LineSplitter())
+          .listen((line) {
+            if (line.trim().startsWith('Page ')) {
+              final parts = line.trim().split(' ');
+              if (parts.length >= 2) {
+                final pageNum = int.tryParse(parts[1]);
+                if (pageNum != null) {
+                  sendPort.send({
+                    'type': 'progress',
+                    'fileIndex': i,
+                    'page': pageNum,
+                  });
+                }
               }
             }
-          }
-        });
+          });
 
-    // CRITICAL FIX 3: File System Polling for Progress
-    // Instead of relying on stderr (which buffers) or stdin hacking (which deadlocks),
-    // we poll the output directory for generated files. This is robust and fast.
-    int lastFileCount = 0;
-    flushTimer = Timer.periodic(const Duration(milliseconds: 100), (timer) {
-      try {
+      // File System Polling for Progress
+      int lastFileCount = 0;
+      flushTimer = Timer.periodic(const Duration(milliseconds: 100), (timer) {
+        try {
+          final files = tempDir
+              .listSync()
+              .whereType<File>()
+              .where((f) => f.path.contains('page') && _isImage(f.path))
+              .toList();
+
+          if (files.length > lastFileCount) {
+            lastFileCount = files.length;
+            sendPort.send({
+              'type': 'progress',
+              'fileIndex': i,
+              'page': lastFileCount,
+            });
+          }
+        } catch (e) {
+          // Ignore errors
+        }
+      });
+
+      final exitCode = await process.exitCode;
+      flushTimer.cancel();
+      await stderrSubscription.cancel();
+
+      if (exitCode == 0) {
+        // Small delay to ensure OS flushes all files
+        await Future.delayed(const Duration(milliseconds: 200));
+
         final files = tempDir
             .listSync()
             .whereType<File>()
             .where((f) => f.path.contains('page') && _isImage(f.path))
             .toList();
 
+        files.sort((a, b) => a.path.compareTo(b.path));
+
+        // Final progress check
         if (files.length > lastFileCount) {
-          lastFileCount = files.length;
-          // Send progress for the latest page count
-          sendPort.send({'type': 'progress', 'page': lastFileCount});
+          sendPort.send({
+            'type': 'progress',
+            'fileIndex': i,
+            'page': files.length,
+          });
         }
-      } catch (e) {
-        // Ignore errors during polling (e.g. file lock contention)
+
+        final filePaths = files.map((f) => f.path).toList();
+        allGeneratedFiles.addAll(filePaths);
+        groupedFiles[inputFile.path] = filePaths;
+      } else {
+        sendPort.send({
+          'type': 'error',
+          'message':
+              'Process exited with code $exitCode for file ${inputFile.path}',
+        });
+        return; // Stop processing on error
       }
-    });
-
-    // 3. Wait for the process to finish naturally.
-    final exitCode = await process.exitCode;
-
-    // Stop the flushing timer immediately.
-    flushTimer.cancel();
-
-    // 4. Ensure we finish processing any remaining logs and clean up.
-    await stderrSubscription.cancel();
-
-    if (exitCode == 0) {
-      // Small delay to ensure OS flushes all files to disk listing
-      await Future.delayed(const Duration(milliseconds: 200));
-
-      // List generated files
-      final files = tempDir
-          .listSync()
-          .whereType<File>()
-          .where((f) => f.path.contains('page') && _isImage(f.path))
-          .toList();
-
-      // Sort by name to ensure order
-      files.sort((a, b) => a.path.compareTo(b.path));
-
-      // CRITICAL FIX 4: Final Progress Check (Refined)
-      // Ensure we send the 100% progress event if we haven't yet.
-      // This guarantees the UI transitions gracefully.
-      if (files.length > lastFileCount) {
-        sendPort.send({'type': 'progress', 'page': files.length});
-      }
-
-      sendPort.send({
-        'type': 'done',
-        'files': files.map((f) => f.path).toList(),
-      });
-    } else {
-      sendPort.send({
-        'type': 'error',
-        'message': 'Process exited with code $exitCode',
-      });
     }
+
+    sendPort.send({
+      'type': 'done',
+      'files': allGeneratedFiles,
+      'groupedFiles': groupedFiles,
+    });
   } catch (e, stackTrace) {
     flushTimer?.cancel();
     sendPort.send({
@@ -219,7 +234,6 @@ Future<void> _isolateEntryPoint(_IsolateParams isolateParams) async {
     });
   } finally {
     flushTimer?.cancel();
-    // FIX 1: Ensure process is killed to prevent zombies
     process?.kill(ProcessSignal.sigkill);
     Isolate.exit();
   }

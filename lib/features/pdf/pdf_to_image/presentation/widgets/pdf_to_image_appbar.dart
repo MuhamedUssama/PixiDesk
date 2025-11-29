@@ -24,12 +24,12 @@ class PdfToImageAppbar extends StatelessWidget implements PreferredSizeWidget {
             final result = await FilePicker.platform.pickFiles(
               type: FileType.custom,
               allowedExtensions: ['pdf'],
+              allowMultiple: true,
             );
             if (result != null && result.files.isNotEmpty) {
               if (context.mounted) {
-                context.read<PdfToImageCubit>().selectFile(
-                  File(result.files.single.path!),
-                );
+                final files = result.files.map((f) => File(f.path!)).toList();
+                context.read<PdfToImageCubit>().selectFiles(files);
               }
             }
           },

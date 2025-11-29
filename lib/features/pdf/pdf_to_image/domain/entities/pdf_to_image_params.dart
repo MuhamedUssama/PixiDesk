@@ -2,16 +2,16 @@ import 'dart:io';
 import 'package:equatable/equatable.dart';
 
 class PdfToImageParams extends Equatable {
-  final File inputFile;
+  final List<File> inputFiles;
   final String outputFormat;
   final int dpi;
 
   const PdfToImageParams({
-    required this.inputFile,
-    required this.outputFormat,
-    required this.dpi,
+    required this.inputFiles,
+    this.outputFormat = 'jpg',
+    this.dpi = 200,
   });
 
   @override
-  List<Object?> get props => [inputFile, outputFormat, dpi];
+  List<Object?> get props => [inputFiles, outputFormat, dpi];
 }

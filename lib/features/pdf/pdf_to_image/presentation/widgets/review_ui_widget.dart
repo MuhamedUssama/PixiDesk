@@ -27,9 +27,39 @@ class _ReviewUiWidgetState extends State<ReviewUiWidget> {
   bool _isGridView = true;
   int _initialPageIndex = 0;
 
+  void _handleSaveAll(BuildContext context) {
+    final cubit = context.read<PdfToImageCubit>();
+    if (widget.state.selectedFiles.length > 1) {
+      showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: const Text('Download Options'),
+          content: const Text('How would you like to save the images?'),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context);
+                cubit.triggerSaveAll();
+              },
+              child: const Text('Combined Folder'),
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context);
+                cubit.saveAsSeparateZips();
+              },
+              child: const Text('Separate ZIPs'),
+            ),
+          ],
+        ),
+      );
+    } else {
+      widget.onSaveAll();
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    // If no images, show nothing (shouldn't happen in this state but good for safety)
     if (widget.state.generatedImages == null ||
         widget.state.generatedImages!.isEmpty) {
       return const SizedBox.shrink();
@@ -78,7 +108,7 @@ class _ReviewUiWidgetState extends State<ReviewUiWidget> {
                         label: Text(widget.l10n.saveAsZip),
                       ),
                       ElevatedButton.icon(
-                        onPressed: widget.onSaveAll,
+                        onPressed: () => _handleSaveAll(context),
                         style: ElevatedButton.styleFrom(
                           minimumSize: const Size(0, 48),
                           padding: const EdgeInsets.symmetric(horizontal: 24),

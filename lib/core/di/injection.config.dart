@@ -53,6 +53,8 @@ import '../../features/pdf/pdf_to_image/domain/repositories/pdf_to_image_reposit
     as _i114;
 import '../../features/pdf/pdf_to_image/domain/usecases/convert_pdf_to_images_usecase.dart'
     as _i45;
+import '../../features/pdf/pdf_to_image/domain/usecases/save_as_separate_zips_usecase.dart'
+    as _i719;
 import '../../features/pdf/pdf_to_image/domain/usecases/save_as_zip_usecase.dart'
     as _i423;
 import '../../features/pdf/pdf_to_image/domain/usecases/save_images_usecase.dart'
@@ -123,6 +125,9 @@ extension GetItInjectableX on _i174.GetIt {
     gh.factory<_i1023.PdfConverterCubit>(
       () => _i1023.PdfConverterCubit(gh<_i796.GeneratePdfUseCase>()),
     );
+    gh.factory<_i719.SaveAsSeparateZipsUseCase>(
+      () => _i719.SaveAsSeparateZipsUseCase(gh<_i114.PdfToImageRepository>()),
+    );
     gh.factory<_i423.SaveAsZipUseCase>(
       () => _i423.SaveAsZipUseCase(gh<_i114.PdfToImageRepository>()),
     );
@@ -140,6 +145,7 @@ extension GetItInjectableX on _i174.GetIt {
         gh<_i45.ConvertPdfToImagesUseCase>(),
         gh<_i849.SaveImagesUseCase>(),
         gh<_i423.SaveAsZipUseCase>(),
+        gh<_i719.SaveAsSeparateZipsUseCase>(),
       ),
     );
     return this;

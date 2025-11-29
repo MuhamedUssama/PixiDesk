@@ -13,7 +13,7 @@ enum PdfToImageStatus {
 
 class PdfToImageState extends Equatable {
   final PdfToImageStatus status;
-  final File? selectedFile;
+  final List<File> selectedFiles;
   final String outputFormat;
   final int dpi;
   final ConversionProgress? progress;
@@ -22,10 +22,11 @@ class PdfToImageState extends Equatable {
   final String? successMessage;
   final Set<String> selectedImagePaths;
   final Map<String, int> imageRotations;
+  final Map<String, List<File>> groupedImages;
 
   const PdfToImageState({
     this.status = PdfToImageStatus.initial,
-    this.selectedFile,
+    this.selectedFiles = const [],
     this.outputFormat = 'jpg',
     this.dpi = 150,
     this.progress,
@@ -34,11 +35,12 @@ class PdfToImageState extends Equatable {
     this.successMessage,
     this.selectedImagePaths = const {},
     this.imageRotations = const {},
+    this.groupedImages = const {},
   });
 
   PdfToImageState copyWith({
     PdfToImageStatus? status,
-    File? selectedFile,
+    List<File>? selectedFiles,
     String? outputFormat,
     int? dpi,
     ConversionProgress? progress,
@@ -47,10 +49,11 @@ class PdfToImageState extends Equatable {
     String? successMessage,
     Set<String>? selectedImagePaths,
     Map<String, int>? imageRotations,
+    Map<String, List<File>>? groupedImages,
   }) {
     return PdfToImageState(
       status: status ?? this.status,
-      selectedFile: selectedFile ?? this.selectedFile,
+      selectedFiles: selectedFiles ?? this.selectedFiles,
       outputFormat: outputFormat ?? this.outputFormat,
       dpi: dpi ?? this.dpi,
       progress: progress ?? this.progress,
@@ -59,13 +62,14 @@ class PdfToImageState extends Equatable {
       successMessage: successMessage,
       selectedImagePaths: selectedImagePaths ?? this.selectedImagePaths,
       imageRotations: imageRotations ?? this.imageRotations,
+      groupedImages: groupedImages ?? this.groupedImages,
     );
   }
 
   @override
   List<Object?> get props => [
     status,
-    selectedFile,
+    selectedFiles,
     outputFormat,
     dpi,
     progress,
@@ -74,5 +78,6 @@ class PdfToImageState extends Equatable {
     successMessage,
     selectedImagePaths,
     imageRotations,
+    groupedImages,
   ];
 }
