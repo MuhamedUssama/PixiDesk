@@ -6,6 +6,7 @@ import 'package:pixi_desk/features/pdf/pdf_to_image/presentation/cubit/pdf_to_im
 import 'package:pixi_desk/features/pdf/pdf_to_image/presentation/cubit/pdf_to_image_state.dart';
 import 'package:pixi_desk/features/pdf/pdf_to_image/presentation/widgets/image_grid_view.dart';
 import 'package:pixi_desk/features/pdf/pdf_to_image/presentation/widgets/image_page_view.dart';
+import 'package:pixi_desk/core/utils/download_utils.dart';
 import 'package:pixi_desk/l10n/localization/app_localizations.dart';
 
 class ReviewUiWidget extends StatefulWidget {
@@ -26,37 +27,6 @@ class ReviewUiWidget extends StatefulWidget {
 class _ReviewUiWidgetState extends State<ReviewUiWidget> {
   bool _isGridView = true;
   int _initialPageIndex = 0;
-
-  void _handleSaveAll(BuildContext context) {
-    final cubit = context.read<PdfToImageCubit>();
-    if (widget.state.selectedFiles.length > 1) {
-      showDialog(
-        context: context,
-        builder: (context) => AlertDialog(
-          title: const Text('Download Options'),
-          content: const Text('How would you like to save the images?'),
-          actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.pop(context);
-                cubit.triggerSaveAll();
-              },
-              child: const Text('Combined Folder'),
-            ),
-            TextButton(
-              onPressed: () {
-                Navigator.pop(context);
-                cubit.saveAsSeparateZips();
-              },
-              child: const Text('Separate ZIPs'),
-            ),
-          ],
-        ),
-      );
-    } else {
-      widget.onSaveAll();
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -108,7 +78,15 @@ class _ReviewUiWidgetState extends State<ReviewUiWidget> {
                         label: Text(widget.l10n.saveAsZip),
                       ),
                       ElevatedButton.icon(
-                        onPressed: () => _handleSaveAll(context),
+                        onPressed: () {
+                          DownloadUtils.handleDownloadFlow(
+                            context: context,
+                            cubit: context.read<PdfToImageCubit>(),
+                            l10n: widget.l10n,
+                            isMultipleFiles:
+                                widget.state.selectedFiles.length > 1,
+                          );
+                        },
                         style: ElevatedButton.styleFrom(
                           minimumSize: const Size(0, 48),
                           padding: const EdgeInsets.symmetric(horizontal: 24),

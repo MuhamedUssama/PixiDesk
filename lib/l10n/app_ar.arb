@@ -73,5 +73,9 @@
   "previous": "السابق",
   "next": "التالي",
   "gridView": "عرض الشاشة",
-  "saveAsZip": "حفظ كأرشيف"
+  "saveAsZip": "حفظ كأرشيف",
+  "downloadOptions": "خيارات التحميل",
+  "downloadOptionsMessage": "كيف ترغب في حفظ الصور؟",
+  "combinedFolder": "مجلد مدمج",
+  "separateZips": "أرشيف منفصل"
 }

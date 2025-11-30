@@ -83,5 +83,9 @@
   "previous": "Previous",
   "next": "Next",
   "gridView": "Grid View",
-  "saveAsZip": "Save As Zip"
+  "saveAsZip": "Save As Zip",
+  "downloadOptions": "Download Options",
+  "downloadOptionsMessage": "How would you like to save the images?",
+  "combinedFolder": "Combined Folder",
+  "separateZips": "Separate ZIPs"
 }

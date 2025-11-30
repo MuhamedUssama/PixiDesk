@@ -235,4 +235,16 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get saveAsZip => 'حفظ كأرشيف';
+
+  @override
+  String get downloadOptions => 'Download Options';
+
+  @override
+  String get downloadOptionsMessage => 'How would you like to save the images?';
+
+  @override
+  String get combinedFolder => 'Combined Folder';
+
+  @override
+  String get separateZips => 'Separate ZIPs';
 }
