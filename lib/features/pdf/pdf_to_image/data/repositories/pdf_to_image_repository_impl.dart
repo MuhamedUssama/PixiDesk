@@ -1,8 +1,12 @@
 import 'dart:async';
+import 'dart:developer';
 import 'dart:io';
+import 'package:flutter/foundation.dart';
 import 'package:image/image.dart' as img;
 import 'package:archive/archive_io.dart';
 import 'package:injectable/injectable.dart';
+import 'package:path/path.dart' as path;
+import 'package:pixi_desk/features/pdf/pdf_to_image/data/datasources/parallel_conversion_service.dart';
 import 'package:pixi_desk/features/pdf/pdf_to_image/data/datasources/poppler_service.dart';
 import 'package:pixi_desk/features/pdf/pdf_to_image/domain/entities/conversion_progress.dart';
 import 'package:pixi_desk/features/pdf/pdf_to_image/domain/entities/pdf_to_image_event.dart';
@@ -12,39 +16,154 @@ import 'package:pixi_desk/features/pdf/pdf_to_image/domain/repositories/pdf_to_i
 @LazySingleton(as: PdfToImageRepository)
 class PdfToImageRepositoryImpl implements PdfToImageRepository {
   final PopplerService _popplerService;
+  final ParallelConversionService _parallelConversionService;
 
-  PdfToImageRepositoryImpl(this._popplerService);
+  PdfToImageRepositoryImpl(
+    this._popplerService,
+    this._parallelConversionService,
+  );
 
   @override
   Stream<PdfToImageEvent> convert(PdfToImageParams params) async* {
-    int totalPages = await _popplerService.getPageCount(params.inputFile);
+    log('Repository: Calculating total pages...');
+    int totalPages = 0;
+    for (final file in params.inputFiles) {
+      log('Repository: Getting page count for ${file.path}...');
+      totalPages += await _popplerService.getPageCount(file);
+      log(
+        'Repository: Got page count for ${file.path}. Total so far: $totalPages',
+      );
+    }
     if (totalPages == 0) totalPages = 1;
+    log(
+      'Repository: Total pages calculated: $totalPages. Starting main service...',
+    );
 
+    // Threshold for parallel processing
+    const int parallelThreshold = 5;
+
+    if (totalPages <= parallelThreshold) {
+      yield* _convertSequential(params, totalPages);
+    } else {
+      yield* _convertParallel(params, totalPages);
+    }
+  }
+
+  Stream<PdfToImageEvent> _convertSequential(
+    PdfToImageParams params,
+    int totalPages,
+  ) async* {
     final stream = await _popplerService.convertPdfToImages(params);
+    final Map<int, int> pagesProcessedPerFile = {};
 
     await for (final event in stream) {
       if (event['type'] == 'progress') {
         final int page = event['page'] as int;
+        final int fileIndex = event['fileIndex'] as int;
+
+        pagesProcessedPerFile[fileIndex] = page;
+        final int totalProcessed = pagesProcessedPerFile.values.fold(
+          0,
+          (a, b) => a + b,
+        );
 
         double percentage = 0.0;
         if (totalPages > 0) {
-          percentage = (page / totalPages).clamp(0.0, 1.0);
+          percentage = (totalProcessed / totalPages).clamp(0.0, 1.0);
         }
         yield PdfToImageProgress(
           ConversionProgress(
-            currentPage: page,
+            currentPage: totalProcessed,
             totalPages: totalPages,
             percentage: percentage,
           ),
         );
       } else if (event['type'] == 'done') {
         final List<String> paths = (event['files'] as List).cast<String>();
+        final Map<String, dynamic> groupedPathsRaw =
+            event['groupedFiles'] as Map<String, dynamic>;
+        final Map<String, List<String>> groupedPaths = groupedPathsRaw.map(
+          (key, value) => MapEntry(key, (value as List).cast<String>()),
+        );
+
         final files = paths.map((p) => File(p)).toList();
-        yield PdfToImageCompleted(files);
+        final groupedFiles = groupedPaths.map(
+          (k, v) => MapEntry(k, v.map((p) => File(p)).toList()),
+        );
+
+        yield PdfToImageCompleted(files, groupedImages: groupedFiles);
       } else if (event['type'] == 'error') {
         throw Exception(event['message']);
       }
     }
+  }
+
+  Stream<PdfToImageEvent> _convertParallel(
+    PdfToImageParams params,
+    int totalPages,
+  ) async* {
+    final stream = await _parallelConversionService.convertInParallel(
+      params.inputFiles,
+      params,
+    );
+
+    final pagesProcessedPerTask = <String, int>{};
+    final allFiles = <String>[];
+    final groupedFilesMap = <String, List<String>>{};
+
+    await for (final event in stream) {
+      if (event['type'] == 'progress') {
+        final String taskId = event['taskId'] as String;
+        final int page = event['page'] as int;
+
+        pagesProcessedPerTask[taskId] = page;
+
+        final int totalProcessed = pagesProcessedPerTask.values.fold(
+          0,
+          (sum, count) => sum + count,
+        );
+
+        double percentage = 0.0;
+        if (totalPages > 0) {
+          percentage = (totalProcessed / totalPages).clamp(0.0, 1.0);
+        }
+
+        yield PdfToImageProgress(
+          ConversionProgress(
+            currentPage: totalProcessed,
+            totalPages: totalPages,
+            percentage: percentage,
+          ),
+        );
+      } else if (event['type'] == 'done') {
+        final List<String> files = (event['files'] as List).cast<String>();
+        final String sourcePath = event['sourcePath'] as String;
+
+        allFiles.addAll(files);
+
+        if (!groupedFilesMap.containsKey(sourcePath)) {
+          groupedFilesMap[sourcePath] = [];
+        }
+        groupedFilesMap[sourcePath]!.addAll(files);
+      } else if (event['type'] == 'error') {
+        throw Exception(event['message']);
+      }
+    }
+
+    // Sort all files to ensure consistent order
+    allFiles.sort();
+
+    // Sort grouped files
+    for (final key in groupedFilesMap.keys) {
+      groupedFilesMap[key]!.sort();
+    }
+
+    final files = allFiles.map((p) => File(p)).toList();
+    final groupedFiles = groupedFilesMap.map(
+      (k, v) => MapEntry(k, v.map((p) => File(p)).toList()),
+    );
+
+    yield PdfToImageCompleted(files, groupedImages: groupedFiles);
   }
 
   @override
@@ -79,36 +198,69 @@ class PdfToImageRepositoryImpl implements PdfToImageRepository {
     encoder.create(destinationPath);
 
     try {
-      for (final file in images) {
-        final fileName = file.path.split(Platform.pathSeparator).last;
-        final rotation = rotations?[file.path] ?? 0;
+      await _addImagesToZip(encoder, images, rotations);
+    } finally {
+      encoder.close();
+    }
+  }
 
-        if (rotation == 0) {
-          await encoder.addFile(file, fileName);
-        } else {
-          // For rotated images, we need to process them first
-          // We'll create a temporary file for the rotated version
-          final tempDir = await Directory.systemTemp.createTemp('rotated_');
-          final tempFile = File(
-            '${tempDir.path}${Platform.pathSeparator}$fileName',
-          );
+  @override
+  Future<void> saveAsSeparateZips(
+    Map<String, List<File>> groupedImages,
+    String destinationDirectory, {
+    Map<String, int>? rotations,
+  }) async {
+    for (final entry in groupedImages.entries) {
+      final sourceFilePath = entry.key;
+      final images = entry.value;
 
-          try {
-            await _saveRotatedImage(file, tempFile.path, rotation);
-            await encoder.addFile(tempFile, fileName);
-          } finally {
-            // Cleanup temp file immediately after adding to zip
-            if (await tempFile.exists()) {
-              await tempFile.delete();
-            }
-            if (await tempDir.exists()) {
-              await tempDir.delete();
-            }
+      final sourceFileName = sourceFilePath.split(Platform.pathSeparator).last;
+      final zipFileName = '${path.withoutExtension(sourceFileName)}.zip';
+      final zipFilePath = path.join(destinationDirectory, zipFileName);
+
+      final encoder = ZipFileEncoder();
+      encoder.create(zipFilePath);
+
+      try {
+        await _addImagesToZip(encoder, images, rotations);
+      } finally {
+        encoder.close();
+      }
+    }
+  }
+
+  Future<void> _addImagesToZip(
+    ZipFileEncoder encoder,
+    List<File> images,
+    Map<String, int>? rotations,
+  ) async {
+    for (final file in images) {
+      final fileName = file.path.split(Platform.pathSeparator).last;
+      final rotation = rotations?[file.path] ?? 0;
+
+      if (rotation == 0) {
+        await encoder.addFile(file, fileName);
+      } else {
+        // For rotated images, we need to process them first
+        // We'll create a temporary file for the rotated version
+        final tempDir = await Directory.systemTemp.createTemp('rotated_');
+        final tempFile = File(
+          '${tempDir.path}${Platform.pathSeparator}$fileName',
+        );
+
+        try {
+          await _saveRotatedImage(file, tempFile.path, rotation);
+          await encoder.addFile(tempFile, fileName);
+        } finally {
+          // Cleanup temp file immediately after adding to zip
+          if (await tempFile.exists()) {
+            await tempFile.delete();
+          }
+          if (await tempDir.exists()) {
+            await tempDir.delete();
           }
         }
       }
-    } finally {
-      encoder.close();
     }
   }
 
@@ -118,34 +270,62 @@ class PdfToImageRepositoryImpl implements PdfToImageRepository {
     int rotation,
   ) async {
     try {
-      final bytes = await sourceFile.readAsBytes();
-      final image = img.decodeImage(bytes);
+      final params = ImageProcessingParams(
+        sourcePath: sourceFile.path,
+        destinationPath: destinationPath,
+        rotation: rotation,
+      );
 
-      if (image != null) {
-        // Rotate the image (90 degrees * quarterTurns)
-        final rotatedImage = img.copyRotate(image, angle: rotation * 90);
-
-        // Encode back to original format
-        final fileName = sourceFile.path.split(Platform.pathSeparator).last;
-        final extension = fileName.split('.').last.toLowerCase();
-        List<int> encodedBytes;
-
-        if (extension == 'png') {
-          encodedBytes = img.encodePng(rotatedImage);
-        } else {
-          // Default to JPG
-          encodedBytes = img.encodeJpg(rotatedImage, quality: 100);
-        }
-
-        final destFile = File(destinationPath);
-        await destFile.writeAsBytes(encodedBytes);
-      } else {
-        // Fallback if decoding fails
-        await sourceFile.copy(destinationPath);
-      }
+      await compute(processImageInIsolate, params);
     } catch (e) {
-      // Fallback on error
-      await sourceFile.copy(destinationPath);
+      throw Exception('Failed to process image: ${sourceFile.path}. Error: $e');
     }
+  }
+
+  @override
+  Future<void> cancelCurrentConversion() async {
+    log('Repository: Cancelling current conversion...');
+    await _popplerService.cancel();
+    await _parallelConversionService.cancel();
+  }
+}
+
+class ImageProcessingParams {
+  final String sourcePath;
+  final String destinationPath;
+  final int rotation;
+
+  const ImageProcessingParams({
+    required this.sourcePath,
+    required this.destinationPath,
+    required this.rotation,
+  });
+}
+
+Future<void> processImageInIsolate(ImageProcessingParams params) async {
+  final sourceFile = File(params.sourcePath);
+  final bytes = await sourceFile.readAsBytes();
+  final image = img.decodeImage(bytes);
+
+  if (image != null) {
+    // Rotate the image (90 degrees * quarterTurns)
+    final rotatedImage = img.copyRotate(image, angle: params.rotation * 90);
+
+    // Encode back to original format
+    final fileName = params.sourcePath.split(Platform.pathSeparator).last;
+    final extension = fileName.split('.').last.toLowerCase();
+    List<int> encodedBytes;
+
+    if (extension == 'png') {
+      encodedBytes = img.encodePng(rotatedImage);
+    } else {
+      // Default to JPG with quality 95
+      encodedBytes = img.encodeJpg(rotatedImage, quality: 95);
+    }
+
+    final destFile = File(params.destinationPath);
+    await destFile.writeAsBytes(encodedBytes);
+  } else {
+    throw Exception('Failed to decode image');
   }
 }

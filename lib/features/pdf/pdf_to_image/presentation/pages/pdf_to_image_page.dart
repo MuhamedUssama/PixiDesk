@@ -65,10 +65,17 @@ class PdfToImagePage extends StatelessWidget {
                         child: DropTarget(
                           onDragDone: (details) {
                             if (details.files.isNotEmpty) {
-                              final file = File(details.files.first.path);
-                              if (file.path.toLowerCase().endsWith('.pdf')) {
-                                context.read<PdfToImageCubit>().selectFile(
-                                  file,
+                              final files = details.files
+                                  .map((f) => File(f.path))
+                                  .where(
+                                    (f) =>
+                                        f.path.toLowerCase().endsWith('.pdf'),
+                                  )
+                                  .toList();
+
+                              if (files.isNotEmpty) {
+                                context.read<PdfToImageCubit>().selectFiles(
+                                  files,
                                 );
                               } else {
                                 ScaffoldMessenger.of(context).showSnackBar(
@@ -83,14 +90,14 @@ class PdfToImagePage extends StatelessWidget {
                           child: Container(
                             color: Colors.transparent,
                             child: Center(
-                              child: state.selectedFile == null
+                              child: state.selectedFiles.isEmpty
                                   ? EmptyStateWidget(l10n: l10n)
                                   : SelectedFileState(state: state, l10n: l10n),
                             ),
                           ),
                         ),
                       ),
-                      if (state.selectedFile != null)
+                      if (state.selectedFiles.isNotEmpty)
                         SizedBox(
                               width: 300,
                               child: Column(
@@ -101,17 +108,50 @@ class PdfToImagePage extends StatelessWidget {
                                     padding: const EdgeInsets.all(16.0),
                                     child: SizedBox(
                                       width: double.infinity,
-                                      child: ElevatedButton(
-                                        onPressed:
-                                            state.status ==
-                                                PdfToImageStatus.converting
-                                            ? null
-                                            : () {
-                                                context
-                                                    .read<PdfToImageCubit>()
-                                                    .startConversion();
-                                              },
-                                        child: Text(l10n.convert),
+                                      child: Row(
+                                        children: [
+                                          if (state.status ==
+                                              PdfToImageStatus.converting)
+                                            Expanded(
+                                              child: Padding(
+                                                padding: const EdgeInsets.only(
+                                                  right: 8.0,
+                                                ),
+                                                child: ElevatedButton(
+                                                  onPressed: () {
+                                                    context
+                                                        .read<PdfToImageCubit>()
+                                                        .cancelConversion();
+                                                  },
+                                                  style:
+                                                      ElevatedButton.styleFrom(
+                                                        backgroundColor:
+                                                            AppColors.error,
+                                                        foregroundColor:
+                                                            Colors.white,
+                                                      ),
+                                                  child: Text(l10n.cancel),
+                                                ),
+                                              ),
+                                            ),
+                                          Expanded(
+                                            child: ElevatedButton(
+                                              onPressed:
+                                                  state.status ==
+                                                      PdfToImageStatus
+                                                          .converting
+                                                  ? null
+                                                  : () {
+                                                      context
+                                                          .read<
+                                                            PdfToImageCubit
+                                                          >()
+                                                          .startConversion();
+                                                    },
+                                              child: Text(l10n.convert),
+                                            ),
+                                          ),
+                                        ],
                                       ),
                                     ),
                                   ),

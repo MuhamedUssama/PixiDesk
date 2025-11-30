@@ -6,6 +6,7 @@ import 'package:pixi_desk/features/pdf/pdf_to_image/presentation/cubit/pdf_to_im
 import 'package:pixi_desk/features/pdf/pdf_to_image/presentation/cubit/pdf_to_image_state.dart';
 import 'package:pixi_desk/features/pdf/pdf_to_image/presentation/widgets/image_grid_view.dart';
 import 'package:pixi_desk/features/pdf/pdf_to_image/presentation/widgets/image_page_view.dart';
+import 'package:pixi_desk/core/utils/download_utils.dart';
 import 'package:pixi_desk/l10n/localization/app_localizations.dart';
 
 class ReviewUiWidget extends StatefulWidget {
@@ -29,7 +30,6 @@ class _ReviewUiWidgetState extends State<ReviewUiWidget> {
 
   @override
   Widget build(BuildContext context) {
-    // If no images, show nothing (shouldn't happen in this state but good for safety)
     if (widget.state.generatedImages == null ||
         widget.state.generatedImages!.isEmpty) {
       return const SizedBox.shrink();
@@ -78,7 +78,15 @@ class _ReviewUiWidgetState extends State<ReviewUiWidget> {
                         label: Text(widget.l10n.saveAsZip),
                       ),
                       ElevatedButton.icon(
-                        onPressed: widget.onSaveAll,
+                        onPressed: () {
+                          DownloadUtils.handleDownloadFlow(
+                            context: context,
+                            cubit: context.read<PdfToImageCubit>(),
+                            l10n: widget.l10n,
+                            isMultipleFiles:
+                                widget.state.selectedFiles.length > 1,
+                          );
+                        },
                         style: ElevatedButton.styleFrom(
                           minimumSize: const Size(0, 48),
                           padding: const EdgeInsets.symmetric(horizontal: 24),

@@ -1,11 +1,15 @@
+import 'dart:async';
+import 'dart:developer';
 import 'dart:io';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
 import 'package:pixi_desk/features/pdf/pdf_to_image/domain/entities/pdf_to_image_event.dart';
 import 'package:pixi_desk/features/pdf/pdf_to_image/domain/entities/pdf_to_image_params.dart';
+import 'package:pixi_desk/features/pdf/pdf_to_image/domain/usecases/cancel_conversion_usecase.dart';
 import 'package:pixi_desk/features/pdf/pdf_to_image/domain/usecases/convert_pdf_to_images_usecase.dart';
 import 'package:pixi_desk/features/pdf/pdf_to_image/domain/usecases/save_images_usecase.dart';
 import 'package:pixi_desk/features/pdf/pdf_to_image/domain/usecases/save_as_zip_usecase.dart';
+import 'package:pixi_desk/features/pdf/pdf_to_image/domain/usecases/save_as_separate_zips_usecase.dart';
 import 'package:pixi_desk/features/pdf/pdf_to_image/presentation/cubit/pdf_to_image_state.dart';
 import 'package:file_picker/file_picker.dart';
 
@@ -14,23 +18,42 @@ class PdfToImageCubit extends Cubit<PdfToImageState> {
   final ConvertPdfToImagesUseCase _convertPdfToImagesUseCase;
   final SaveImagesUseCase _saveImagesUseCase;
   final SaveAsZipUseCase _saveAsZipUseCase;
+  final SaveAsSeparateZipsUseCase _saveAsSeparateZipsUseCase;
+  final CancelConversionUseCase _cancelConversionUseCase;
+  StreamSubscription? _conversionSubscription;
 
   PdfToImageCubit(
     this._convertPdfToImagesUseCase,
     this._saveImagesUseCase,
     this._saveAsZipUseCase,
+    this._saveAsSeparateZipsUseCase,
+    this._cancelConversionUseCase,
   ) : super(const PdfToImageState());
 
-  void selectFile(File file) {
+  void selectFiles(List<File> files) {
+    final currentFiles = List<File>.from(state.selectedFiles);
+    currentFiles.addAll(files);
+    // Remove duplicates based on path
+    final uniqueFiles = <String, File>{};
+    for (final file in currentFiles) {
+      uniqueFiles[file.path] = file;
+    }
+
     emit(
       state.copyWith(
-        selectedFile: file,
+        selectedFiles: uniqueFiles.values.toList(),
         status: PdfToImageStatus.initial,
         generatedImages: null,
         progress: null,
         errorMessage: null,
       ),
     );
+  }
+
+  void removeFile(File file) {
+    final currentFiles = List<File>.from(state.selectedFiles);
+    currentFiles.removeWhere((f) => f.path == file.path);
+    emit(state.copyWith(selectedFiles: currentFiles));
   }
 
   void updateSettings({String? format, int? dpi}) {
@@ -87,6 +110,13 @@ class PdfToImageCubit extends Cubit<PdfToImageState> {
   Future<void> triggerSaveAll() async {
     if (state.generatedImages == null || state.generatedImages!.isEmpty) return;
 
+    if (state.selectedFiles.length > 1) {
+      // The UI should check this before calling triggerSaveAll, OR
+      // we can have a method `onSaveClicked` that decides.
+      // Let's rename this to `saveCombined` and add `saveSeparateZips`.
+      // And have a helper `shouldShowDownloadOptions`.
+    }
+
     final String? directoryPath = await FilePicker.platform.getDirectoryPath();
     if (directoryPath == null) return;
 
@@ -104,7 +134,6 @@ class PdfToImageCubit extends Cubit<PdfToImageState> {
           successMessage: 'Files saved successfully',
         ),
       );
-      // Reset status back to review after showing success
       emit(
         state.copyWith(status: PdfToImageStatus.review, successMessage: null),
       );
@@ -113,6 +142,39 @@ class PdfToImageCubit extends Cubit<PdfToImageState> {
         state.copyWith(
           status: PdfToImageStatus.error,
           errorMessage: 'Error saving files: $e',
+        ),
+      );
+    }
+  }
+
+  Future<void> saveAsSeparateZips() async {
+    if (state.groupedImages.isEmpty) return;
+
+    final String? directoryPath = await FilePicker.platform.getDirectoryPath();
+    if (directoryPath == null) return;
+
+    emit(state.copyWith(status: PdfToImageStatus.saving));
+
+    try {
+      await _saveAsSeparateZipsUseCase(
+        groupedImages: state.groupedImages,
+        destinationDirectory: directoryPath,
+        rotations: state.imageRotations,
+      );
+      emit(
+        state.copyWith(
+          status: PdfToImageStatus.savedSuccess,
+          successMessage: 'ZIP files saved successfully',
+        ),
+      );
+      emit(
+        state.copyWith(status: PdfToImageStatus.review, successMessage: null),
+      );
+    } catch (e) {
+      emit(
+        state.copyWith(
+          status: PdfToImageStatus.error,
+          errorMessage: 'Error saving ZIP files: $e',
         ),
       );
     }
@@ -159,33 +221,46 @@ class PdfToImageCubit extends Cubit<PdfToImageState> {
   }
 
   Future<void> startConversion() async {
-    if (state.selectedFile == null) return;
+    log('Cubit: Starting conversion flow...');
+    if (state.selectedFiles.isEmpty) return;
 
+    await _conversionSubscription?.cancel();
     emit(state.copyWith(status: PdfToImageStatus.converting));
 
     final params = PdfToImageParams(
-      inputFile: state.selectedFile!,
+      inputFiles: state.selectedFiles,
       outputFormat: state.outputFormat,
       dpi: state.dpi,
     );
 
     try {
       final stream = _convertPdfToImagesUseCase(params);
-
-      await for (final event in stream) {
-        if (event is PdfToImageProgress) {
-          emit(state.copyWith(progress: event.progress));
-        } else if (event is PdfToImageCompleted) {
+      _conversionSubscription = stream.listen(
+        (event) {
+          if (event is PdfToImageProgress) {
+            emit(state.copyWith(progress: event.progress));
+          } else if (event is PdfToImageCompleted) {
+            emit(
+              state.copyWith(
+                status: PdfToImageStatus.review,
+                generatedImages: event.images,
+                groupedImages: event.groupedImages,
+                progress: null,
+              ),
+            );
+          }
+        },
+        onError: (error) {
           emit(
             state.copyWith(
-              status: PdfToImageStatus.review,
-              generatedImages: event.images,
-              progress: null,
+              status: PdfToImageStatus.error,
+              errorMessage: 'Error converting PDF to images: $error',
             ),
           );
-        }
-      }
+        },
+      );
     } catch (e) {
+      log('Error initiating conversion: $e');
       emit(
         state.copyWith(
           status: PdfToImageStatus.error,
@@ -193,6 +268,28 @@ class PdfToImageCubit extends Cubit<PdfToImageState> {
         ),
       );
     }
+  }
+
+  Future<void> cancelConversion() async {
+    if (state.status != PdfToImageStatus.converting) return;
+
+    log('Cubit: Cancelling conversion...');
+    await _conversionSubscription?.cancel();
+    await _cancelConversionUseCase();
+
+    emit(
+      state.copyWith(
+        status: PdfToImageStatus.initial,
+        progress: null,
+        errorMessage: null,
+      ),
+    );
+  }
+
+  @override
+  Future<void> close() {
+    _conversionSubscription?.cancel();
+    return super.close();
   }
 
   void reset() {

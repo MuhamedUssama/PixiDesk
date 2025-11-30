@@ -20,9 +20,10 @@ class PdfToImageProgress extends PdfToImageEvent {
 
 class PdfToImageCompleted extends PdfToImageEvent {
   final List<File> images;
+  final Map<String, List<File>> groupedImages;
 
-  const PdfToImageCompleted(this.images);
+  const PdfToImageCompleted(this.images, {this.groupedImages = const {}});
 
   @override
-  List<Object?> get props => [images];
+  List<Object?> get props => [images, groupedImages];
 }

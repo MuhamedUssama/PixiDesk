@@ -29,18 +29,46 @@ class SelectedFileState extends StatelessWidget {
               : AppColors.lightHeadTextColor,
         ).animate().scale(duration: 400.ms, curve: Curves.easeOutBack),
         const SizedBox(height: 16),
-        Text(
-              state.selectedFile!.path.split(Platform.pathSeparator).last,
-              style: Theme.of(context).textTheme.headlineSmall,
-            )
-            .animate()
-            .fadeIn(duration: 400.ms)
-            .slideY(
-              begin: 0.5,
-              end: 0,
-              duration: 400.ms,
-              curve: Curves.easeOutQuad,
+        const SizedBox(height: 16),
+        if (state.selectedFiles.length == 1)
+          Text(
+                state.selectedFiles.first.path
+                    .split(Platform.pathSeparator)
+                    .last,
+                style: Theme.of(context).textTheme.headlineSmall,
+              )
+              .animate()
+              .fadeIn(duration: 400.ms)
+              .slideY(
+                begin: 0.5,
+                end: 0,
+                duration: 400.ms,
+                curve: Curves.easeOutQuad,
+              )
+        else
+          Container(
+            constraints: const BoxConstraints(maxHeight: 200),
+            width: 400,
+            child: ListView.builder(
+              shrinkWrap: true,
+              itemCount: state.selectedFiles.length,
+              itemBuilder: (context, index) {
+                final file = state.selectedFiles[index];
+                return ListTile(
+                  leading: const Icon(Icons.picture_as_pdf, size: 24),
+                  title: Text(
+                    file.path.split(Platform.pathSeparator).last,
+                    style: Theme.of(context).textTheme.bodyMedium,
+                  ),
+                  trailing: IconButton(
+                    icon: const Icon(Icons.close, size: 18),
+                    onPressed: () =>
+                        context.read<PdfToImageCubit>().removeFile(file),
+                  ),
+                );
+              },
             ),
+          ),
         const SizedBox(height: 16),
         AnimatedSwitcher(
           duration: const Duration(milliseconds: 300),
@@ -50,11 +78,11 @@ class SelectedFileState extends StatelessWidget {
                   child: const ConversionProgressWidget(),
                 )
               : TextButton.icon(
-                  key: const ValueKey('removeButton'),
+                  key: const ValueKey('clearAllButton'),
                   onPressed: () => context.read<PdfToImageCubit>().clearFile(),
                   style: TextButton.styleFrom(foregroundColor: AppColors.error),
-                  icon: const Icon(Icons.delete, color: AppColors.error),
-                  label: Text(l10n.removeFile),
+                  icon: const Icon(Icons.delete_sweep, color: AppColors.error),
+                  label: const Text('Clear All'),
                 ),
         ),
       ],

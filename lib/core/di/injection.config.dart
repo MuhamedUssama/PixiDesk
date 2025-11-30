@@ -45,14 +45,22 @@ import '../../features/pdf/pdf_converter/domain/usecases/generate_pdf_use_case.d
     as _i796;
 import '../../features/pdf/pdf_converter/presentation/cubit/pdf_converter_cubit.dart'
     as _i1023;
+import '../../features/pdf/pdf_to_image/data/datasources/parallel_conversion_service.dart'
+    as _i626;
+import '../../features/pdf/pdf_to_image/data/datasources/pdf_task_manager.dart'
+    as _i104;
 import '../../features/pdf/pdf_to_image/data/datasources/poppler_service.dart'
     as _i649;
 import '../../features/pdf/pdf_to_image/data/repositories/pdf_to_image_repository_impl.dart'
     as _i850;
 import '../../features/pdf/pdf_to_image/domain/repositories/pdf_to_image_repository.dart'
     as _i114;
+import '../../features/pdf/pdf_to_image/domain/usecases/cancel_conversion_usecase.dart'
+    as _i796;
 import '../../features/pdf/pdf_to_image/domain/usecases/convert_pdf_to_images_usecase.dart'
     as _i45;
+import '../../features/pdf/pdf_to_image/domain/usecases/save_as_separate_zips_usecase.dart'
+    as _i719;
 import '../../features/pdf/pdf_to_image/domain/usecases/save_as_zip_usecase.dart'
     as _i423;
 import '../../features/pdf/pdf_to_image/domain/usecases/save_images_usecase.dart'
@@ -108,8 +116,14 @@ extension GetItInjectableX on _i174.GetIt {
     gh.factory<_i400.PdfCompressionCubit>(
       () => _i400.PdfCompressionCubit(gh<_i263.CompressPdfUseCase>()),
     );
-    gh.lazySingleton<_i114.PdfToImageRepository>(
-      () => _i850.PdfToImageRepositoryImpl(gh<_i649.PopplerService>()),
+    gh.lazySingleton<_i104.PdfTaskManager>(
+      () => _i104.PdfTaskManager(gh<_i649.PopplerService>()),
+    );
+    gh.lazySingleton<_i626.ParallelConversionService>(
+      () => _i626.ParallelConversionService(
+        gh<_i649.PopplerService>(),
+        gh<_i104.PdfTaskManager>(),
+      ),
     );
     gh.factory<_i743.ImageCubit>(
       () => _i743.ImageCubit(
@@ -123,6 +137,18 @@ extension GetItInjectableX on _i174.GetIt {
     gh.factory<_i1023.PdfConverterCubit>(
       () => _i1023.PdfConverterCubit(gh<_i796.GeneratePdfUseCase>()),
     );
+    gh.factory<_i792.SettingsCubit>(
+      () => _i792.SettingsCubit(gh<_i674.SettingsRepository>()),
+    );
+    gh.lazySingleton<_i114.PdfToImageRepository>(
+      () => _i850.PdfToImageRepositoryImpl(
+        gh<_i649.PopplerService>(),
+        gh<_i626.ParallelConversionService>(),
+      ),
+    );
+    gh.factory<_i719.SaveAsSeparateZipsUseCase>(
+      () => _i719.SaveAsSeparateZipsUseCase(gh<_i114.PdfToImageRepository>()),
+    );
     gh.factory<_i423.SaveAsZipUseCase>(
       () => _i423.SaveAsZipUseCase(gh<_i114.PdfToImageRepository>()),
     );
@@ -132,14 +158,16 @@ extension GetItInjectableX on _i174.GetIt {
     gh.factory<_i849.SaveImagesUseCase>(
       () => _i849.SaveImagesUseCase(gh<_i114.PdfToImageRepository>()),
     );
-    gh.factory<_i792.SettingsCubit>(
-      () => _i792.SettingsCubit(gh<_i674.SettingsRepository>()),
+    gh.lazySingleton<_i796.CancelConversionUseCase>(
+      () => _i796.CancelConversionUseCase(gh<_i114.PdfToImageRepository>()),
     );
     gh.factory<_i748.PdfToImageCubit>(
       () => _i748.PdfToImageCubit(
         gh<_i45.ConvertPdfToImagesUseCase>(),
         gh<_i849.SaveImagesUseCase>(),
         gh<_i423.SaveAsZipUseCase>(),
+        gh<_i719.SaveAsSeparateZipsUseCase>(),
+        gh<_i796.CancelConversionUseCase>(),
       ),
     );
     return this;

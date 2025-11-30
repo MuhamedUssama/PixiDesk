@@ -547,6 +547,36 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Save As Zip'**
   String get saveAsZip;
+
+  /// No description provided for @downloadOptions.
+  ///
+  /// In en, this message translates to:
+  /// **'Download Options'**
+  String get downloadOptions;
+
+  /// No description provided for @downloadOptionsMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'How would you like to save the images?'**
+  String get downloadOptionsMessage;
+
+  /// No description provided for @combinedFolder.
+  ///
+  /// In en, this message translates to:
+  /// **'Combined Folder'**
+  String get combinedFolder;
+
+  /// No description provided for @separateZips.
+  ///
+  /// In en, this message translates to:
+  /// **'Separate ZIPs'**
+  String get separateZips;
+
+  /// No description provided for @cancel.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel'**
+  String get cancel;
 }
 
 class _AppLocalizationsDelegate

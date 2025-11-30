@@ -15,4 +15,12 @@ abstract class PdfToImageRepository {
     String destinationPath, {
     Map<String, int>? rotations,
   });
+
+  Future<void> saveAsSeparateZips(
+    Map<String, List<File>> groupedImages,
+    String destinationDirectory, {
+    Map<String, int>? rotations,
+  });
+
+  Future<void> cancelCurrentConversion();
 }
