@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:io';
+import 'package:flutter/foundation.dart';
 import 'package:image/image.dart' as img;
 import 'package:archive/archive_io.dart';
 import 'package:injectable/injectable.dart';
@@ -173,34 +174,55 @@ class PdfToImageRepositoryImpl implements PdfToImageRepository {
     int rotation,
   ) async {
     try {
-      final bytes = await sourceFile.readAsBytes();
-      final image = img.decodeImage(bytes);
+      final params = ImageProcessingParams(
+        sourcePath: sourceFile.path,
+        destinationPath: destinationPath,
+        rotation: rotation,
+      );
 
-      if (image != null) {
-        // Rotate the image (90 degrees * quarterTurns)
-        final rotatedImage = img.copyRotate(image, angle: rotation * 90);
-
-        // Encode back to original format
-        final fileName = sourceFile.path.split(Platform.pathSeparator).last;
-        final extension = fileName.split('.').last.toLowerCase();
-        List<int> encodedBytes;
-
-        if (extension == 'png') {
-          encodedBytes = img.encodePng(rotatedImage);
-        } else {
-          // Default to JPG
-          encodedBytes = img.encodeJpg(rotatedImage, quality: 100);
-        }
-
-        final destFile = File(destinationPath);
-        await destFile.writeAsBytes(encodedBytes);
-      } else {
-        // Fallback if decoding fails
-        await sourceFile.copy(destinationPath);
-      }
+      await compute(processImageInIsolate, params);
     } catch (e) {
-      // Fallback on error
-      await sourceFile.copy(destinationPath);
+      throw Exception('Failed to process image: ${sourceFile.path}. Error: $e');
     }
+  }
+}
+
+class ImageProcessingParams {
+  final String sourcePath;
+  final String destinationPath;
+  final int rotation;
+
+  ImageProcessingParams({
+    required this.sourcePath,
+    required this.destinationPath,
+    required this.rotation,
+  });
+}
+
+Future<void> processImageInIsolate(ImageProcessingParams params) async {
+  final sourceFile = File(params.sourcePath);
+  final bytes = await sourceFile.readAsBytes();
+  final image = img.decodeImage(bytes);
+
+  if (image != null) {
+    // Rotate the image (90 degrees * quarterTurns)
+    final rotatedImage = img.copyRotate(image, angle: params.rotation * 90);
+
+    // Encode back to original format
+    final fileName = params.sourcePath.split(Platform.pathSeparator).last;
+    final extension = fileName.split('.').last.toLowerCase();
+    List<int> encodedBytes;
+
+    if (extension == 'png') {
+      encodedBytes = img.encodePng(rotatedImage);
+    } else {
+      // Default to JPG with quality 95
+      encodedBytes = img.encodeJpg(rotatedImage, quality: 95);
+    }
+
+    final destFile = File(params.destinationPath);
+    await destFile.writeAsBytes(encodedBytes);
+  } else {
+    throw Exception('Failed to decode image');
   }
 }
