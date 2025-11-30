@@ -1,3 +1,5 @@
+import 'dart:async';
+import 'dart:developer';
 import 'dart:io';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
@@ -16,6 +18,7 @@ class PdfToImageCubit extends Cubit<PdfToImageState> {
   final SaveImagesUseCase _saveImagesUseCase;
   final SaveAsZipUseCase _saveAsZipUseCase;
   final SaveAsSeparateZipsUseCase _saveAsSeparateZipsUseCase;
+  StreamSubscription? _conversionSubscription;
 
   PdfToImageCubit(
     this._convertPdfToImagesUseCase,
@@ -225,8 +228,10 @@ class PdfToImageCubit extends Cubit<PdfToImageState> {
   }
 
   Future<void> startConversion() async {
+    log('Cubit: Starting conversion flow...');
     if (state.selectedFiles.isEmpty) return;
 
+    await _conversionSubscription?.cancel();
     emit(state.copyWith(status: PdfToImageStatus.converting));
 
     final params = PdfToImageParams(
@@ -237,22 +242,32 @@ class PdfToImageCubit extends Cubit<PdfToImageState> {
 
     try {
       final stream = _convertPdfToImagesUseCase(params);
-
-      await for (final event in stream) {
-        if (event is PdfToImageProgress) {
-          emit(state.copyWith(progress: event.progress));
-        } else if (event is PdfToImageCompleted) {
+      _conversionSubscription = stream.listen(
+        (event) {
+          if (event is PdfToImageProgress) {
+            emit(state.copyWith(progress: event.progress));
+          } else if (event is PdfToImageCompleted) {
+            emit(
+              state.copyWith(
+                status: PdfToImageStatus.review,
+                generatedImages: event.images,
+                groupedImages: event.groupedImages,
+                progress: null,
+              ),
+            );
+          }
+        },
+        onError: (error) {
           emit(
             state.copyWith(
-              status: PdfToImageStatus.review,
-              generatedImages: event.images,
-              groupedImages: event.groupedImages,
-              progress: null,
+              status: PdfToImageStatus.error,
+              errorMessage: 'Error converting PDF to images: $error',
             ),
           );
-        }
-      }
+        },
+      );
     } catch (e) {
+      log('Error initiating conversion: $e');
       emit(
         state.copyWith(
           status: PdfToImageStatus.error,
@@ -260,6 +275,12 @@ class PdfToImageCubit extends Cubit<PdfToImageState> {
         ),
       );
     }
+  }
+
+  @override
+  Future<void> close() {
+    _conversionSubscription?.cancel();
+    return super.close();
   }
 
   void reset() {

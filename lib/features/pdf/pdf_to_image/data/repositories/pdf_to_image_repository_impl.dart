@@ -1,10 +1,12 @@
 import 'dart:async';
+import 'dart:developer';
 import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:image/image.dart' as img;
 import 'package:archive/archive_io.dart';
 import 'package:injectable/injectable.dart';
 import 'package:path/path.dart' as path;
+import 'package:pixi_desk/features/pdf/pdf_to_image/data/datasources/parallel_conversion_service.dart';
 import 'package:pixi_desk/features/pdf/pdf_to_image/data/datasources/poppler_service.dart';
 import 'package:pixi_desk/features/pdf/pdf_to_image/domain/entities/conversion_progress.dart';
 import 'package:pixi_desk/features/pdf/pdf_to_image/domain/entities/pdf_to_image_event.dart';
@@ -14,17 +16,43 @@ import 'package:pixi_desk/features/pdf/pdf_to_image/domain/repositories/pdf_to_i
 @LazySingleton(as: PdfToImageRepository)
 class PdfToImageRepositoryImpl implements PdfToImageRepository {
   final PopplerService _popplerService;
+  final ParallelConversionService _parallelConversionService;
 
-  PdfToImageRepositoryImpl(this._popplerService);
+  PdfToImageRepositoryImpl(
+    this._popplerService,
+    this._parallelConversionService,
+  );
 
   @override
   Stream<PdfToImageEvent> convert(PdfToImageParams params) async* {
+    log('Repository: Calculating total pages...');
     int totalPages = 0;
     for (final file in params.inputFiles) {
+      log('Repository: Getting page count for ${file.path}...');
       totalPages += await _popplerService.getPageCount(file);
+      log(
+        'Repository: Got page count for ${file.path}. Total so far: $totalPages',
+      );
     }
     if (totalPages == 0) totalPages = 1;
+    log(
+      'Repository: Total pages calculated: $totalPages. Starting main service...',
+    );
 
+    // Threshold for parallel processing
+    const int parallelThreshold = 5;
+
+    if (totalPages <= parallelThreshold) {
+      yield* _convertSequential(params, totalPages);
+    } else {
+      yield* _convertParallel(params, totalPages);
+    }
+  }
+
+  Stream<PdfToImageEvent> _convertSequential(
+    PdfToImageParams params,
+    int totalPages,
+  ) async* {
     final stream = await _popplerService.convertPdfToImages(params);
     final Map<int, int> pagesProcessedPerFile = {};
 
@@ -68,6 +96,74 @@ class PdfToImageRepositoryImpl implements PdfToImageRepository {
         throw Exception(event['message']);
       }
     }
+  }
+
+  Stream<PdfToImageEvent> _convertParallel(
+    PdfToImageParams params,
+    int totalPages,
+  ) async* {
+    final stream = await _parallelConversionService.convertInParallel(
+      params.inputFiles,
+      params,
+    );
+
+    final pagesProcessedPerTask = <String, int>{};
+    final allFiles = <String>[];
+    final groupedFilesMap = <String, List<String>>{};
+
+    await for (final event in stream) {
+      if (event['type'] == 'progress') {
+        final String taskId = event['taskId'] as String;
+        final int page = event['page'] as int;
+
+        pagesProcessedPerTask[taskId] = page;
+
+        final int totalProcessed = pagesProcessedPerTask.values.fold(
+          0,
+          (sum, count) => sum + count,
+        );
+
+        double percentage = 0.0;
+        if (totalPages > 0) {
+          percentage = (totalProcessed / totalPages).clamp(0.0, 1.0);
+        }
+
+        yield PdfToImageProgress(
+          ConversionProgress(
+            currentPage: totalProcessed,
+            totalPages: totalPages,
+            percentage: percentage,
+          ),
+        );
+      } else if (event['type'] == 'done') {
+        final List<String> files = (event['files'] as List).cast<String>();
+        final String sourcePath = event['sourcePath'] as String;
+
+        allFiles.addAll(files);
+
+        if (!groupedFilesMap.containsKey(sourcePath)) {
+          groupedFilesMap[sourcePath] = [];
+        }
+        groupedFilesMap[sourcePath]!.addAll(files);
+      } else if (event['type'] == 'error') {
+        throw Exception(event['message']);
+      }
+    }
+
+    // Sort all files to ensure consistent order
+    allFiles.sort();
+
+    // Sort grouped files
+    for (final key in groupedFilesMap.keys) {
+      groupedFilesMap[key]!.sort();
+    }
+
+    final files = allFiles.map((p) => File(p)).toList();
+    final groupedFiles = groupedFilesMap.map(
+      (k, v) => MapEntry(k, v.map((p) => File(p)).toList()),
+    );
+
+    yield PdfToImageCompleted(files, groupedImages: groupedFiles);
   }
 
   @override
