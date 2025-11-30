@@ -249,4 +249,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get separateZips => 'Separate ZIPs';
+
+  @override
+  String get cancel => 'Cancel';
 }

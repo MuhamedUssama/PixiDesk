@@ -11,13 +11,23 @@ import 'package:pixi_desk/features/pdf/pdf_to_image/domain/entities/pdf_to_image
 
 @injectable
 class PopplerService {
+  Isolate? _currentIsolate;
+
+  Future<void> cancel() async {
+    if (_currentIsolate != null) {
+      log('PopplerService: Cancelling current isolate...');
+      _currentIsolate!.kill(priority: Isolate.immediate);
+      _currentIsolate = null;
+    }
+  }
+
   Future<Stream<dynamic>> convertPdfToImages(PdfToImageParams params) async {
     final receivePort = ReceivePort();
 
     // We need to pass the binary path to the isolate
     final binaryPath = getPopplerBinaryPath('pdftoppm');
 
-    await Isolate.spawn(
+    _currentIsolate = await Isolate.spawn(
       _isolateEntryPoint,
       _IsolateParams(
         sendPort: receivePort.sendPort,

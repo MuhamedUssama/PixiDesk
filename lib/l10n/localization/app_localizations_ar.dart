@@ -247,4 +247,7 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get separateZips => 'أرشيف منفصل';
+
+  @override
+  String get cancel => 'إلغاء';
 }

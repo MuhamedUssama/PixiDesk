@@ -281,6 +281,13 @@ class PdfToImageRepositoryImpl implements PdfToImageRepository {
       throw Exception('Failed to process image: ${sourceFile.path}. Error: $e');
     }
   }
+
+  @override
+  Future<void> cancelCurrentConversion() async {
+    log('Repository: Cancelling current conversion...');
+    await _popplerService.cancel();
+    await _parallelConversionService.cancel();
+  }
 }
 
 class ImageProcessingParams {
@@ -288,7 +295,7 @@ class ImageProcessingParams {
   final String destinationPath;
   final int rotation;
 
-  ImageProcessingParams({
+  const ImageProcessingParams({
     required this.sourcePath,
     required this.destinationPath,
     required this.rotation,

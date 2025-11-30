@@ -55,6 +55,8 @@ import '../../features/pdf/pdf_to_image/data/repositories/pdf_to_image_repositor
     as _i850;
 import '../../features/pdf/pdf_to_image/domain/repositories/pdf_to_image_repository.dart'
     as _i114;
+import '../../features/pdf/pdf_to_image/domain/usecases/cancel_conversion_usecase.dart'
+    as _i796;
 import '../../features/pdf/pdf_to_image/domain/usecases/convert_pdf_to_images_usecase.dart'
     as _i45;
 import '../../features/pdf/pdf_to_image/domain/usecases/save_as_separate_zips_usecase.dart'
@@ -156,12 +158,16 @@ extension GetItInjectableX on _i174.GetIt {
     gh.factory<_i849.SaveImagesUseCase>(
       () => _i849.SaveImagesUseCase(gh<_i114.PdfToImageRepository>()),
     );
+    gh.lazySingleton<_i796.CancelConversionUseCase>(
+      () => _i796.CancelConversionUseCase(gh<_i114.PdfToImageRepository>()),
+    );
     gh.factory<_i748.PdfToImageCubit>(
       () => _i748.PdfToImageCubit(
         gh<_i45.ConvertPdfToImagesUseCase>(),
         gh<_i849.SaveImagesUseCase>(),
         gh<_i423.SaveAsZipUseCase>(),
         gh<_i719.SaveAsSeparateZipsUseCase>(),
+        gh<_i796.CancelConversionUseCase>(),
       ),
     );
     return this;

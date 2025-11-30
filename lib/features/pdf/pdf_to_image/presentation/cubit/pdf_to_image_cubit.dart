@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
 import 'package:pixi_desk/features/pdf/pdf_to_image/domain/entities/pdf_to_image_event.dart';
 import 'package:pixi_desk/features/pdf/pdf_to_image/domain/entities/pdf_to_image_params.dart';
+import 'package:pixi_desk/features/pdf/pdf_to_image/domain/usecases/cancel_conversion_usecase.dart';
 import 'package:pixi_desk/features/pdf/pdf_to_image/domain/usecases/convert_pdf_to_images_usecase.dart';
 import 'package:pixi_desk/features/pdf/pdf_to_image/domain/usecases/save_images_usecase.dart';
 import 'package:pixi_desk/features/pdf/pdf_to_image/domain/usecases/save_as_zip_usecase.dart';
@@ -18,6 +19,7 @@ class PdfToImageCubit extends Cubit<PdfToImageState> {
   final SaveImagesUseCase _saveImagesUseCase;
   final SaveAsZipUseCase _saveAsZipUseCase;
   final SaveAsSeparateZipsUseCase _saveAsSeparateZipsUseCase;
+  final CancelConversionUseCase _cancelConversionUseCase;
   StreamSubscription? _conversionSubscription;
 
   PdfToImageCubit(
@@ -25,6 +27,7 @@ class PdfToImageCubit extends Cubit<PdfToImageState> {
     this._saveImagesUseCase,
     this._saveAsZipUseCase,
     this._saveAsSeparateZipsUseCase,
+    this._cancelConversionUseCase,
   ) : super(const PdfToImageState());
 
   void selectFiles(List<File> files) {
@@ -107,15 +110,6 @@ class PdfToImageCubit extends Cubit<PdfToImageState> {
   Future<void> triggerSaveAll() async {
     if (state.generatedImages == null || state.generatedImages!.isEmpty) return;
 
-    // If multiple files, we need to ask the user (handled by UI based on this check,
-    // or we can emit a status, but the requirement says UI renders based on state).
-    // Actually, the requirement says: "The Cubit is responsible for knowing when to present the download options".
-    // So we can return a Future<bool> or emit a state.
-    // Let's assume the UI calls this method when "Save" is clicked.
-    // If we have multiple files, we shouldn't just save.
-    // But wait, the UI needs to show the dialog.
-    // If I emit a status `downloadOptionsRequired`, the UI can listen and show dialog.
-
     if (state.selectedFiles.length > 1) {
       // The UI should check this before calling triggerSaveAll, OR
       // we can have a method `onSaveClicked` that decides.
@@ -123,7 +117,6 @@ class PdfToImageCubit extends Cubit<PdfToImageState> {
       // And have a helper `shouldShowDownloadOptions`.
     }
 
-    // This method will now strictly be "Save Combined" (Option 1 or Single File)
     final String? directoryPath = await FilePicker.platform.getDirectoryPath();
     if (directoryPath == null) return;
 
@@ -275,6 +268,22 @@ class PdfToImageCubit extends Cubit<PdfToImageState> {
         ),
       );
     }
+  }
+
+  Future<void> cancelConversion() async {
+    if (state.status != PdfToImageStatus.converting) return;
+
+    log('Cubit: Cancelling conversion...');
+    await _conversionSubscription?.cancel();
+    await _cancelConversionUseCase();
+
+    emit(
+      state.copyWith(
+        status: PdfToImageStatus.initial,
+        progress: null,
+        errorMessage: null,
+      ),
+    );
   }
 
   @override

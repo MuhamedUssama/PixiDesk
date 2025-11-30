@@ -77,5 +77,6 @@
   "downloadOptions": "خيارات التحميل",
   "downloadOptionsMessage": "كيف ترغب في حفظ الصور؟",
   "combinedFolder": "مجلد مدمج",
-  "separateZips": "أرشيف منفصل"
+  "separateZips": "أرشيف منفصل",
+  "cancel": "إلغاء"
 }

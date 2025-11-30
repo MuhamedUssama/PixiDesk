@@ -14,13 +14,42 @@ import 'package:pool/pool.dart';
 class ParallelConversionService {
   final PopplerService _popplerService;
   final PdfTaskManager _taskManager;
+  final List<Isolate> _activeIsolates = [];
+  final List<ReceivePort> _activePorts = [];
+  bool _isCancelled = false;
 
   ParallelConversionService(this._popplerService, this._taskManager);
+
+  Future<void> cancel() async {
+    log('ParallelService: Cancelling all tasks...');
+    _isCancelled = true;
+
+    // Create copies to iterate over, and clear originals immediately
+    // This prevents ConcurrentModificationError when _processTask tries to remove items
+    final isolatesToKill = List<Isolate>.from(_activeIsolates);
+    _activeIsolates.clear();
+
+    final portsToClose = List<ReceivePort>.from(_activePorts);
+    _activePorts.clear();
+
+    // Kill all active isolates
+    for (final isolate in isolatesToKill) {
+      isolate.kill(priority: Isolate.immediate);
+    }
+
+    // Close all active ports (this will terminate the await for loops in _processTask)
+    for (final port in portsToClose) {
+      port.close();
+    }
+
+    log('ParallelService: All active isolates killed and ports closed.');
+  }
 
   Future<Stream<dynamic>> convertInParallel(
     List<File> files,
     PdfToImageParams params,
   ) async {
+    _isCancelled = false;
     log('ParallelService: Creating tasks...');
     final tasks = await _taskManager.createTasks(files, params);
     log('ParallelService: Created ${tasks.length} tasks.');
@@ -57,6 +86,14 @@ class ParallelConversionService {
     int index,
     int total,
   ) async {
+    if (_isCancelled) {
+      await controller.close();
+      return;
+    }
+
+    Isolate? isolate;
+    ReceivePort? receivePort;
+
     try {
       log(
         'ParallelService: Requesting resource for task ${task.taskId} (${index + 1}/$total)...',
@@ -64,12 +101,20 @@ class ParallelConversionService {
       final resource = await pool.request();
       log('ParallelService: Resource granted for task ${task.taskId}.');
 
+      if (_isCancelled) {
+        resource.release();
+        await controller.close();
+        return;
+      }
+
       try {
-        final receivePort = ReceivePort();
+        receivePort = ReceivePort();
+        _activePorts.add(receivePort);
+
         final binaryPath = _popplerService.getPopplerBinaryPath('pdftoppm');
 
         log('ParallelService: Spawning isolate for task ${task.taskId}...');
-        await Isolate.spawn(
+        isolate = await Isolate.spawn(
           parallelIsolateEntryPoint,
           ParallelIsolateParams(
             sendPort: receivePort.sendPort,
@@ -82,6 +127,8 @@ class ParallelConversionService {
             binaryPath: binaryPath,
           ),
         );
+        _activeIsolates.add(isolate);
+
         log(
           'ParallelService: Isolate spawned for task ${task.taskId}. Listening...',
         );
@@ -109,19 +156,32 @@ class ParallelConversionService {
           controller.add(event);
         }
       } catch (e, stack) {
-        log('ParallelService: Error in task ${task.taskId}: $e');
-        controller.addError(e, stack);
+        if (!_isCancelled) {
+          log('ParallelService: Error in task ${task.taskId}: $e');
+          controller.addError(e, stack);
+        }
       } finally {
         log('ParallelService: Releasing resource for task ${task.taskId}.');
+
+        if (isolate != null) {
+          _activeIsolates.remove(isolate);
+        }
+        if (receivePort != null) {
+          _activePorts.remove(receivePort);
+          receivePort.close();
+        }
+
         resource.release();
         await controller.close();
       }
     } catch (e) {
       // Error requesting resource (unlikely)
-      log(
-        'ParallelService: Error requesting resource for task ${task.taskId}: $e',
-      );
-      controller.addError(e);
+      if (!_isCancelled) {
+        log(
+          'ParallelService: Error requesting resource for task ${task.taskId}: $e',
+        );
+        controller.addError(e);
+      }
       await controller.close();
     }
   }

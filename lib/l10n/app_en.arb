@@ -87,5 +87,6 @@
   "downloadOptions": "Download Options",
   "downloadOptionsMessage": "How would you like to save the images?",
   "combinedFolder": "Combined Folder",
-  "separateZips": "Separate ZIPs"
+  "separateZips": "Separate ZIPs",
+  "cancel": "Cancel"
 }

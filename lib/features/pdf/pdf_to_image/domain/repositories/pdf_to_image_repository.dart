@@ -21,4 +21,6 @@ abstract class PdfToImageRepository {
     String destinationDirectory, {
     Map<String, int>? rotations,
   });
+
+  Future<void> cancelCurrentConversion();
 }
