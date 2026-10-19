@@ -874,4 +874,110 @@ class AppLocalizationsEn extends AppLocalizations {
   String imageStudioPercent(String value) {
     return '$value%';
   }
+
+  @override
+  String get changeLanguage => 'Change language';
+
+  @override
+  String get switchToLightTheme => 'Switch to light theme';
+
+  @override
+  String get switchToDarkTheme => 'Switch to dark theme';
+
+  @override
+  String get homeEyebrow => 'YOUR WORKSPACE';
+
+  @override
+  String get homeHeadline => 'Your everyday files.\nBeautifully handled.';
+
+  @override
+  String get homeDescription =>
+      'A calm workspace for images and documents. Choose a tool and make it your own.';
+
+  @override
+  String get homeWorkspaces => 'Choose your workspace';
+
+  @override
+  String get desktopWorkspaceCaption => 'Made for your desktop';
+
+  @override
+  String get homeImageDescription =>
+      'Fine-tune a single photo or a whole collection, with a clear view of every edit.';
+
+  @override
+  String get homePdfDescription =>
+      'Bring images together, lighten a document, or turn its pages into something new.';
+
+  @override
+  String get openImageStudio => 'Open image studio';
+
+  @override
+  String get explorePdfTools => 'Explore PDF tools';
+
+  @override
+  String get catalogEdit => 'Edit';
+
+  @override
+  String get catalogConvert => 'Convert';
+
+  @override
+  String get catalogCompress => 'Compress';
+
+  @override
+  String get catalogCreate => 'Create';
+
+  @override
+  String get catalogExtract => 'Extract';
+
+  @override
+  String get catalogArrange => 'Arrange images';
+
+  @override
+  String get catalogPageSize => 'Page sizes';
+
+  @override
+  String get catalogQuality => 'Quality controls';
+
+  @override
+  String get catalogPreview => 'Preview';
+
+  @override
+  String get catalogResolution => 'Custom resolution';
+
+  @override
+  String get catalogBatchExport => 'Batch export';
+
+  @override
+  String get pdfCatalogEyebrow => 'DOCUMENT WORKSPACE';
+
+  @override
+  String get pdfCatalogHeadline => 'Every page.\nA little more possibility.';
+
+  @override
+  String get pdfCatalogDescription =>
+      'Create, compress, or extract. Thoughtful tools for the documents you work with every day.';
+
+  @override
+  String get pdfCatalogChooseTool => 'A tool for every next step';
+
+  @override
+  String get pdfCreateDescription =>
+      'Turn your images into one neatly arranged PDF, ready to save and share.';
+
+  @override
+  String get pdfCompressDescription =>
+      'Make room for what matters. Reduce PDF size with a quality level that suits your file.';
+
+  @override
+  String get pdfExtractDescription =>
+      'Give your pages a new format. Export PDF pages as images at your preferred resolution.';
+
+  @override
+  String get pdfCreateAction => 'Create a PDF';
+
+  @override
+  String get pdfCompressAction => 'Compress a document';
+
+  @override
+  String get pdfExtractAction => 'Extract page images';
 }

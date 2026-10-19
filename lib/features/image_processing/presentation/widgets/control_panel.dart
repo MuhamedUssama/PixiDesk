@@ -1,3 +1,4 @@
+import 'package:pixi_desk/core/theme/app_surface_colors.dart';
 import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -21,7 +22,7 @@ class _ControlPanelState extends State<ControlPanel> {
   @override
   Widget build(BuildContext context) {
     final l = AppLocalizations.of(context)!;
-    final colors = StudioColors(context);
+    final colors = AppSurfaceColors.of(context);
     return BlocBuilder<ImageCubit, ImageState>(
       builder: (context, state) {
         final c = context.read<ImageCubit>();
@@ -61,7 +62,10 @@ class _ControlPanelState extends State<ControlPanel> {
                           const SizedBox(height: 3),
                           Text(
                             l.imageStudioInspectorHint,
-                            style: TextStyle(fontSize: 11, color: colors.muted),
+                            style: TextStyle(
+                              fontSize: 11,
+                              color: colors.secondaryText,
+                            ),
                           ),
                         ],
                       ),
@@ -786,7 +790,7 @@ class _ControlPanelState extends State<ControlPanel> {
     ValueChanged<ImageRecipe> change,
     AppLocalizations l,
   ) {
-    final colors = StudioColors(context);
+    final colors = AppSurfaceColors.of(context);
     void select(ImageFormat f) => change(
       r.copyWith(
         format: f,
@@ -803,7 +807,7 @@ class _ControlPanelState extends State<ControlPanel> {
           style: TextStyle(
             fontSize: 11,
             fontWeight: FontWeight.w600,
-            color: colors.muted,
+            color: colors.secondaryText,
           ),
         ),
         const SizedBox(height: 10),
@@ -817,14 +821,14 @@ class _ControlPanelState extends State<ControlPanel> {
                   button: true,
                   child: Material(
                     color: r.format.canonical == common[i]
-                        ? colors.ink
-                        : colors.field,
+                        ? colors.primaryText
+                        : colors.controlBackground,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10),
                       side: BorderSide(
                         color: r.format.canonical == common[i]
-                            ? colors.ink
-                            : colors.line,
+                            ? colors.primaryText
+                            : colors.borderColor,
                       ),
                     ),
                     child: InkWell(
@@ -840,7 +844,7 @@ class _ControlPanelState extends State<ControlPanel> {
                             fontWeight: FontWeight.w600,
                             color: r.format.canonical == common[i]
                                 ? Theme.of(context).colorScheme.surface
-                                : colors.muted,
+                                : colors.secondaryText,
                           ),
                         ),
                       ),
@@ -875,13 +879,13 @@ class _ControlPanelState extends State<ControlPanel> {
                     common.contains(r.format.canonical)
                         ? l.imageStudioMoreFormats
                         : r.format.extension.toUpperCase(),
-                    style: TextStyle(fontSize: 11, color: colors.muted),
+                    style: TextStyle(fontSize: 11, color: colors.secondaryText),
                   ),
                   const SizedBox(width: 4),
                   Icon(
                     Icons.expand_more_rounded,
                     size: 14,
-                    color: colors.muted,
+                    color: colors.secondaryText,
                   ),
                 ],
               ),
@@ -898,7 +902,7 @@ class _ControlPanelState extends State<ControlPanel> {
     ImageCubit c,
     AppLocalizations l,
   ) {
-    final colors = StudioColors(context);
+    final colors = AppSurfaceColors.of(context);
     final source = state.selectedImage;
     ImageGeometry? geometry;
     if (source != null) {
@@ -911,8 +915,8 @@ class _ControlPanelState extends State<ControlPanel> {
     return Container(
       padding: const EdgeInsets.fromLTRB(16, 14, 16, 16),
       decoration: BoxDecoration(
-        color: colors.panel,
-        border: Border(top: BorderSide(color: colors.line)),
+        color: colors.panelBackground,
+        border: Border(top: BorderSide(color: colors.borderColor)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -925,19 +929,19 @@ class _ControlPanelState extends State<ControlPanel> {
                   style: TextStyle(
                     fontSize: 10,
                     fontWeight: FontWeight.w700,
-                    color: colors.muted,
+                    color: colors.secondaryText,
                   ),
                 ),
                 const SizedBox(width: 8),
                 Text(
                   '${geometry.width} × ${geometry.height}',
-                  style: TextStyle(fontSize: 10, color: colors.faint),
+                  style: TextStyle(fontSize: 10, color: colors.disabledText),
                 ),
                 const Spacer(),
                 Icon(
                   Icons.arrow_outward_rounded,
                   size: 12,
-                  color: colors.faint,
+                  color: colors.disabledText,
                 ),
               ],
             ),
@@ -990,7 +994,7 @@ class _ControlPanelState extends State<ControlPanel> {
     bool expanded = false,
   }) {
     final l = AppLocalizations.of(context)!;
-    final colors = StudioColors(context);
+    final colors = AppSurfaceColors.of(context);
     final icons = {
       l.imageCompression: Icons.tune_rounded,
       l.imageResize: Icons.crop_rounded,
@@ -1003,7 +1007,7 @@ class _ControlPanelState extends State<ControlPanel> {
     return Padding(
       padding: const EdgeInsets.only(bottom: 12),
       child: Material(
-        color: colors.field,
+        color: colors.controlBackground,
         borderRadius: BorderRadius.circular(12),
         clipBehavior: Clip.antiAlias,
         child: Padding(
@@ -1016,7 +1020,7 @@ class _ControlPanelState extends State<ControlPanel> {
             visualDensity: VisualDensity.compact,
             title: Row(
               children: [
-                Icon(icons[title], size: 15, color: colors.muted),
+                Icon(icons[title], size: 15, color: colors.secondaryText),
                 const SizedBox(width: 9),
                 Expanded(
                   child: Text(
@@ -1134,7 +1138,7 @@ class _SettingFieldState extends State<_SettingField> {
 
   @override
   Widget build(BuildContext context) {
-    final colors = StudioColors(context);
+    final colors = AppSurfaceColors.of(context);
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 7),
       child: Column(
@@ -1142,7 +1146,7 @@ class _SettingFieldState extends State<_SettingField> {
         children: [
           Text(
             widget.label,
-            style: TextStyle(fontSize: 11, color: colors.muted),
+            style: TextStyle(fontSize: 11, color: colors.secondaryText),
           ),
           const SizedBox(height: 7),
           Semantics(
@@ -1154,7 +1158,7 @@ class _SettingFieldState extends State<_SettingField> {
               key: PageStorageKey('image-setting:${widget.label}'),
               controller: _controller,
               focusNode: _focus,
-              style: TextStyle(fontSize: 12, color: colors.ink),
+              style: TextStyle(fontSize: 12, color: colors.primaryText),
               keyboardType: widget.numeric
                   ? const TextInputType.numberWithOptions(decimal: true)
                   : TextInputType.text,
@@ -1192,7 +1196,7 @@ class _SettingSliderState extends State<_SettingSlider> {
   @override
   Widget build(BuildContext context) {
     final value = (_drag ?? widget.value).clamp(widget.min, widget.max);
-    final colors = StudioColors(context);
+    final colors = AppSurfaceColors.of(context);
     final l = AppLocalizations.of(context)!;
     return Padding(
       padding: const EdgeInsets.only(top: 4),
@@ -1207,7 +1211,7 @@ class _SettingSliderState extends State<_SettingSlider> {
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 3),
                 decoration: BoxDecoration(
-                  color: colors.panel,
+                  color: colors.panelBackground,
                   borderRadius: BorderRadius.circular(5),
                 ),
                 child: Text(
@@ -1217,7 +1221,7 @@ class _SettingSliderState extends State<_SettingSlider> {
                   style: TextStyle(
                     fontSize: 10,
                     fontWeight: FontWeight.w600,
-                    color: colors.muted,
+                    color: colors.secondaryText,
                   ),
                 ),
               ),

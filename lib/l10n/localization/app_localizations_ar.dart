@@ -869,4 +869,110 @@ class AppLocalizationsAr extends AppLocalizations {
   String imageStudioPercent(String value) {
     return '$value٪';
   }
+
+  @override
+  String get changeLanguage => 'تغيير اللغة';
+
+  @override
+  String get switchToLightTheme => 'تفعيل المظهر الفاتح';
+
+  @override
+  String get switchToDarkTheme => 'تفعيل المظهر الداكن';
+
+  @override
+  String get homeEyebrow => 'مساحة عملك';
+
+  @override
+  String get homeHeadline => 'صورك ومستنداتك،\nبلمسة متقنة.';
+
+  @override
+  String get homeDescription =>
+      'مساحة مرتبة للعمل على الصور والمستندات. اختر أداتك وابدأ بطريقتك.';
+
+  @override
+  String get homeWorkspaces => 'اختر مساحة عملك';
+
+  @override
+  String get desktopWorkspaceCaption => 'مصمّم لسطح المكتب';
+
+  @override
+  String get homeImageDescription =>
+      'عدّل صورة واحدة أو مجموعة كاملة، مع معاينة واضحة لكل تعديل.';
+
+  @override
+  String get homePdfDescription =>
+      'اجمع صورك في مستند، أو قلّل حجمه، أو حوّل صفحاته إلى صور.';
+
+  @override
+  String get openImageStudio => 'افتح استوديو الصور';
+
+  @override
+  String get explorePdfTools => 'استكشف أدوات PDF';
+
+  @override
+  String get catalogEdit => 'تعديل';
+
+  @override
+  String get catalogConvert => 'تحويل';
+
+  @override
+  String get catalogCompress => 'ضغط';
+
+  @override
+  String get catalogCreate => 'إنشاء';
+
+  @override
+  String get catalogExtract => 'استخراج';
+
+  @override
+  String get catalogArrange => 'ترتيب الصور';
+
+  @override
+  String get catalogPageSize => 'أحجام الصفحات';
+
+  @override
+  String get catalogQuality => 'ضبط الجودة';
+
+  @override
+  String get catalogPreview => 'معاينة';
+
+  @override
+  String get catalogResolution => 'دقة مخصصة';
+
+  @override
+  String get catalogBatchExport => 'تصدير جماعي';
+
+  @override
+  String get pdfCatalogEyebrow => 'مساحة المستندات';
+
+  @override
+  String get pdfCatalogHeadline => 'كل صفحة،\nوفرص أكثر.';
+
+  @override
+  String get pdfCatalogDescription =>
+      'أنشئ مستنداتك أو اضغطها أو استخرج صفحاتها. أدوات مرتبة للملفات التي تعمل عليها كل يوم.';
+
+  @override
+  String get pdfCatalogChooseTool => 'أداة لكل خطوة تالية';
+
+  @override
+  String get pdfCreateDescription =>
+      'حوّل صورك إلى ملف PDF مرتب وجاهز للحفظ والمشاركة.';
+
+  @override
+  String get pdfCompressDescription =>
+      'قلّل حجم ملف PDF بمستوى جودة يناسب مستندك.';
+
+  @override
+  String get pdfExtractDescription =>
+      'امنح صفحاتك صيغة جديدة. صدّر صفحات PDF كصور بالدقة التي تناسبك.';
+
+  @override
+  String get pdfCreateAction => 'أنشئ ملف PDF';
+
+  @override
+  String get pdfCompressAction => 'اضغط مستندًا';
+
+  @override
+  String get pdfExtractAction => 'استخرج صور الصفحات';
 }

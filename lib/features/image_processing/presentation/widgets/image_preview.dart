@@ -1,3 +1,4 @@
+import 'package:pixi_desk/core/theme/app_surface_colors.dart';
 import 'dart:math' as math;
 import 'dart:typed_data';
 import 'package:flutter/material.dart';
@@ -36,7 +37,7 @@ class _ImagePreviewState extends State<ImagePreview> {
   @override
   Widget build(BuildContext context) {
     final l = AppLocalizations.of(context)!;
-    final colors = StudioColors(context);
+    final colors = AppSurfaceColors.of(context);
     return BlocBuilder<ImageCubit, ImageState>(
       builder: (context, state) {
         final c = context.read<ImageCubit>();
@@ -59,7 +60,7 @@ class _ImagePreviewState extends State<ImagePreview> {
           }
         }
         return StudioPanel(
-          color: colors.canvas,
+          color: colors.canvasBackground,
           minimumContentHeight: 360,
           child: Column(
             children: [
@@ -69,8 +70,8 @@ class _ImagePreviewState extends State<ImagePreview> {
                   vertical: 14,
                 ),
                 decoration: BoxDecoration(
-                  color: colors.panel,
-                  border: Border(bottom: BorderSide(color: colors.line)),
+                  color: colors.panelBackground,
+                  border: Border(bottom: BorderSide(color: colors.borderColor)),
                 ),
                 child: LayoutBuilder(
                   builder: (context, constraints) => Row(
@@ -79,13 +80,13 @@ class _ImagePreviewState extends State<ImagePreview> {
                         width: 30,
                         height: 32,
                         decoration: BoxDecoration(
-                          color: colors.field,
+                          color: colors.controlBackground,
                           borderRadius: BorderRadius.circular(7),
                         ),
                         child: Icon(
                           Icons.image_outlined,
                           size: 16,
-                          color: colors.muted,
+                          color: colors.secondaryText,
                         ),
                       ),
                       const SizedBox(width: 10),
@@ -110,7 +111,7 @@ class _ImagePreviewState extends State<ImagePreview> {
                                 overflow: TextOverflow.ellipsis,
                                 style: TextStyle(
                                   fontSize: 10,
-                                  color: colors.muted,
+                                  color: colors.secondaryText,
                                 ),
                               ),
                             ],
@@ -160,13 +161,13 @@ class _ImagePreviewState extends State<ImagePreview> {
                                   ][mode],
                                   style: TextStyle(
                                     fontSize: 10,
-                                    color: colors.muted,
+                                    color: colors.secondaryText,
                                   ),
                                 ),
                                 Icon(
                                   Icons.expand_more_rounded,
                                   size: 15,
-                                  color: colors.muted,
+                                  color: colors.secondaryText,
                                 ),
                               ],
                             ),
@@ -196,7 +197,7 @@ class _ImagePreviewState extends State<ImagePreview> {
                         icon: Icon(
                           Icons.info_outline_rounded,
                           size: 15,
-                          color: colors.faint,
+                          color: colors.disabledText,
                         ),
                       ),
                     ],
@@ -282,16 +283,16 @@ class _ImagePreviewState extends State<ImagePreview> {
   }
 
   Widget _zoomBar(BuildContext context, AppLocalizations l) {
-    final colors = StudioColors(context);
+    final colors = AppSurfaceColors.of(context);
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 3),
       decoration: BoxDecoration(
-        color: colors.panel,
-        border: Border.all(color: colors.line),
+        color: colors.panelBackground,
+        border: Border.all(color: colors.borderColor),
         borderRadius: BorderRadius.circular(12),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: colors.dark ? .12 : .035),
+            color: Colors.black.withValues(alpha: colors.isDark ? .12 : .035),
             blurRadius: 18,
             offset: const Offset(0, 4),
           ),
@@ -318,7 +319,7 @@ class _ImagePreviewState extends State<ImagePreview> {
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontSize: 10,
-                  color: colors.muted,
+                  color: colors.secondaryText,
                   fontWeight: FontWeight.w500,
                 ),
               ),
@@ -332,7 +333,7 @@ class _ImagePreviewState extends State<ImagePreview> {
           Container(
             width: 1,
             height: 16,
-            color: colors.line,
+            color: colors.borderColor,
             margin: const EdgeInsets.symmetric(horizontal: 6),
           ),
           TextButton(
@@ -350,14 +351,14 @@ class _ImagePreviewState extends State<ImagePreview> {
     ImageCubit c,
     AppLocalizations l,
   ) {
-    final colors = StudioColors(context);
+    final colors = AppSurfaceColors.of(context);
     final result = state.result;
     final saved = result != null && !result.skipped;
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 11),
       decoration: BoxDecoration(
-        color: colors.panel,
-        border: Border(top: BorderSide(color: colors.line)),
+        color: colors.panelBackground,
+        border: Border(top: BorderSide(color: colors.borderColor)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -369,7 +370,7 @@ class _ImagePreviewState extends State<ImagePreview> {
                     ? Icons.check_circle_outline_rounded
                     : Icons.shield_outlined,
                 size: 14,
-                color: colors.muted,
+                color: colors.secondaryText,
               ),
               const SizedBox(width: 8),
               Expanded(
@@ -383,7 +384,7 @@ class _ImagePreviewState extends State<ImagePreview> {
                       : l.imageStudioLocal,
                   maxLines: 2,
                   overflow: TextOverflow.ellipsis,
-                  style: TextStyle(fontSize: 10, color: colors.muted),
+                  style: TextStyle(fontSize: 10, color: colors.secondaryText),
                 ),
               ),
               if (saved) ...[
@@ -400,7 +401,7 @@ class _ImagePreviewState extends State<ImagePreview> {
               ] else if (state.selectedImage != null)
                 Text(
                   l.imageStudioReady,
-                  style: TextStyle(fontSize: 10, color: colors.faint),
+                  style: TextStyle(fontSize: 10, color: colors.disabledText),
                 ),
             ],
           ),
@@ -416,7 +417,7 @@ class _ImagePreviewState extends State<ImagePreview> {
                     Icon(
                       Icons.info_outline_rounded,
                       size: 12,
-                      color: colors.muted,
+                      color: colors.secondaryText,
                     ),
                     const SizedBox(width: 7),
                     Expanded(
@@ -424,7 +425,10 @@ class _ImagePreviewState extends State<ImagePreview> {
                         imageNoticeLabel(l, result.notices.first),
                         maxLines: 2,
                         overflow: TextOverflow.ellipsis,
-                        style: TextStyle(fontSize: 10, color: colors.muted),
+                        style: TextStyle(
+                          fontSize: 10,
+                          color: colors.secondaryText,
+                        ),
                       ),
                     ),
                   ],
@@ -442,7 +446,7 @@ class _ImagePreviewState extends State<ImagePreview> {
     ImageCubit c,
     AppLocalizations l,
   ) {
-    final colors = StudioColors(context);
+    final colors = AppSurfaceColors.of(context);
     return LayoutBuilder(
       builder: (context, constraints) => Center(
         child: SingleChildScrollView(
@@ -464,8 +468,8 @@ class _ImagePreviewState extends State<ImagePreview> {
                           width: 98,
                           height: 98,
                           decoration: BoxDecoration(
-                            color: colors.field,
-                            border: Border.all(color: colors.line),
+                            color: colors.controlBackground,
+                            border: Border.all(color: colors.borderColor),
                             borderRadius: BorderRadius.circular(20),
                           ),
                         ),
@@ -478,13 +482,13 @@ class _ImagePreviewState extends State<ImagePreview> {
                             width: 98,
                             height: 98,
                             decoration: BoxDecoration(
-                              color: colors.panel,
-                              border: Border.all(color: colors.line),
+                              color: colors.panelBackground,
+                              border: Border.all(color: colors.borderColor),
                               borderRadius: BorderRadius.circular(20),
                               boxShadow: [
                                 BoxShadow(
                                   color: Colors.black.withValues(
-                                    alpha: colors.dark ? .14 : .045,
+                                    alpha: colors.isDark ? .14 : .045,
                                   ),
                                   blurRadius: 24,
                                   offset: const Offset(0, 9),
@@ -494,7 +498,7 @@ class _ImagePreviewState extends State<ImagePreview> {
                             child: Icon(
                               Icons.landscape_outlined,
                               size: 36,
-                              color: colors.muted,
+                              color: colors.secondaryText,
                             ),
                           ),
                         ),
@@ -506,9 +510,12 @@ class _ImagePreviewState extends State<ImagePreview> {
                           width: 30,
                           height: 30,
                           decoration: BoxDecoration(
-                            color: colors.ink,
+                            color: colors.primaryText,
                             borderRadius: BorderRadius.circular(10),
-                            border: Border.all(color: colors.canvas, width: 3),
+                            border: Border.all(
+                              color: colors.canvasBackground,
+                              width: 3,
+                            ),
                           ),
                           child: Icon(
                             Icons.add_rounded,
@@ -529,7 +536,7 @@ class _ImagePreviewState extends State<ImagePreview> {
                     height: 1.2,
                     fontWeight: FontWeight.w600,
                     letterSpacing: -.8,
-                    color: colors.ink,
+                    color: colors.primaryText,
                   ),
                 ),
                 const SizedBox(height: 12),
@@ -539,7 +546,7 @@ class _ImagePreviewState extends State<ImagePreview> {
                   style: TextStyle(
                     fontSize: 12,
                     height: 1.8,
-                    color: colors.muted,
+                    color: colors.secondaryText,
                   ),
                 ),
                 const SizedBox(height: 24),
@@ -563,7 +570,7 @@ class _ImagePreviewState extends State<ImagePreview> {
                           vertical: 4,
                         ),
                         decoration: BoxDecoration(
-                          border: Border.all(color: colors.line),
+                          border: Border.all(color: colors.borderColor),
                           borderRadius: BorderRadius.circular(5),
                         ),
                         child: Text(
@@ -571,7 +578,7 @@ class _ImagePreviewState extends State<ImagePreview> {
                           style: TextStyle(
                             fontSize: 9,
                             letterSpacing: .5,
-                            color: colors.faint,
+                            color: colors.disabledText,
                             fontWeight: FontWeight.w600,
                           ),
                         ),
@@ -591,7 +598,7 @@ class _CanvasImage extends StatelessWidget {
   final Uint8List bytes;
   final int width, height;
   final String label, errorLabel;
-  final StudioColors colors;
+  final AppSurfaceColors colors;
   const _CanvasImage({
     required this.bytes,
     required this.width,
@@ -616,7 +623,9 @@ class _CanvasImage extends StatelessWidget {
             borderRadius: BorderRadius.circular(6),
             boxShadow: [
               BoxShadow(
-                color: Colors.black.withValues(alpha: colors.dark ? .28 : .13),
+                color: Colors.black.withValues(
+                  alpha: colors.isDark ? .28 : .13,
+                ),
                 blurRadius: 32,
                 offset: const Offset(0, 12),
               ),
@@ -644,14 +653,14 @@ class _CanvasImage extends StatelessWidget {
                       vertical: 4,
                     ),
                     decoration: BoxDecoration(
-                      color: colors.panel.withValues(alpha: .94),
+                      color: colors.panelBackground.withValues(alpha: .94),
                       borderRadius: BorderRadius.circular(5),
                     ),
                     child: Text(
                       label,
                       style: TextStyle(
                         fontSize: 9,
-                        color: colors.muted,
+                        color: colors.secondaryText,
                         fontWeight: FontWeight.w500,
                       ),
                     ),
@@ -667,12 +676,14 @@ class _CanvasImage extends StatelessWidget {
 }
 
 class _StudioDots extends CustomPainter {
-  final StudioColors colors;
+  final AppSurfaceColors colors;
   _StudioDots(this.colors);
   @override
   void paint(Canvas canvas, Size size) {
     final paint = Paint()
-      ..color = colors.ink.withValues(alpha: colors.dark ? .055 : .065);
+      ..color = colors.primaryText.withValues(
+        alpha: colors.isDark ? .055 : .065,
+      );
     for (double y = 12; y < size.height; y += 22) {
       for (double x = 12; x < size.width; x += 22) {
         canvas.drawCircle(Offset(x, y), .65, paint);
@@ -681,7 +692,7 @@ class _StudioDots extends CustomPainter {
   }
 
   @override
-  bool shouldRepaint(_StudioDots old) => old.colors.dark != colors.dark;
+  bool shouldRepaint(_StudioDots old) => old.colors.isDark != colors.isDark;
 }
 
 class _CheckerPainter extends CustomPainter {

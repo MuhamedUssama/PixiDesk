@@ -1,67 +1,60 @@
 import 'package:flutter/material.dart';
-import 'package:pixi_desk/core/router/app_router.dart';
-import 'package:pixi_desk/core/theme/app_colors.dart';
-import 'package:pixi_desk/core/utils/app_assets.dart';
-import 'package:pixi_desk/features/pdf/widgets/pdf_tool_item.dart';
-import 'package:pixi_desk/l10n/localization/app_localizations.dart';
+import '../../core/router/app_router.dart';
+import '../../core/widgets/app_catalog_page.dart';
+import '../../l10n/localization/app_localizations.dart';
+import 'widgets/pdf_tool_item.dart';
 
 class PdfToolsPage extends StatelessWidget {
   const PdfToolsPage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context)!;
-    final theme = Theme.of(context);
-    final bool isDark = theme.brightness == Brightness.dark;
-    return Scaffold(
-      appBar: AppBar(title: Text(l10n.pdfTools)),
-      body: ListView(
-        padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
-        children: [
-          Container(
-            height: 500,
-            padding: const EdgeInsets.all(16),
-            decoration: BoxDecoration(
-              color: isDark
-                  ? AppColors.card
-                  : AppColors.darkTextColor.withValues(alpha: 0.4),
-              borderRadius: BorderRadius.circular(24),
-            ),
-            child: Column(
-              children: [
-                PdfToolItem(
-                  onTap: () {
-                    Navigator.pushNamed(context, AppRouter.pdfConverterRoute);
-                  },
-                  toolName: l10n.pdfConverterTitle,
-                  toolDescription: l10n.pdfConverterSubtitle,
-                  icon: Icons.file_open,
-                ),
-                const Divider(),
-                PdfToolItem(
-                  onTap: () {
-                    Navigator.pushNamed(context, AppRouter.pdfCompressionRoute);
-                  },
-                  toolName: l10n.compressPdf,
-                  toolDescription: l10n.compressPdfSubtitle,
-                  icon: Icons.compress,
-                ),
-                const Divider(),
-                PdfToolItem(
-                  onTap: () {
-                    Navigator.pushNamed(context, AppRouter.pdfToImageRoute);
-                  },
-                  toolName: l10n.pdfToImages,
-                  toolDescription: l10n.pdfToImagesSubtitle,
-                  svg: isDark
-                      ? AppImages.pdfToImageDark
-                      : AppImages.pdfToImageLight,
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),
+    final localizations = AppLocalizations.of(context)!;
+    return AppCatalogPage(
+      appBar: AppBar(title: Text(localizations.pdfTools)),
+      eyebrow: localizations.pdfCatalogEyebrow,
+      title: localizations.pdfCatalogHeadline,
+      description: localizations.pdfCatalogDescription,
+      sectionTitle: localizations.pdfCatalogChooseTool,
+      sectionCaption: localizations.desktopWorkspaceCaption,
+      toolCards: [
+        PdfToolItem(
+          icon: Icons.add_photo_alternate_outlined,
+          title: localizations.pdfConverterTitle,
+          description: localizations.pdfCreateDescription,
+          actionLabel: localizations.pdfCreateAction,
+          capabilityLabels: [
+            localizations.catalogArrange,
+            localizations.catalogPageSize,
+          ],
+          onPressed: () =>
+              Navigator.pushNamed(context, AppRouter.pdfConverterRoute),
+        ),
+        PdfToolItem(
+          icon: Icons.compress_rounded,
+          title: localizations.compressPdf,
+          description: localizations.pdfCompressDescription,
+          actionLabel: localizations.pdfCompressAction,
+          capabilityLabels: [
+            localizations.catalogQuality,
+            localizations.catalogPreview,
+          ],
+          onPressed: () =>
+              Navigator.pushNamed(context, AppRouter.pdfCompressionRoute),
+        ),
+        PdfToolItem(
+          icon: Icons.photo_library_outlined,
+          title: localizations.pdfToImages,
+          description: localizations.pdfExtractDescription,
+          actionLabel: localizations.pdfExtractAction,
+          capabilityLabels: [
+            localizations.catalogResolution,
+            localizations.catalogBatchExport,
+          ],
+          onPressed: () =>
+              Navigator.pushNamed(context, AppRouter.pdfToImageRoute),
+        ),
+      ],
     );
   }
 }

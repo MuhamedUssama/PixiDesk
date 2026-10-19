@@ -1,3 +1,4 @@
+import 'package:pixi_desk/core/theme/app_surface_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -16,13 +17,10 @@ import '../widgets/image_studio_style.dart';
 class ImageProcessingPage extends StatelessWidget {
   const ImageProcessingPage({super.key});
   @override
-  Widget build(BuildContext context) =>
-      ImageStudioTheme(child: Builder(builder: _buildWorkspace));
-
-  Widget _buildWorkspace(BuildContext context) {
+  Widget build(BuildContext context) {
     final l = AppLocalizations.of(context)!;
     final c = context.read<ImageCubit>();
-    final colors = StudioColors(context);
+    final colors = AppSurfaceColors.of(context);
     return CallbackShortcuts(
       bindings: {
         const SingleActivator(LogicalKeyboardKey.keyO, control: true): () =>
@@ -139,14 +137,15 @@ class ImageProcessingPage extends StatelessWidget {
                                         ),
                                         padding: const EdgeInsets.all(4),
                                         decoration: BoxDecoration(
-                                          color: colors.field,
+                                          color: colors.controlBackground,
                                           borderRadius: BorderRadius.circular(
                                             12,
                                           ),
                                         ),
                                         child: TabBar(
-                                          labelColor: colors.ink,
-                                          unselectedLabelColor: colors.muted,
+                                          labelColor: colors.primaryText,
+                                          unselectedLabelColor:
+                                              colors.secondaryText,
                                           labelStyle: const TextStyle(
                                             fontSize: 12,
                                             fontWeight: FontWeight.w600,
@@ -155,7 +154,7 @@ class ImageProcessingPage extends StatelessWidget {
                                           indicatorSize:
                                               TabBarIndicatorSize.tab,
                                           indicator: BoxDecoration(
-                                            color: colors.panel,
+                                            color: colors.panelBackground,
                                             borderRadius: BorderRadius.circular(
                                               9,
                                             ),
@@ -235,7 +234,7 @@ class ImageProcessingPage extends StatelessWidget {
     ImageCubit c,
     AppLocalizations l,
   ) {
-    final colors = StudioColors(context);
+    final colors = AppSurfaceColors.of(context);
     return LayoutBuilder(
       builder: (context, constraints) {
         final compact = constraints.maxWidth < 720;
@@ -286,7 +285,7 @@ class ImageProcessingPage extends StatelessWidget {
                 Container(
                   width: 1,
                   height: 20,
-                  color: colors.line,
+                  color: colors.borderColor,
                   margin: const EdgeInsets.symmetric(horizontal: 12),
                 ),
                 IconButton(
@@ -310,7 +309,7 @@ class ImageProcessingPage extends StatelessWidget {
               if (constraints.maxWidth > 1000) ...[
                 Text(
                   l.imageQueueCount(state.jobs.length),
-                  style: TextStyle(fontSize: 11, color: colors.muted),
+                  style: TextStyle(fontSize: 11, color: colors.secondaryText),
                 ),
                 const SizedBox(width: 18),
               ],
@@ -334,7 +333,7 @@ class ImageProcessingPage extends StatelessWidget {
     ImageCubit c,
     AppLocalizations l,
   ) {
-    final colors = StudioColors(context);
+    final colors = AppSurfaceColors.of(context);
     return Padding(
       padding: const EdgeInsets.fromLTRB(20, 0, 20, 12),
       child: StudioPanel(
@@ -349,7 +348,7 @@ class ImageProcessingPage extends StatelessWidget {
                         ? Icons.hourglass_top_rounded
                         : Icons.visibility_outlined,
                     size: 15,
-                    color: colors.muted,
+                    color: colors.secondaryText,
                   ),
                   const SizedBox(width: 10),
                   Expanded(
@@ -366,7 +365,10 @@ class ImageProcessingPage extends StatelessWidget {
                       state.total > 0) ...[
                     Text(
                       l.imageProgressCount(state.finished, state.total),
-                      style: TextStyle(fontSize: 11, color: colors.muted),
+                      style: TextStyle(
+                        fontSize: 11,
+                        color: colors.secondaryText,
+                      ),
                     ),
                     IconButton(
                       tooltip: state.paused ? l.imageResume : l.imagePause,

@@ -1,6 +1,6 @@
+import 'package:pixi_desk/core/theme/app_surface_colors.dart';
 import 'package:flutter/material.dart';
 import '../../../../l10n/localization/app_localizations.dart';
-import 'image_studio_style.dart';
 
 class ImageProcessingAppbar extends StatelessWidget
     implements PreferredSizeWidget {
@@ -8,7 +8,7 @@ class ImageProcessingAppbar extends StatelessWidget
   const ImageProcessingAppbar({super.key, this.actions = const []});
   @override
   Widget build(BuildContext context) {
-    final c = StudioColors(context);
+    final surfaceColors = AppSurfaceColors.of(context);
     final l = AppLocalizations.of(context)!;
     return AppBar(
       toolbarHeight: 76,
@@ -30,7 +30,7 @@ class ImageProcessingAppbar extends StatelessWidget
             width: 38,
             height: 38,
             decoration: BoxDecoration(
-              color: c.ink,
+              color: surfaceColors.primaryText,
               borderRadius: BorderRadius.circular(11),
             ),
             child: Icon(
@@ -50,7 +50,7 @@ class ImageProcessingAppbar extends StatelessWidget
                   style: TextStyle(
                     fontSize: 10,
                     fontWeight: FontWeight.w500,
-                    color: c.muted,
+                    color: surfaceColors.secondaryText,
                     letterSpacing: .5,
                   ),
                 ),
@@ -62,7 +62,7 @@ class ImageProcessingAppbar extends StatelessWidget
                     fontSize: 18,
                     fontWeight: FontWeight.w600,
                     letterSpacing: -.4,
-                    color: c.ink,
+                    color: surfaceColors.primaryText,
                   ),
                 ),
               ],

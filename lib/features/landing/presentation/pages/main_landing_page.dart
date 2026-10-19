@@ -1,106 +1,106 @@
 import 'package:flutter/material.dart';
-import 'package:pixi_desk/core/router/app_router.dart';
-import 'package:pixi_desk/features/landing/presentation/widgets/feature_card_widget.dart';
-import 'package:pixi_desk/l10n/localization/app_localizations.dart';
-
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:pixi_desk/features/settings/presentation/cubit/settings_cubit.dart';
+import '../../../../core/router/app_router.dart';
+import '../../../../core/theme/app_surface_colors.dart';
+import '../../../../core/widgets/app_catalog_page.dart';
+import '../../../../l10n/localization/app_localizations.dart';
+import '../../../settings/presentation/cubit/settings_cubit.dart';
+import '../widgets/feature_card_widget.dart';
 
 class MainLandingPage extends StatelessWidget {
   const MainLandingPage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context)!;
-
-    return Scaffold(
-      body: CustomScrollView(
-        slivers: [
-          SliverToBoxAdapter(
-            child: Padding(
-              padding: const EdgeInsets.fromLTRB(32, 32, 32, 0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  IconButton(
-                    icon: const Icon(Icons.language),
-                    onPressed: () =>
-                        context.read<SettingsCubit>().toggleLocale(),
-                    tooltip: 'Change Language',
-                  ),
-                  const SizedBox(width: 8),
-                  IconButton(
-                    icon: Icon(
-                      Theme.of(context).brightness == Brightness.dark
-                          ? Icons.light_mode
-                          : Icons.dark_mode,
-                    ),
-                    onPressed: () =>
-                        context.read<SettingsCubit>().toggleTheme(),
-                    tooltip: 'Toggle Theme',
-                  ),
-                ],
+    final localizations = AppLocalizations.of(context)!;
+    final surfaceColors = AppSurfaceColors.of(context);
+    final isDarkTheme = Theme.of(context).brightness == Brightness.dark;
+    return AppCatalogPage(
+      appBar: AppBar(
+        automaticallyImplyLeading: false,
+        titleSpacing: 24,
+        title: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Container(
+              width: 30,
+              height: 30,
+              decoration: BoxDecoration(
+                color: surfaceColors.primaryText,
+                borderRadius: BorderRadius.circular(9),
+              ),
+              child: Icon(
+                Icons.auto_awesome_mosaic_rounded,
+                size: 17,
+                color: Theme.of(context).colorScheme.surface,
               ),
             ),
-          ),
-          SliverToBoxAdapter(
-            child: Padding(
-              padding: const EdgeInsets.fromLTRB(32, 32, 32, 32),
-              child: Column(
-                children: [
-                  Text(
-                    l10n.appTitle,
-                    style: Theme.of(context).textTheme.displayMedium?.copyWith(
-                      fontWeight: FontWeight.bold,
-                    ),
-                    textAlign: TextAlign.center,
-                  ),
-                  const SizedBox(height: 16),
-                  Text(
-                    l10n.appSubtitle,
-                    style: Theme.of(
-                      context,
-                    ).textTheme.headlineSmall?.copyWith(color: Colors.grey),
-                    textAlign: TextAlign.center,
-                  ),
-                ],
+            const SizedBox(width: 10),
+            Flexible(
+              child: Text(
+                localizations.appTitle,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
               ),
             ),
+          ],
+        ),
+        actions: [
+          IconButton(
+            tooltip: localizations.changeLanguage,
+            icon: const Icon(Icons.language_rounded),
+            onPressed: () => context.read<SettingsCubit>().toggleLocale(),
           ),
-          SliverPadding(
-            padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
-            sliver: SliverGrid(
-              gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
-                maxCrossAxisExtent: 500,
-                mainAxisSpacing: 32,
-                crossAxisSpacing: 32,
-                childAspectRatio: 1.2,
-              ),
-              delegate: SliverChildListDelegate([
-                FeatureCardWidget(
-                  icon: Icons.image_outlined,
-                  title: l10n.imageProcessingTitle,
-                  subtitle: l10n.imageProcessingSubtitle,
-                  onTap: () {
-                    Navigator.pushNamed(
-                      context,
-                      AppRouter.imageProcessingRoute,
-                    );
-                  },
-                ),
-                FeatureCardWidget(
-                  icon: Icons.picture_as_pdf_outlined,
-                  title: l10n.pdfTools,
-                  subtitle: l10n.pdfToolsSubtitle,
-                  onTap: () {
-                    Navigator.pushNamed(context, AppRouter.pdfToolsRoute);
-                  },
-                ),
-              ]),
+          IconButton(
+            tooltip: isDarkTheme
+                ? localizations.switchToLightTheme
+                : localizations.switchToDarkTheme,
+            icon: Icon(
+              isDarkTheme
+                  ? Icons.light_mode_outlined
+                  : Icons.dark_mode_outlined,
+            ),
+            onPressed: () => context.read<SettingsCubit>().toggleTheme(
+              currentBrightness: Theme.of(context).brightness,
             ),
           ),
+          const SizedBox(width: 16),
         ],
       ),
+      eyebrow: localizations.homeEyebrow,
+      title: localizations.homeHeadline,
+      description: localizations.homeDescription,
+      sectionTitle: localizations.homeWorkspaces,
+      sectionCaption: localizations.desktopWorkspaceCaption,
+      maxColumns: 2,
+      toolCards: [
+        FeatureCardWidget(
+          icon: Icons.photo_library_outlined,
+          title: localizations.imageStudioTitle,
+          description: localizations.homeImageDescription,
+          actionLabel: localizations.openImageStudio,
+          capabilityLabels: [
+            localizations.catalogEdit,
+            localizations.catalogConvert,
+            localizations.catalogCompress,
+          ],
+          onPressed: () =>
+              Navigator.pushNamed(context, AppRouter.imageProcessingRoute),
+        ),
+        FeatureCardWidget(
+          icon: Icons.description_outlined,
+          title: localizations.pdfTools,
+          description: localizations.homePdfDescription,
+          actionLabel: localizations.explorePdfTools,
+          capabilityLabels: [
+            localizations.catalogCreate,
+            localizations.catalogCompress,
+            localizations.catalogExtract,
+          ],
+          onPressed: () =>
+              Navigator.pushNamed(context, AppRouter.pdfToolsRoute),
+        ),
+      ],
     );
   }
 }

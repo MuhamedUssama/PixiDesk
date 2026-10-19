@@ -1,3 +1,4 @@
+import 'package:pixi_desk/core/theme/app_surface_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -13,7 +14,7 @@ class ImageQueue extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l = AppLocalizations.of(context)!;
-    final colors = StudioColors(context);
+    final colors = AppSurfaceColors.of(context);
     return BlocBuilder<ImageCubit, ImageState>(
       builder: (context, state) {
         final c = context.read<ImageCubit>();
@@ -51,14 +52,14 @@ class ImageQueue extends StatelessWidget {
                           vertical: 2,
                         ),
                         decoration: BoxDecoration(
-                          color: colors.field,
+                          color: colors.controlBackground,
                           borderRadius: BorderRadius.circular(5),
                         ),
                         child: Text(
                           state.jobs.length.toString().padLeft(2, '0'),
                           style: TextStyle(
                             fontSize: 10,
-                            color: colors.muted,
+                            color: colors.secondaryText,
                             fontWeight: FontWeight.w600,
                           ),
                         ),
@@ -102,7 +103,7 @@ class ImageQueue extends StatelessWidget {
                                 Icon(
                                   Icons.photo_library_outlined,
                                   size: 27,
-                                  color: colors.faint,
+                                  color: colors.disabledText,
                                 ),
                                 const SizedBox(height: 14),
                                 Text(
@@ -110,7 +111,7 @@ class ImageQueue extends StatelessWidget {
                                   textAlign: TextAlign.center,
                                   style: TextStyle(
                                     fontSize: 12,
-                                    color: colors.muted,
+                                    color: colors.secondaryText,
                                   ),
                                 ),
                                 const SizedBox(height: 5),
@@ -119,7 +120,7 @@ class ImageQueue extends StatelessWidget {
                                   textAlign: TextAlign.center,
                                   style: TextStyle(
                                     fontSize: 11,
-                                    color: colors.faint,
+                                    color: colors.disabledText,
                                   ),
                                 ),
                               ],
@@ -135,13 +136,15 @@ class ImageQueue extends StatelessWidget {
                             final selected = index == state.selectedIndex;
                             return Material(
                               color: selected
-                                  ? colors.selected
+                                  ? colors.selectedBackground
                                   : Colors.transparent,
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(11),
                                 side: BorderSide(
                                   color: selected
-                                      ? colors.ink.withValues(alpha: .12)
+                                      ? colors.primaryText.withValues(
+                                          alpha: .12,
+                                        )
                                       : Colors.transparent,
                                 ),
                               ),
@@ -196,7 +199,7 @@ class ImageQueue extends StatelessWidget {
                                                 fontWeight: selected
                                                     ? FontWeight.w600
                                                     : FontWeight.w500,
-                                                color: colors.ink,
+                                                color: colors.primaryText,
                                               ),
                                             ),
                                             const SizedBox(height: 4),
@@ -207,7 +210,7 @@ class ImageQueue extends StatelessWidget {
                                               ),
                                               style: TextStyle(
                                                 fontSize: 10,
-                                                color: colors.muted,
+                                                color: colors.secondaryText,
                                               ),
                                             ),
                                             if (job.status !=
@@ -228,7 +231,7 @@ class ImageQueue extends StatelessWidget {
                                                 style: TextStyle(
                                                   fontSize: 10,
                                                   color: job.failure == null
-                                                      ? colors.muted
+                                                      ? colors.secondaryText
                                                       : Theme.of(
                                                           context,
                                                         ).colorScheme.error,
@@ -255,7 +258,7 @@ class ImageQueue extends StatelessWidget {
                                           child: Icon(
                                             Icons.check_circle_rounded,
                                             size: 13,
-                                            color: colors.ink,
+                                            color: colors.primaryText,
                                           ),
                                         ),
                                     ],
@@ -284,14 +287,17 @@ class ImageQueue extends StatelessWidget {
                       Icon(
                         Icons.lock_outline_rounded,
                         size: 12,
-                        color: colors.faint,
+                        color: colors.disabledText,
                       ),
                       const SizedBox(width: 6),
                       Expanded(
                         child: Text(
                           l.imageStudioLocal,
                           maxLines: 2,
-                          style: TextStyle(fontSize: 10, color: colors.faint),
+                          style: TextStyle(
+                            fontSize: 10,
+                            color: colors.disabledText,
+                          ),
                         ),
                       ),
                     ],

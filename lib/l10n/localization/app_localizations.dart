@@ -1729,6 +1729,204 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'{value}%'**
   String imageStudioPercent(String value);
+
+  /// No description provided for @changeLanguage.
+  ///
+  /// In en, this message translates to:
+  /// **'Change language'**
+  String get changeLanguage;
+
+  /// No description provided for @switchToLightTheme.
+  ///
+  /// In en, this message translates to:
+  /// **'Switch to light theme'**
+  String get switchToLightTheme;
+
+  /// No description provided for @switchToDarkTheme.
+  ///
+  /// In en, this message translates to:
+  /// **'Switch to dark theme'**
+  String get switchToDarkTheme;
+
+  /// No description provided for @homeEyebrow.
+  ///
+  /// In en, this message translates to:
+  /// **'YOUR WORKSPACE'**
+  String get homeEyebrow;
+
+  /// No description provided for @homeHeadline.
+  ///
+  /// In en, this message translates to:
+  /// **'Your everyday files.\nBeautifully handled.'**
+  String get homeHeadline;
+
+  /// No description provided for @homeDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'A calm workspace for images and documents. Choose a tool and make it your own.'**
+  String get homeDescription;
+
+  /// No description provided for @homeWorkspaces.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose your workspace'**
+  String get homeWorkspaces;
+
+  /// No description provided for @desktopWorkspaceCaption.
+  ///
+  /// In en, this message translates to:
+  /// **'Made for your desktop'**
+  String get desktopWorkspaceCaption;
+
+  /// No description provided for @homeImageDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Fine-tune a single photo or a whole collection, with a clear view of every edit.'**
+  String get homeImageDescription;
+
+  /// No description provided for @homePdfDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Bring images together, lighten a document, or turn its pages into something new.'**
+  String get homePdfDescription;
+
+  /// No description provided for @openImageStudio.
+  ///
+  /// In en, this message translates to:
+  /// **'Open image studio'**
+  String get openImageStudio;
+
+  /// No description provided for @explorePdfTools.
+  ///
+  /// In en, this message translates to:
+  /// **'Explore PDF tools'**
+  String get explorePdfTools;
+
+  /// No description provided for @catalogEdit.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit'**
+  String get catalogEdit;
+
+  /// No description provided for @catalogConvert.
+  ///
+  /// In en, this message translates to:
+  /// **'Convert'**
+  String get catalogConvert;
+
+  /// No description provided for @catalogCompress.
+  ///
+  /// In en, this message translates to:
+  /// **'Compress'**
+  String get catalogCompress;
+
+  /// No description provided for @catalogCreate.
+  ///
+  /// In en, this message translates to:
+  /// **'Create'**
+  String get catalogCreate;
+
+  /// No description provided for @catalogExtract.
+  ///
+  /// In en, this message translates to:
+  /// **'Extract'**
+  String get catalogExtract;
+
+  /// No description provided for @catalogArrange.
+  ///
+  /// In en, this message translates to:
+  /// **'Arrange images'**
+  String get catalogArrange;
+
+  /// No description provided for @catalogPageSize.
+  ///
+  /// In en, this message translates to:
+  /// **'Page sizes'**
+  String get catalogPageSize;
+
+  /// No description provided for @catalogQuality.
+  ///
+  /// In en, this message translates to:
+  /// **'Quality controls'**
+  String get catalogQuality;
+
+  /// No description provided for @catalogPreview.
+  ///
+  /// In en, this message translates to:
+  /// **'Preview'**
+  String get catalogPreview;
+
+  /// No description provided for @catalogResolution.
+  ///
+  /// In en, this message translates to:
+  /// **'Custom resolution'**
+  String get catalogResolution;
+
+  /// No description provided for @catalogBatchExport.
+  ///
+  /// In en, this message translates to:
+  /// **'Batch export'**
+  String get catalogBatchExport;
+
+  /// No description provided for @pdfCatalogEyebrow.
+  ///
+  /// In en, this message translates to:
+  /// **'DOCUMENT WORKSPACE'**
+  String get pdfCatalogEyebrow;
+
+  /// No description provided for @pdfCatalogHeadline.
+  ///
+  /// In en, this message translates to:
+  /// **'Every page.\nA little more possibility.'**
+  String get pdfCatalogHeadline;
+
+  /// No description provided for @pdfCatalogDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Create, compress, or extract. Thoughtful tools for the documents you work with every day.'**
+  String get pdfCatalogDescription;
+
+  /// No description provided for @pdfCatalogChooseTool.
+  ///
+  /// In en, this message translates to:
+  /// **'A tool for every next step'**
+  String get pdfCatalogChooseTool;
+
+  /// No description provided for @pdfCreateDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Turn your images into one neatly arranged PDF, ready to save and share.'**
+  String get pdfCreateDescription;
+
+  /// No description provided for @pdfCompressDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Make room for what matters. Reduce PDF size with a quality level that suits your file.'**
+  String get pdfCompressDescription;
+
+  /// No description provided for @pdfExtractDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Give your pages a new format. Export PDF pages as images at your preferred resolution.'**
+  String get pdfExtractDescription;
+
+  /// No description provided for @pdfCreateAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Create a PDF'**
+  String get pdfCreateAction;
+
+  /// No description provided for @pdfCompressAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Compress a document'**
+  String get pdfCompressAction;
+
+  /// No description provided for @pdfExtractAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Extract page images'**
+  String get pdfExtractAction;
 }
 
 class _AppLocalizationsDelegate

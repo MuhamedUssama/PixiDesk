@@ -18,10 +18,12 @@ class SettingsCubit extends Cubit<SettingsState> {
     emit(state.copyWith(themeMode: themeMode, locale: locale));
   }
 
-  Future<void> toggleTheme() async {
-    final newMode = state.themeMode == ThemeMode.dark
-        ? ThemeMode.light
-        : ThemeMode.dark;
+  Future<void> toggleTheme({Brightness? currentBrightness}) async {
+    final isCurrentlyDark =
+        state.themeMode == ThemeMode.dark ||
+        (state.themeMode == ThemeMode.system &&
+            currentBrightness == Brightness.dark);
+    final newMode = isCurrentlyDark ? ThemeMode.light : ThemeMode.dark;
     await _repository.saveThemeMode(newMode);
     emit(state.copyWith(themeMode: newMode));
   }
