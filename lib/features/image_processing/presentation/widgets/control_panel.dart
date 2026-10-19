@@ -328,6 +328,9 @@ class _ControlPanelState extends State<ControlPanel> {
                                 if (state.outputFolder != null)
                                   SelectableText(
                                     state.outputFolder!,
+                                    key: const PageStorageKey(
+                                      'image-output-folder',
+                                    ),
                                     style: Theme.of(
                                       context,
                                     ).textTheme.bodySmall,
@@ -997,41 +1000,44 @@ class _ControlPanelState extends State<ControlPanel> {
       l.imageNaming: Icons.drive_file_rename_outline_rounded,
       l.imagePresets: Icons.bookmarks_outlined,
     };
-    return Container(
-      margin: const EdgeInsets.only(bottom: 12),
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 3),
-      decoration: BoxDecoration(
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 12),
+      child: Material(
         color: colors.field,
         borderRadius: BorderRadius.circular(12),
-      ),
-      child: ExpansionTile(
-        key: PageStorageKey(title),
-        initiallyExpanded:
-            expanded || title == l.imageResize || title == l.imagePresets,
-        dense: true,
-        visualDensity: VisualDensity.compact,
-        title: Row(
-          children: [
-            Icon(icons[title], size: 15, color: colors.muted),
-            const SizedBox(width: 9),
-            Expanded(
-              child: Text(
-                title,
-                style: const TextStyle(
-                  fontSize: 12,
-                  fontWeight: FontWeight.w600,
+        clipBehavior: Clip.antiAlias,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 3),
+          child: ExpansionTile(
+            key: PageStorageKey(title),
+            initiallyExpanded:
+                expanded || title == l.imageResize || title == l.imagePresets,
+            dense: true,
+            visualDensity: VisualDensity.compact,
+            title: Row(
+              children: [
+                Icon(icons[title], size: 15, color: colors.muted),
+                const SizedBox(width: 9),
+                Expanded(
+                  child: Text(
+                    title,
+                    style: const TextStyle(
+                      fontSize: 12,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
                 ),
-              ),
+              ],
             ),
-          ],
-        ),
-        children: [
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: children,
+            children: [
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: children,
+              ),
+              const SizedBox(height: 10),
+            ],
           ),
-          const SizedBox(height: 10),
-        ],
+        ),
       ),
     );
   }
@@ -1143,6 +1149,9 @@ class _SettingFieldState extends State<_SettingField> {
             label: widget.label,
             textField: true,
             child: TextField(
+              // Keep text scroll offsets separate from the ancestor tile's
+              // boolean expansion state in the route's PageStorage bucket.
+              key: PageStorageKey('image-setting:${widget.label}'),
               controller: _controller,
               focusNode: _focus,
               style: TextStyle(fontSize: 12, color: colors.ink),
