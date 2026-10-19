@@ -14,8 +14,13 @@ class ImageGridView extends StatelessWidget {
     return ReorderableListView.builder(
       padding: const EdgeInsets.all(8),
       itemCount: images.length,
-      onReorder: (oldIndex, newIndex) {
-        context.read<PdfConverterCubit>().reorderImages(oldIndex, newIndex);
+      onReorderItem: (oldIndex, newIndex) {
+        // Keep the Cubit's existing insertion-index contract at this UI boundary.
+        final insertionIndex = newIndex > oldIndex ? newIndex + 1 : newIndex;
+        context.read<PdfConverterCubit>().reorderImages(
+          oldIndex,
+          insertionIndex,
+        );
       },
       itemBuilder: (context, index) {
         final image = images[index];

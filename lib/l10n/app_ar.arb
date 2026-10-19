@@ -78,5 +78,274 @@
   "downloadOptionsMessage": "كيف ترغب في حفظ الصور؟",
   "combinedFolder": "مجلد مدمج",
   "separateZips": "أرشيف منفصل",
-  "cancel": "إلغاء"
+  "cancel": "إلغاء",
+  "imageAddFiles": "إضافة صور",
+  "imageAddFolder": "إضافة مجلد",
+  "imageAddRecursive": "تضمين المجلدات الفرعية",
+  "imagePaste": "لصق صور أو مسارات ملفات",
+  "imageQueue": "قائمة المعالجة",
+  "imageSettings": "الإعدادات",
+  "imagePreview": "المعاينة",
+  "imagePreviewHint": "المعاينة صورة ثابتة مصغرة. يحافظ التصدير على الحركة في الصيغ المدعومة.",
+  "imageBeforeAfter": "قبل / بعد",
+  "imageAfter": "بعد",
+  "imageFit": "ملاءمة العرض",
+  "imagePreviewError": "تعذر عرض الصورة. جرّب استيرادها مرة أخرى.",
+  "imageExport": "تصدير الصورة",
+  "imageExportAll": "تصدير القائمة",
+  "imageExportTitle": "حفظ الصورة المعالجة",
+  "imageOutputFolder": "مجلد المخرجات",
+  "imageRetryFailed": "إعادة محاولة الفاشل أو الملغى",
+  "imageClearQueue": "مسح القائمة",
+  "imageRemove": "إزالة الصورة",
+  "imagePause": "إيقاف مؤقت بعد الصورة الحالية",
+  "imageResume": "استئناف القائمة",
+  "imageCancelled": "ملغى",
+  "imagePending": "في الانتظار",
+  "imageRunning": "جارٍ المعالجة",
+  "imageCompleted": "اكتمل",
+  "imageFailed": "فشل",
+  "imageSkipped": "تم التخطي",
+  "imageImporting": "جارٍ فحص الصور…",
+  "imageChoosing": "جارٍ اختيار مكان الحفظ…",
+  "imageProcessing": "جارٍ معالجة الصور…",
+  "imagePreviewing": "جارٍ إعداد المعاينة…",
+  "imageRecognizing": "جارٍ التعرف على النص محليًا…",
+  "imageRemovingBackground": "جارٍ إزالة الخلفية محليًا…",
+  "imageResize": "تغيير الأبعاد والقص",
+  "imageWidth": "العرض (بكسل)",
+  "imageHeight": "الارتفاع (بكسل)",
+  "imageKeepOriginal": "تلقائي / الأصلي",
+  "imageResizeFit": "ملاءمة داخل الحدود",
+  "imageResizeFill": "ملء مع قص",
+  "imageResizeStretch": "تمديد إلى المقاس",
+  "imageAllowUpscale": "السماح بتكبير الصورة",
+  "imageCropLeft": "بداية القص أفقيًا (%)",
+  "imageCropTop": "بداية القص رأسيًا (%)",
+  "imageCropWidth": "عرض القص (%)",
+  "imageCropHeight": "ارتفاع القص (%)",
+  "imageSquareCrop": "قص مربع في المنتصف",
+  "imageResetCrop": "إلغاء القص",
+  "imageRotate": "تدوير ٩٠°",
+  "imageFlipHorizontal": "قلب أفقي",
+  "imageFlipVertical": "قلب رأسي",
+  "imageAdjustments": "تعديلات الألوان",
+  "imageBrightness": "السطوع",
+  "imageContrast": "التباين",
+  "imageSaturation": "التشبع",
+  "imageGrayscale": "تدرج رمادي",
+  "imageReset": "إعادة ضبط الإعدادات",
+  "imageUndo": "تراجع",
+  "imageRedo": "إعادة",
+  "imageCompression": "الترميز والضغط",
+  "imageLossless": "WebP دون فقد",
+  "imageLosslessHint": "يستخدم PNG تحسينًا دون فقد. تنطبق الجودة على JPEG وWebP مع الفقد.",
+  "imageTargetSize": "الحجم المستهدف (كيلوبايت، اختياري)",
+  "imageMinQuality": "الحد الأدنى للجودة",
+  "imageTargetHint": "حدد الحجم المطلوب. ستوضح النتيجة إذا تعذر الوصول إليه.",
+  "imageMetadata": "البيانات الوصفية والحركة",
+  "imageMetadataRemove": "إزالة EXIF والبيانات النصية",
+  "imageMetadataPreserve": "الحفاظ على البيانات المدعومة",
+  "imageMetadataHint": "يتم تصحيح اتجاه الصورة. تُحفظ ملفات ألوان ICC عندما تدعمها الصيغة؛ ويختلف حفظ باقي البيانات حسب الترميز.",
+  "imageAnimationPreserve": "الحفاظ على الحركة المدعومة",
+  "imageAnimationFirst": "تصدير الإطار الأول فقط",
+  "imageAlphaHint": "تُدمج الشفافية في JPEG وBMP مع الخلفية المختارة. تُحوّل الحركة غير المدعومة لصورة ثابتة مع تنبيه في النتيجة.",
+  "imageBackground": "لون الخلفية (RRGGBB)",
+  "imageIconPack": "حزمة ICO: ‏16، 32، 48، 64، 128، 256 بكسل",
+  "imageWatermark": "العلامة المائية",
+  "imageWatermarkText": "نص العلامة المائية (عربي أو إنجليزي)",
+  "imageWatermarkLogo": "اختيار صورة العلامة المائية",
+  "imageWatermarkRemove": "إزالة صورة العلامة المائية",
+  "imageOpacity": "العتامة",
+  "imageWatermarkScale": "الحجم النسبي للعلامة",
+  "imageTopLeft": "أعلى اليسار",
+  "imageTopCenter": "أعلى المنتصف",
+  "imageTopRight": "أعلى اليمين",
+  "imageCenterLeft": "منتصف اليسار",
+  "imageCenter": "المنتصف",
+  "imageCenterRight": "منتصف اليمين",
+  "imageBottomLeft": "أسفل اليسار",
+  "imageBottomCenter": "أسفل المنتصف",
+  "imageBottomRight": "أسفل اليمين",
+  "imageNaming": "أسماء المخرجات والتعارضات",
+  "imageNamePattern": "نمط الاسم",
+  "imageNamePatternHint": "المتغيرات: '{'name'}' و'{'index'}' و'{'width'}' و'{'height'}'. تُحسب الأبعاد بعد التعديلات.",
+  "imageConflictRename": "إعادة التسمية عند وجود ملف",
+  "imageConflictSkip": "تخطي الملفات الموجودة",
+  "imageConflictReplace": "استبدال الملفات الموجودة",
+  "imageReplaceHint": "الاستبدال يكتب فوق المخرجات الموجودة. ملفات الصور الأصلية محمية دائمًا.",
+  "imageOpen": "فتح الناتج",
+  "imageReveal": "إظهار في المجلد",
+  "imageNoSavings": "الناتج ليس أصغر؛ تم تطبيق التعديلات وإعدادات البيانات المطلوبة.",
+  "imageUnchanged": "الأصل كان أصغر بالفعل؛ تم حفظ نسخة دون تغيير.",
+  "imageTargetNotReached": "تعذر الوصول للحجم المستهدف ضمن حد الجودة.",
+  "imageAnimationFlattened": "تم تصدير الإطار الأول فقط.",
+  "imageAlphaFlattened": "تم دمج الشفافية مع لون الخلفية المختار.",
+  "imageMetadataLimited": "هذا الترميز يحفظ جزءًا محدودًا من البيانات الوصفية.",
+  "imagePresets": "الإعدادات المحفوظة والوصفات",
+  "imagePresetSharing": "JPEG للمشاركة",
+  "imagePresetTransparent": "PNG شفاف",
+  "imagePresetStore": "صور المتجر: ١٦٠٠ بكسل",
+  "imagePresetIcon": "حزمة أيقونات سطح المكتب",
+  "imageSavePreset": "حفظ الإعدادات الحالية",
+  "imagePresetName": "اسم الإعداد المحفوظ",
+  "imageImportPreset": "استيراد إعدادات JSON",
+  "imageExportPreset": "تصدير إعدادات JSON",
+  "imageDeletePreset": "حذف الإعدادات المحفوظة",
+  "imageHistory": "سجل المعالجة",
+  "imageClearHistory": "مسح السجل",
+  "imageHistoryHint": "يحفظ حتى ٢٠٠ نتيجة محليًا. مسح السجل لا يحذف ملفاتك.",
+  "imageRestore": "استعادة المصدر والإعدادات",
+  "imageEmptyHistory": "لا توجد نتائج محفوظة بعد.",
+  "imageWatch": "مراقبة مجلد",
+  "imageStopWatch": "إيقاف المراقبة",
+  "imageWatchInput": "اختيار مجلد للمراقبة",
+  "imageWatchHint": "أثناء فتح الصفحة، تتم معالجة الملفات الجديدة أو المتغيرة بعد استقرارها بإعدادات اللحظة الحالية. المجلدات الفرعية مستبعدة. يجب ألا يتداخل مجلدا الإدخال والإخراج.",
+  "imageTools": "الأدوات المحلية",
+  "imageOcr": "استخراج النص (OCR)",
+  "imageOcrLanguage": "لغة التعرف على النص",
+  "imageEnglish": "الإنجليزية",
+  "imageArabic": "العربية",
+  "imageArabicEnglish": "العربية والإنجليزية",
+  "imageOcrHint": "يتطلب تثبيت Tesseract محليًا مع بيانات اللغة المختارة. الصور تظل على جهازك.",
+  "imageCutout": "إزالة الخلفية",
+  "imageCutoutHint": "يتطلب rembg محليًا ونموذج u2net.onnx مثبتًا في U2NET_HOME. لا يتم تنزيل نموذج تلقائيًا.",
+  "imageCopyText": "نسخ النص",
+  "imageSaveText": "حفظ النص",
+  "imageToPdf": "إرسال الصور إلى PDF",
+  "imageFromPdf": "معالجة هذه الصور",
+  "imageResourceHint": "الحدود: ٦٤ ميبيبايت للملف، و٢٤ ميجابكسل للإطار، و٣٢ ميجابكسل إجماليًا، و١٢٠ إطارًا، و١٠٠٠ صورة بالقائمة. تُعالج الملفات بالتتابع.",
+  "imageInvalidInput": "الملف مفقود أو غير قابل للقراءة أو ليس صورة صالحة.",
+  "imageUnsupported": "صيغة الصورة غير مدعومة.",
+  "imageResourceLimit": "الصورة أو القائمة تتجاوز حدود الموارد المدعومة.",
+  "imageInvalidOptions": "راجع الأبعاد والقص والجودة ومتغيرات الأسماء وإعدادات المجلدات.",
+  "imagePermissionDenied": "تعذرت القراءة أو الكتابة في هذا المكان. اختر مجلدًا آخر.",
+  "imageDestinationConflict": "مكان الحفظ يتعارض مع المصدر أو ناتج آخر. اختر اسمًا مختلفًا.",
+  "imageSourceChanged": "تغير المصدر بعد الاستيراد. أعد استيراده قبل المعالجة.",
+  "imageEncodeFailed": "تعذرت معالجة الصورة أو حفظها. لم يتم استبدال المصدر.",
+  "imageInvalidPreset": "ملف الإعدادات غير صالح أو يستخدم إصدارًا غير مدعوم.",
+  "imageStorageFailed": "تعذر تحميل مساحة العمل المحلية أو حفظها. تم الحفاظ على البيانات المحفوظة السابقة.",
+  "imageToolUnavailable": "الأداة المحلية أو النموذج غير مثبت أو تعذر العثور عليه. راجع متطلبات الأداة.",
+  "imageToolFailed": "فشلت الأداة المحلية أو انتهت مهلة التشغيل. راجع التثبيت وملفات اللغة أو النموذج.",
+  "imageQueueCount": "{count} صورة",
+  "@imageQueueCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "imageProgressCount": "تمت معالجة {finished} / {total}",
+  "@imageProgressCount": {
+    "placeholders": {
+      "finished": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "imageDimensions": "{width} × {height} بكسل · {frames} إطار",
+  "@imageDimensions": {
+    "placeholders": {
+      "width": {
+        "type": "int"
+      },
+      "height": {
+        "type": "int"
+      },
+      "frames": {
+        "type": "int"
+      }
+    }
+  },
+  "imageResultStats": "{before} ← {after} · التوفير {savings}٪",
+  "@imageResultStats": {
+    "placeholders": {
+      "before": {
+        "type": "String"
+      },
+      "after": {
+        "type": "String"
+      },
+      "savings": {
+        "type": "String"
+      }
+    }
+  },
+  "imageSettingValue": "{label}: {value}",
+  "@imageSettingValue": {
+    "placeholders": {
+      "label": {
+        "type": "String"
+      },
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "imageWatchingPath": "مراقبة: {path}",
+  "@imageWatchingPath": {
+    "placeholders": {
+      "path": {
+        "type": "String"
+      }
+    }
+  },
+  "imageFileSize": "{value} {unit}",
+  "@imageFileSize": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      },
+      "unit": {
+        "type": "String"
+      }
+    }
+  },
+  "imageBytesUnit": "بايت",
+  "imageKbUnit": "كيبيبايت",
+  "imageMbUnit": "ميبيبايت",
+  "imageAssetScales": "تصدير أصول PNG: ‏1x / 2x / 3x",
+  "imageInterrupted": "غير مكتمل أو معلق — استعده لإعادة المحاولة",
+  "imageRenamePreset": "إعادة تسمية الإعدادات",
+  "imageDuplicatePreset": "نسخ الإعدادات",
+  "imageLastExport": "آخر تصدير محفوظ",
+  "imageStudioTitle": "استوديو الصور",
+  "imageStudioEdit": "تعديل",
+  "imageStudioExport": "تصدير",
+  "imageStudioPresets": "وصفات",
+  "imageStudioInspector": "على مقاسك",
+  "imageStudioInspectorHint": "كل التفاصيل قبل التصدير.",
+  "imageStudioLibrary": "صورك",
+  "imageStudioQueueEmpty": "لا توجد صور بعد",
+  "imageStudioQueuePrompt": "ستظهر صورك هنا بعد إضافتها.",
+  "imageStudioEmptyTitle": "مساحة جديدة لصورك.",
+  "imageStudioEmptyHint": "أفلت صورك هنا للبدء. صورة واحدة أو مجموعة كاملة.",
+  "imageStudioLocal": "المعالجة على جهازك",
+  "imageStudioReady": "جاهز للتصدير",
+  "imageStudioFit": "ملاءمة",
+  "imageStudioCompare": "مقارنة",
+  "imageStudioResult": "الناتج",
+  "imageStudioZoomIn": "تكبير",
+  "imageStudioZoomOut": "تصغير",
+  "imageStudioExportAll": "تصدير الكل",
+  "imageStudioMore": "خيارات أخرى",
+  "imageStudioImportOptions": "خيارات الاستيراد",
+  "imageStudioPreviewAction": "تحديث المعاينة",
+  "imageStudioSingleExport": "تصدير الصورة",
+  "imageStudioQuickPresets": "بداية مناسبة",
+  "imageStudioSavedPresets": "وصفاتك المحفوظة",
+  "imageStudioSelected": "الصورة المحددة",
+  "imageStudioInfo": "معلومات الصورة",
+  "imageStudioMoreFormats": "صيغ أخرى",
+  "imageStudioPercent": "{value}٪",
+  "@imageStudioPercent": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  }
 }

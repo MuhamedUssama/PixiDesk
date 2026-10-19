@@ -88,5 +88,274 @@
   "downloadOptionsMessage": "How would you like to save the images?",
   "combinedFolder": "Combined Folder",
   "separateZips": "Separate ZIPs",
-  "cancel": "Cancel"
+  "cancel": "Cancel",
+  "imageAddFiles": "Add images",
+  "imageAddFolder": "Add folder",
+  "imageAddRecursive": "Include subfolders",
+  "imagePaste": "Paste images or file paths",
+  "imageQueue": "Queue",
+  "imageSettings": "Settings",
+  "imagePreview": "Preview",
+  "imagePreviewHint": "Preview is a scaled still image. Export preserves supported animation.",
+  "imageBeforeAfter": "Before / after",
+  "imageAfter": "After",
+  "imageFit": "Fit view",
+  "imagePreviewError": "Unable to display this image. Try importing it again.",
+  "imageExport": "Export image",
+  "imageExportAll": "Export queue",
+  "imageExportTitle": "Save processed image",
+  "imageOutputFolder": "Output folder",
+  "imageRetryFailed": "Retry failed or cancelled",
+  "imageClearQueue": "Clear queue",
+  "imageRemove": "Remove image",
+  "imagePause": "Pause after current image",
+  "imageResume": "Resume queue",
+  "imageCancelled": "Cancelled",
+  "imagePending": "Pending",
+  "imageRunning": "Processing",
+  "imageCompleted": "Completed",
+  "imageFailed": "Failed",
+  "imageSkipped": "Skipped",
+  "imageImporting": "Inspecting images…",
+  "imageChoosing": "Choosing destination…",
+  "imageProcessing": "Processing images…",
+  "imagePreviewing": "Preparing preview…",
+  "imageRecognizing": "Recognizing text locally…",
+  "imageRemovingBackground": "Removing background locally…",
+  "imageResize": "Resize and crop",
+  "imageWidth": "Width (pixels)",
+  "imageHeight": "Height (pixels)",
+  "imageKeepOriginal": "Auto / original",
+  "imageResizeFit": "Fit within bounds",
+  "imageResizeFill": "Fill and crop",
+  "imageResizeStretch": "Stretch to size",
+  "imageAllowUpscale": "Allow upscaling",
+  "imageCropLeft": "Crop left (%)",
+  "imageCropTop": "Crop top (%)",
+  "imageCropWidth": "Crop width (%)",
+  "imageCropHeight": "Crop height (%)",
+  "imageSquareCrop": "Center square crop",
+  "imageResetCrop": "Reset crop",
+  "imageRotate": "Rotate 90°",
+  "imageFlipHorizontal": "Flip horizontally",
+  "imageFlipVertical": "Flip vertically",
+  "imageAdjustments": "Color adjustments",
+  "imageBrightness": "Brightness",
+  "imageContrast": "Contrast",
+  "imageSaturation": "Saturation",
+  "imageGrayscale": "Grayscale",
+  "imageReset": "Reset settings",
+  "imageUndo": "Undo",
+  "imageRedo": "Redo",
+  "imageCompression": "Encoding and compression",
+  "imageLossless": "Lossless WebP",
+  "imageLosslessHint": "PNG uses lossless optimization. Quality applies to JPEG and lossy WebP.",
+  "imageTargetSize": "Target size (KB, optional)",
+  "imageMinQuality": "Minimum quality",
+  "imageTargetHint": "Set a file size goal. If it cannot be reached, the result will tell you.",
+  "imageMetadata": "Metadata and animation",
+  "imageMetadataRemove": "Remove EXIF and text metadata",
+  "imageMetadataPreserve": "Preserve supported metadata",
+  "imageMetadataHint": "Orientation is normalized. ICC color profiles are retained where the format supports them; exact metadata preservation varies by codec.",
+  "imageAnimationPreserve": "Preserve supported animation",
+  "imageAnimationFirst": "Export first frame only",
+  "imageAlphaHint": "JPEG and BMP flatten transparency onto the selected background. Unsupported animation is flattened with a result notice.",
+  "imageBackground": "Background color (RRGGBB)",
+  "imageIconPack": "ICO pack: 16, 32, 48, 64, 128, 256 px",
+  "imageWatermark": "Watermark",
+  "imageWatermarkText": "Watermark text (Arabic or English)",
+  "imageWatermarkLogo": "Choose watermark image",
+  "imageWatermarkRemove": "Remove watermark image",
+  "imageOpacity": "Opacity",
+  "imageWatermarkScale": "Relative watermark size",
+  "imageTopLeft": "Top left",
+  "imageTopCenter": "Top center",
+  "imageTopRight": "Top right",
+  "imageCenterLeft": "Center left",
+  "imageCenter": "Center",
+  "imageCenterRight": "Center right",
+  "imageBottomLeft": "Bottom left",
+  "imageBottomCenter": "Bottom center",
+  "imageBottomRight": "Bottom right",
+  "imageNaming": "Output naming and conflicts",
+  "imageNamePattern": "Name pattern",
+  "imageNamePatternHint": "Tokens: '{'name'}', '{'index'}', '{'width'}', '{'height'}'. Dimensions reflect the final edits.",
+  "imageConflictRename": "Rename if a file exists",
+  "imageConflictSkip": "Skip existing files",
+  "imageConflictReplace": "Replace existing files",
+  "imageReplaceHint": "Replace overwrites existing exports. Original source files are always protected.",
+  "imageOpen": "Open result",
+  "imageReveal": "Show in folder",
+  "imageNoSavings": "The output is not smaller; requested edits and metadata settings were retained.",
+  "imageUnchanged": "The original was already smaller; an unchanged copy was saved.",
+  "imageTargetNotReached": "The target size could not be reached within the quality limit.",
+  "imageAnimationFlattened": "Only the first frame was exported.",
+  "imageAlphaFlattened": "Transparency was flattened onto the selected background.",
+  "imageMetadataLimited": "This codec preserves only limited metadata.",
+  "imagePresets": "Presets and recipes",
+  "imagePresetSharing": "JPEG for sharing",
+  "imagePresetTransparent": "Transparent PNG",
+  "imagePresetStore": "Store photos: 1600 px",
+  "imagePresetIcon": "Desktop icon pack",
+  "imageSavePreset": "Save current preset",
+  "imagePresetName": "Preset name",
+  "imageImportPreset": "Import preset JSON",
+  "imageExportPreset": "Export preset JSON",
+  "imageDeletePreset": "Delete preset",
+  "imageHistory": "Processing history",
+  "imageClearHistory": "Clear history",
+  "imageHistoryHint": "Stores up to 200 local results. Clearing history never deletes your files.",
+  "imageRestore": "Restore source and recipe",
+  "imageEmptyHistory": "No saved results yet.",
+  "imageWatch": "Watch folder",
+  "imageStopWatch": "Stop watching",
+  "imageWatchInput": "Choose input folder to watch",
+  "imageWatchHint": "While this page is open, new or changed stable files in the selected folder are processed with a snapshot of the current settings. Subfolders are excluded. Input and output folders must not overlap.",
+  "imageTools": "Local tools",
+  "imageOcr": "Extract text (OCR)",
+  "imageOcrLanguage": "OCR language",
+  "imageEnglish": "English",
+  "imageArabic": "Arabic",
+  "imageArabicEnglish": "Arabic and English",
+  "imageOcrHint": "Requires a local Tesseract installation with the selected language data. Images stay on your device.",
+  "imageCutout": "Remove background",
+  "imageCutoutHint": "Requires local rembg and a preinstalled u2net.onnx model in U2NET_HOME. No model is downloaded automatically.",
+  "imageCopyText": "Copy text",
+  "imageSaveText": "Save text",
+  "imageToPdf": "Send images to PDF",
+  "imageFromPdf": "Process these images",
+  "imageResourceHint": "Limits: 64 MiB input, 24 MP per frame, 32 MP total, 120 frames and 1000 queue items. Files are processed sequentially.",
+  "imageInvalidInput": "The file is missing, unreadable, or not a valid image.",
+  "imageUnsupported": "This image format is not supported.",
+  "imageResourceLimit": "The image or queue exceeds the supported resource limits.",
+  "imageInvalidOptions": "Check dimensions, crop, quality, naming tokens and folder settings.",
+  "imagePermissionDenied": "Unable to read or write this location. Choose another folder.",
+  "imageDestinationConflict": "The destination conflicts with a source or another output. Choose another name.",
+  "imageSourceChanged": "The source changed since import. Import it again before processing.",
+  "imageEncodeFailed": "Unable to process or save the image. Your source has not been replaced.",
+  "imageInvalidPreset": "This preset file is invalid or uses an unsupported version.",
+  "imageStorageFailed": "Unable to load or save the local workspace. Existing saved data was preserved.",
+  "imageToolUnavailable": "The required local tool or model is not installed or cannot be found. Check the tool requirements.",
+  "imageToolFailed": "The local tool failed or timed out. Check the installation and language/model files.",
+  "imageQueueCount": "{count} images",
+  "@imageQueueCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "imageProgressCount": "{finished} / {total} processed",
+  "@imageProgressCount": {
+    "placeholders": {
+      "finished": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "imageDimensions": "{width} × {height} px · {frames} frame(s)",
+  "@imageDimensions": {
+    "placeholders": {
+      "width": {
+        "type": "int"
+      },
+      "height": {
+        "type": "int"
+      },
+      "frames": {
+        "type": "int"
+      }
+    }
+  },
+  "imageResultStats": "{before} → {after} · {savings}% saved",
+  "@imageResultStats": {
+    "placeholders": {
+      "before": {
+        "type": "String"
+      },
+      "after": {
+        "type": "String"
+      },
+      "savings": {
+        "type": "String"
+      }
+    }
+  },
+  "imageSettingValue": "{label}: {value}",
+  "@imageSettingValue": {
+    "placeholders": {
+      "label": {
+        "type": "String"
+      },
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "imageWatchingPath": "Watching: {path}",
+  "@imageWatchingPath": {
+    "placeholders": {
+      "path": {
+        "type": "String"
+      }
+    }
+  },
+  "imageFileSize": "{value} {unit}",
+  "@imageFileSize": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      },
+      "unit": {
+        "type": "String"
+      }
+    }
+  },
+  "imageBytesUnit": "B",
+  "imageKbUnit": "KiB",
+  "imageMbUnit": "MiB",
+  "imageAssetScales": "Export PNG assets: 1x / 2x / 3x",
+  "imageInterrupted": "Interrupted or pending — restore to retry",
+  "imageRenamePreset": "Rename preset",
+  "imageDuplicatePreset": "Duplicate preset",
+  "imageLastExport": "Last saved export",
+  "imageStudioTitle": "Image studio",
+  "imageStudioEdit": "Adjust",
+  "imageStudioExport": "Export",
+  "imageStudioPresets": "Presets",
+  "imageStudioInspector": "Make it yours",
+  "imageStudioInspectorHint": "Fine-tune your next export.",
+  "imageStudioLibrary": "Your images",
+  "imageStudioQueueEmpty": "A little quiet here",
+  "imageStudioQueuePrompt": "Your images will appear here.",
+  "imageStudioEmptyTitle": "A fresh canvas.",
+  "imageStudioEmptyHint": "Drop your images here to start. A single shot or a whole collection.",
+  "imageStudioLocal": "Processed on your device",
+  "imageStudioReady": "Ready when you are",
+  "imageStudioFit": "Fit",
+  "imageStudioCompare": "Compare",
+  "imageStudioResult": "Result",
+  "imageStudioZoomIn": "Zoom in",
+  "imageStudioZoomOut": "Zoom out",
+  "imageStudioExportAll": "Export all",
+  "imageStudioMore": "More actions",
+  "imageStudioImportOptions": "Import options",
+  "imageStudioPreviewAction": "Update preview",
+  "imageStudioSingleExport": "Export image",
+  "imageStudioQuickPresets": "A good starting point",
+  "imageStudioSavedPresets": "Your recipes",
+  "imageStudioSelected": "Selected image",
+  "imageStudioInfo": "Image information",
+  "imageStudioMoreFormats": "More formats",
+  "imageStudioPercent": "{value}%",
+  "@imageStudioPercent": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  }
 }

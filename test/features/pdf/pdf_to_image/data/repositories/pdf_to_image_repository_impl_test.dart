@@ -1,9 +1,13 @@
+import 'package:pixi_desk/features/pdf/pdf_to_image/data/datasources/parallel_conversion_service.dart';
 import 'dart:io';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:pixi_desk/features/pdf/pdf_to_image/data/datasources/poppler_service.dart';
 import 'package:pixi_desk/features/pdf/pdf_to_image/data/repositories/pdf_to_image_repository_impl.dart';
 import 'package:path/path.dart' as path;
+
+class MockParallelConversionService extends Mock
+    implements ParallelConversionService {}
 
 class MockPopplerService extends Mock implements PopplerService {}
 
@@ -13,7 +17,10 @@ void main() {
 
   setUp(() {
     mockPopplerService = MockPopplerService();
-    repository = PdfToImageRepositoryImpl(mockPopplerService);
+    repository = PdfToImageRepositoryImpl(
+      mockPopplerService,
+      MockParallelConversionService(),
+    );
   });
 
   test('saveAsSeparateZips creates zip files for each group', () async {

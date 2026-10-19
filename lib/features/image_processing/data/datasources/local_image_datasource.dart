@@ -1,17 +1,18 @@
-import 'dart:io';
+import 'dart:typed_data';
+import '../../domain/entities/image_entity.dart';
+import '../../domain/entities/image_failure.dart';
+import '../../domain/entities/image_job.dart';
+import '../../domain/entities/image_recipe.dart';
 
-import 'package:pixi_desk/features/image_processing/domain/entities/image_format.dart';
-
-abstract class LocalImageDataSource {
-  Future<File> convertImage({
-    required File image,
-    required ImageFormat targetFormat,
-    required String destinationPath,
-  });
-
-  Future<File> compressImage({
-    required File image,
-    required int quality,
-    required String destinationPath,
-  });
+abstract interface class LocalImageDataSource {
+  Future<ImageEntity> inspect(String path, ImageCancellation cancellation);
+  Future<ImageResult> process(
+    ImageRequest request,
+    ImageCancellation cancellation,
+  );
+  Future<Uint8List> preview(
+    ImageEntity source,
+    ImageRecipe recipe,
+    ImageCancellation cancellation,
+  );
 }

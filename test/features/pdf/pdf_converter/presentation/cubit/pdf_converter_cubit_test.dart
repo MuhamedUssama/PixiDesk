@@ -25,25 +25,21 @@ void main() {
       'rotateImage increments quarterTurns correctly',
       build: () => cubit,
       act: (cubit) {
-        cubit.addImages([file]);
-        // Wait for addImages to emit
+        for (var i = 0; i < 4; i++) {
+          cubit.rotateImage('1');
+        }
       },
       seed: () => PdfConverterState(
         images: [PdfImageItem(id: '1', file: file, quarterTurns: 0)],
       ),
-      verify: (cubit) {
-        cubit.rotateImage('1');
-        expect(cubit.state.images.first.quarterTurns, 1);
-
-        cubit.rotateImage('1');
-        expect(cubit.state.images.first.quarterTurns, 2);
-
-        cubit.rotateImage('1');
-        expect(cubit.state.images.first.quarterTurns, 3);
-
-        cubit.rotateImage('1');
-        expect(cubit.state.images.first.quarterTurns, 0);
-      },
+      expect: () => [
+        for (final turns in [1, 2, 3, 0])
+          isA<PdfConverterState>().having(
+            (s) => s.images.single.quarterTurns,
+            'quarterTurns',
+            turns,
+          ),
+      ],
     );
   });
 }

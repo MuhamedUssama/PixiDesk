@@ -1,22 +1,22 @@
-import 'dart:io';
 import 'package:injectable/injectable.dart';
-import '../repositories/image_repository.dart';
+import '../entities/image_failure.dart';
+import '../entities/image_job.dart';
+import 'process_image_usecase.dart';
 
 @lazySingleton
 class CompressImageUseCase {
-  final ImageRepository _repository;
-
-  CompressImageUseCase(this._repository);
-
-  Future<File> call({
-    required File image,
-    required int quality,
-    required String destinationPath,
-  }) {
-    return _repository.compressImage(
-      image: image,
-      quality: quality,
-      destinationPath: destinationPath,
-    );
-  }
+  final ProcessImageUseCase _process;
+  CompressImageUseCase(this._process);
+  Future<ImageResult> call(ImageRequest request, ImageCancellation token) =>
+      _process(
+        ImageRequest(
+          source: request.source,
+          recipe: request.recipe,
+          destinationPath: request.destinationPath,
+          conflict: request.conflict,
+          keepSmaller: true,
+          protectedPaths: request.protectedPaths,
+        ),
+        token,
+      );
 }

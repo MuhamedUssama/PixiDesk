@@ -1,3 +1,4 @@
+import '../../../../../core/router/app_router.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -56,6 +57,23 @@ class _ReviewUiWidgetState extends State<ReviewUiWidget> {
                   Row(
                     spacing: 12,
                     children: [
+                      IconButton(
+                        tooltip: widget.l10n.imageFromPdf,
+                        icon: const Icon(Icons.tune),
+                        onPressed: () => Navigator.of(context).pushNamed(
+                          AppRouter.imageProcessingRoute,
+                          arguments: widget.state.generatedImages!
+                              .where(
+                                (file) =>
+                                    widget.state.selectedImagePaths.isEmpty ||
+                                    widget.state.selectedImagePaths.contains(
+                                      file.path,
+                                    ),
+                              )
+                              .map((file) => file.path)
+                              .toList(),
+                        ),
+                      ),
                       if (!_isGridView)
                         IconButton(
                           icon: const Icon(Icons.grid_view_rounded),

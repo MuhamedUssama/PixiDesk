@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pixi_desk/core/theme/app_colors.dart';
-import 'package:pixi_desk/features/image_processing/presentation/widgets/drop_zone_widget.dart';
+import 'package:pixi_desk/core/widgets/drop_zone_widget.dart';
 import 'package:pixi_desk/features/pdf/pdf_compression/presentation/cubit/pdf_compression_cubit.dart';
 import 'package:pixi_desk/features/pdf/pdf_compression/presentation/cubit/pdf_compression_state.dart';
 import 'package:pixi_desk/features/pdf/pdf_compression/presentation/widgets/compression_result_widget.dart';

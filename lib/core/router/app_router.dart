@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pixi_desk/core/di/injection.dart';
@@ -29,14 +30,30 @@ class AppRouter {
       case imageProcessingRoute:
         return MaterialPageRoute(
           builder: (context) => BlocProvider(
-            create: (context) => getIt<ImageCubit>(),
+            create: (context) {
+              final cubit = getIt<ImageCubit>();
+              cubit.initialize().then((_) {
+                if (!cubit.isClosed && settings.arguments is List<String>) {
+                  cubit.addImages(settings.arguments as List<String>);
+                }
+              });
+              return cubit;
+            },
             child: const ImageProcessingPage(),
           ),
         );
       case pdfConverterRoute:
         return MaterialPageRoute(
           builder: (context) => BlocProvider(
-            create: (context) => getIt<PdfConverterCubit>(),
+            create: (context) {
+              final cubit = getIt<PdfConverterCubit>();
+              if (settings.arguments is List<String>) {
+                cubit.addImages(
+                  (settings.arguments as List<String>).map(File.new).toList(),
+                );
+              }
+              return cubit;
+            },
             child: const PdfConverterPage(),
           ),
         );

@@ -10,7 +10,7 @@ import '../cubit/pdf_converter_state.dart';
 import '../widgets/image_grid_view.dart';
 import '../widgets/image_page_view.dart';
 import '../widgets/pdf_config_section.dart';
-import '../../../../image_processing/presentation/widgets/drop_zone_widget.dart';
+import '../../../../../core/widgets/drop_zone_widget.dart';
 
 class PdfConverterPage extends StatelessWidget {
   const PdfConverterPage({super.key});

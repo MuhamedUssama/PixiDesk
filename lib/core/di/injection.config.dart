@@ -1,5 +1,5 @@
-// dart format width=80
 // GENERATED CODE - DO NOT MODIFY BY HAND
+// dart format width=80
 
 // **************************************************************************
 // InjectableConfigGenerator
@@ -19,12 +19,28 @@ import '../../features/image_processing/data/datasources/local_image_datasource_
     as _i220;
 import '../../features/image_processing/data/repositories/image_repository_impl.dart'
     as _i246;
+import '../../features/image_processing/data/repositories/image_workspace_repository_impl.dart'
+    as _i399;
+import '../../features/image_processing/data/services/local_image_desktop_gateway.dart'
+    as _i386;
 import '../../features/image_processing/domain/repositories/image_repository.dart'
     as _i280;
+import '../../features/image_processing/domain/repositories/image_workspace_repository.dart'
+    as _i569;
+import '../../features/image_processing/domain/services/image_desktop_gateway.dart'
+    as _i968;
 import '../../features/image_processing/domain/usecases/compress_image_usecase.dart'
     as _i89;
 import '../../features/image_processing/domain/usecases/convert_image_usecase.dart'
     as _i750;
+import '../../features/image_processing/domain/usecases/image_desktop_usecase.dart'
+    as _i862;
+import '../../features/image_processing/domain/usecases/image_workspace_usecase.dart'
+    as _i1058;
+import '../../features/image_processing/domain/usecases/preview_image_usecase.dart'
+    as _i444;
+import '../../features/image_processing/domain/usecases/process_image_usecase.dart'
+    as _i510;
 import '../../features/image_processing/presentation/cubit/image_cubit.dart'
     as _i743;
 import '../../features/pdf/pdf_compression/data/datasources/ghostscript_compression_service.dart'
@@ -91,30 +107,33 @@ extension GetItInjectableX on _i174.GetIt {
       () => _i725.GhostscriptCompressionService(),
     );
     gh.factory<_i649.PopplerService>(() => _i649.PopplerService());
+    gh.lazySingleton<_i569.ImageWorkspaceRepository>(
+      () => _i399.ImageWorkspaceRepositoryImpl(),
+    );
     gh.lazySingleton<_i457.PdfCompressionRepository>(
       () => _i561.PdfCompressionRepositoryImpl(),
     );
     gh.lazySingleton<_i347.PdfRepository>(() => _i1022.PdfRepositoryImpl());
+    gh.factory<_i968.ImageDesktopGateway>(
+      () => _i386.LocalImageDesktopGateway(),
+    );
     gh.lazySingleton<_i495.LocalImageDataSource>(
       () => _i220.LocalImageDataSourceImpl(),
+    );
+    gh.lazySingleton<_i1058.ImageWorkspaceUseCase>(
+      () => _i1058.ImageWorkspaceUseCase(gh<_i569.ImageWorkspaceRepository>()),
     );
     gh.lazySingleton<_i674.SettingsRepository>(
       () => _i955.SettingsRepositoryImpl(gh<_i460.SharedPreferences>()),
     );
-    gh.lazySingleton<_i280.ImageRepository>(
-      () => _i246.ImageRepositoryImpl(gh<_i495.LocalImageDataSource>()),
-    );
     gh.factory<_i263.CompressPdfUseCase>(
       () => _i263.CompressPdfUseCase(gh<_i457.PdfCompressionRepository>()),
     );
-    gh.lazySingleton<_i89.CompressImageUseCase>(
-      () => _i89.CompressImageUseCase(gh<_i280.ImageRepository>()),
-    );
-    gh.lazySingleton<_i750.ConvertImageUseCase>(
-      () => _i750.ConvertImageUseCase(gh<_i280.ImageRepository>()),
-    );
     gh.factory<_i400.PdfCompressionCubit>(
       () => _i400.PdfCompressionCubit(gh<_i263.CompressPdfUseCase>()),
+    );
+    gh.lazySingleton<_i280.ImageRepository>(
+      () => _i246.ImageRepositoryImpl(gh<_i495.LocalImageDataSource>()),
     );
     gh.lazySingleton<_i104.PdfTaskManager>(
       () => _i104.PdfTaskManager(gh<_i649.PopplerService>()),
@@ -125,17 +144,14 @@ extension GetItInjectableX on _i174.GetIt {
         gh<_i104.PdfTaskManager>(),
       ),
     );
-    gh.factory<_i743.ImageCubit>(
-      () => _i743.ImageCubit(
-        gh<_i750.ConvertImageUseCase>(),
-        gh<_i89.CompressImageUseCase>(),
-      ),
-    );
     gh.factory<_i796.GeneratePdfUseCase>(
       () => _i796.GeneratePdfUseCase(gh<_i347.PdfRepository>()),
     );
     gh.factory<_i1023.PdfConverterCubit>(
       () => _i1023.PdfConverterCubit(gh<_i796.GeneratePdfUseCase>()),
+    );
+    gh.factory<_i862.ImageDesktopUseCase>(
+      () => _i862.ImageDesktopUseCase(gh<_i968.ImageDesktopGateway>()),
     );
     gh.factory<_i792.SettingsCubit>(
       () => _i792.SettingsCubit(gh<_i674.SettingsRepository>()),
@@ -145,6 +161,18 @@ extension GetItInjectableX on _i174.GetIt {
         gh<_i649.PopplerService>(),
         gh<_i626.ParallelConversionService>(),
       ),
+    );
+    gh.lazySingleton<_i444.PreviewImageUseCase>(
+      () => _i444.PreviewImageUseCase(gh<_i280.ImageRepository>()),
+    );
+    gh.lazySingleton<_i510.ProcessImageUseCase>(
+      () => _i510.ProcessImageUseCase(gh<_i280.ImageRepository>()),
+    );
+    gh.lazySingleton<_i89.CompressImageUseCase>(
+      () => _i89.CompressImageUseCase(gh<_i510.ProcessImageUseCase>()),
+    );
+    gh.lazySingleton<_i750.ConvertImageUseCase>(
+      () => _i750.ConvertImageUseCase(gh<_i510.ProcessImageUseCase>()),
     );
     gh.factory<_i719.SaveAsSeparateZipsUseCase>(
       () => _i719.SaveAsSeparateZipsUseCase(gh<_i114.PdfToImageRepository>()),
@@ -168,6 +196,16 @@ extension GetItInjectableX on _i174.GetIt {
         gh<_i423.SaveAsZipUseCase>(),
         gh<_i719.SaveAsSeparateZipsUseCase>(),
         gh<_i796.CancelConversionUseCase>(),
+      ),
+    );
+    gh.factory<_i743.ImageCubit>(
+      () => _i743.ImageCubit(
+        gh<_i510.ProcessImageUseCase>(),
+        gh<_i750.ConvertImageUseCase>(),
+        gh<_i89.CompressImageUseCase>(),
+        gh<_i444.PreviewImageUseCase>(),
+        gh<_i862.ImageDesktopUseCase>(),
+        gh<_i1058.ImageWorkspaceUseCase>(),
       ),
     );
     return this;

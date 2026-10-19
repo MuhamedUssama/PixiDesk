@@ -1,151 +1,114 @@
 import 'dart:io';
-import 'package:flutter/foundation.dart';
-import 'package:image/image.dart' as img;
-import 'package:flutter_image_compress/flutter_image_compress.dart';
+import 'dart:typed_data';
 import 'package:injectable/injectable.dart';
-import 'package:pixi_desk/features/image_processing/data/datasources/local_image_datasource.dart';
+import 'package:path/path.dart' as p;
+import '../../domain/entities/image_entity.dart';
+import '../../domain/entities/image_failure.dart';
 import '../../domain/entities/image_format.dart';
-
-class ImageProcessingParams {
-  final List<int> imageBytes;
-  final ImageFormat targetFormat;
-  final int quality;
-
-  ImageProcessingParams({
-    required this.imageBytes,
-    required this.targetFormat,
-    this.quality = 100,
-  });
-}
-
-Future<List<int>> processImageInIsolate(ImageProcessingParams params) async {
-  final decodedImage = img.decodeImage(Uint8List.fromList(params.imageBytes));
-
-  if (decodedImage == null) {
-    throw Exception('Failed to decode image');
-  }
-
-  List<int> encodedBytes;
-  switch (params.targetFormat) {
-    case ImageFormat.png:
-      encodedBytes = img.encodePng(decodedImage);
-      break;
-    case ImageFormat.jpg:
-    case ImageFormat.jpeg:
-      encodedBytes = img.encodeJpg(decodedImage, quality: params.quality);
-      break;
-    case ImageFormat.webp:
-      throw Exception(
-        'WebP encoding is not supported by the fallback encoder.',
-      );
-    case ImageFormat.bmp:
-      encodedBytes = img.encodeBmp(decodedImage);
-      break;
-    case ImageFormat.tiff:
-      encodedBytes = img.encodeTiff(decodedImage);
-      break;
-    case ImageFormat.ico:
-      encodedBytes = img.encodeIco(decodedImage);
-      break;
-    case ImageFormat.gif:
-      encodedBytes = img.encodeGif(decodedImage);
-      break;
-  }
-  return encodedBytes;
-}
+import '../../domain/entities/image_job.dart';
+import '../../domain/entities/image_recipe.dart';
+import '../services/image_output_writer.dart';
+import '../services/image_worker.dart';
+import '../services/text_watermark_renderer.dart';
+import 'local_image_datasource.dart';
 
 @LazySingleton(as: LocalImageDataSource)
 class LocalImageDataSourceImpl implements LocalImageDataSource {
+  final _writer = ImageOutputWriter();
   @override
-  Future<File> convertImage({
-    required File image,
-    required ImageFormat targetFormat,
-    required String destinationPath,
-  }) async {
-    final bytes = await image.readAsBytes();
+  Future<ImageEntity> inspect(String path, ImageCancellation cancellation) =>
+      runImageWorker<ImageEntity>(ImageWorkerTask(path), cancellation);
 
-    final encodedBytes = await compute(
-      processImageInIsolate,
-      ImageProcessingParams(imageBytes: bytes, targetFormat: targetFormat),
-    );
-
-    final newFile = File(destinationPath);
-    await newFile.writeAsBytes(encodedBytes);
-    return newFile;
-  }
-
-  @override
-  Future<File> compressImage({
-    required File image,
-    required int quality,
-    required String destinationPath,
-  }) async {
-    // Try using flutter_image_compress first
-    try {
-      final format = ImageFormat.fromPath(image.path);
-      CompressFormat compressFormat;
-
-      switch (format) {
-        case ImageFormat.jpg:
-        case ImageFormat.jpeg:
-          compressFormat = CompressFormat.jpeg;
-          break;
-        case ImageFormat.png:
-          compressFormat = CompressFormat.png;
-          break;
-        case ImageFormat.webp:
-          compressFormat = CompressFormat.webp;
-          break;
-        default:
-          // For other formats, use image package
-          return _compressWithImagePackage(image, quality, destinationPath);
-      }
-
-      final result = await FlutterImageCompress.compressAndGetFile(
-        image.absolute.path,
-        destinationPath,
-        quality: quality,
-        format: compressFormat,
-      );
-
-      if (result != null) {
-        final compressedFile = File(result.path);
-        final originalSize = await image.length();
-        final compressedSize = await compressedFile.length();
-
-        if (compressedSize >= originalSize) {
-          await image.copy(destinationPath);
-          return File(destinationPath);
-        }
-        return compressedFile;
-      } else {
-        return _compressWithImagePackage(image, quality, destinationPath);
-      }
-    } catch (e) {
-      // Fallback to image package
-      return _compressWithImagePackage(image, quality, destinationPath);
+  Future<void> _validateSource(ImageEntity source) async {
+    final stat = await File(source.path).stat();
+    if (stat.size != source.sizeInBytes ||
+        stat.modified.microsecondsSinceEpoch != source.modifiedMicros) {
+      throw const ImageFailure(ImageFailureCode.sourceChanged);
     }
   }
 
-  Future<File> _compressWithImagePackage(
-    File image,
-    int quality,
-    String destinationPath,
+  @override
+  Future<Uint8List> preview(
+    ImageEntity source,
+    ImageRecipe recipe,
+    ImageCancellation cancellation,
   ) async {
-    final bytes = await image.readAsBytes();
-    final format = ImageFormat.fromPath(destinationPath);
-
-    final encodedBytes = await compute(
-      processImageInIsolate,
-      ImageProcessingParams(
-        imageBytes: bytes,
-        targetFormat: format,
-        quality: quality,
-      ),
+    await _validateSource(source);
+    final text = await renderTextWatermark(recipe.watermarkText);
+    final rendered = await runImageWorker<EncodedImage>(
+      ImageWorkerTask(source.path, recipe: recipe, textWatermark: text),
+      cancellation,
     );
+    return rendered.thumbnail;
+  }
 
-    final newFile = File(destinationPath);
-    await newFile.writeAsBytes(encodedBytes);
-    return newFile;
+  @override
+  Future<ImageResult> process(
+    ImageRequest request,
+    ImageCancellation cancellation,
+  ) async {
+    final clock = Stopwatch()..start();
+    request.recipe.validate();
+    final source = request.source;
+    await _validateSource(source);
+    final format = request.recipe.format.canonical;
+    final ext = p
+        .extension(request.destinationPath)
+        .replaceFirst('.', '')
+        .toLowerCase();
+    // Never reinterpret the destination as a different codec.
+    if (ImageFormat.fromPath('image.$ext').canonical != format) {
+      throw const ImageFailure(ImageFailureCode.invalidOptions);
+    }
+    final text = await renderTextWatermark(request.recipe.watermarkText);
+    final rendered = await runImageWorker<EncodedImage>(
+      ImageWorkerTask(source.path, recipe: request.recipe, textWatermark: text),
+      cancellation,
+    );
+    await _validateSource(source);
+    cancellation.check();
+    var bytes = rendered.bytes;
+    final notices = [...rendered.notices];
+    final r = request.recipe;
+    final originalAllowed =
+        request.keepSmaller &&
+        source.format.canonical == format &&
+        r ==
+            ImageRecipe(
+              format: format,
+              quality: r.quality,
+              minQuality: r.minQuality,
+              metadata: MetadataPolicy.preserve,
+              webpLossless: r.webpLossless,
+            );
+    if (bytes.length >= source.sizeInBytes) {
+      if (originalAllowed) {
+        bytes = await File(source.path).readAsBytes();
+        notices.add(ImageNotice.unchanged);
+      } else if (request.keepSmaller) {
+        notices.add(ImageNotice.noSavings);
+      }
+    }
+    final path = await _writer.write(
+      source: source.path,
+      protectedPaths: request.protectedPaths,
+      destination: request.destinationPath,
+      bytes: bytes,
+      conflict: request.conflict,
+      cancellation: cancellation,
+    );
+    return ImageResult(
+      path: path ?? request.destinationPath,
+      originalBytes: source.sizeInBytes,
+      outputBytes: path == null ? 0 : bytes.length,
+      width: rendered.width,
+      height: rendered.height,
+      elapsed: clock.elapsed,
+      thumbnail: notices.contains(ImageNotice.unchanged)
+          ? source.thumbnail
+          : rendered.thumbnail,
+      notices: List.unmodifiable(notices),
+      skipped: path == null,
+    );
   }
 }
