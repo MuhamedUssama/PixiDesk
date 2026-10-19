@@ -1,4 +1,3 @@
-import 'dart:io';
 import 'package:injectable/injectable.dart';
 import 'package:pixi_desk/features/pdf/pdf_to_image/domain/repositories/pdf_to_image_repository.dart';
 
@@ -9,7 +8,7 @@ class SaveImagesUseCase {
   SaveImagesUseCase(this._repository);
 
   Future<void> call(
-    List<File> images,
+    List<String> images,
     String destinationPath,
     Map<String, int> rotations,
   ) {

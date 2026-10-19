@@ -1,8 +1,8 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:pixi_desk/features/pdf/pdf_to_image/presentation/cubit/pdf_to_image_cubit.dart';
-import 'package:pixi_desk/features/pdf/pdf_to_image/presentation/cubit/pdf_to_image_state.dart';
+import 'package:pixi_desk/features/pdf/pdf_to_image/presentation/bloc/pdf_to_image_bloc.dart';
+import 'package:pixi_desk/features/pdf/pdf_to_image/presentation/bloc/pdf_to_image_state.dart';
 import 'package:pixi_desk/l10n/localization/app_localizations.dart';
 
 class ImagePageView extends StatefulWidget {
@@ -40,7 +40,7 @@ class _ImagePageViewState extends State<ImagePageView> {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
 
-    return BlocBuilder<PdfToImageCubit, PdfToImageState>(
+    return BlocBuilder<PdfToImageBloc, PdfToImageState>(
       builder: (context, state) {
         return Stack(
           children: [
@@ -82,7 +82,10 @@ class _ImagePageViewState extends State<ImagePageView> {
                           turns: rotation / 4.0,
                           duration: const Duration(milliseconds: 300),
                           curve: Curves.easeInOut,
-                          child: Image.file(file, fit: BoxFit.contain),
+                          child: Image.file(
+                            File(state.previewPaths[file.path] ?? file.path),
+                            fit: BoxFit.contain,
+                          ),
                         ),
                       );
                     },
@@ -118,7 +121,7 @@ class _ImagePageViewState extends State<ImagePageView> {
                 child: FloatingActionButton.extended(
                   onPressed: () {
                     final currentFile = widget.images[_currentIndex];
-                    context.read<PdfToImageCubit>().rotateImage(
+                    context.read<PdfToImageBloc>().rotateImage(
                       currentFile.path,
                     );
                   },

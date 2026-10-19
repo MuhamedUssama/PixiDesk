@@ -1,0 +1,30 @@
+name: PdfiumBindings
+description: 'Selected public PDFium APIs from pinned chromium/8100 headers. Regenerate with dart run ffigen --config native/pdfium/ffigen.yaml.'
+output: ../../lib/features/pdf/pdf_to_image/data/pdfium/pdfium_bindings.dart
+headers:
+  entry-points:
+    - include/fpdfview.h
+    - include/fpdf_formfill.h
+functions:
+  include:
+    - 'FPDF_(InitLibrary|DestroyLibrary|LoadDocument|GetLastError|GetPageCount|LoadPage|ClosePage|CloseDocument|GetPageWidthF|GetPageHeightF|RenderPageBitmap|GetFormType)'
+    - 'FPDFBitmap_(Create|Destroy|FillRect|GetBuffer|GetStride)'
+    - 'FPDFDOC_(InitFormFillEnvironment|ExitFormFillEnvironment)'
+    - 'FORM_On(AfterLoadPage|BeforeClosePage)'
+    - 'FPDF_FFLDraw'
+macros:
+  exclude:
+    - '.*'
+enums:
+  exclude:
+    - '.*'
+preamble: |
+  // ignore_for_file: type=lint, unused_element, unused_field
+structs:
+  include:
+    - '_FPDF_FORMFILLINFO'
+    - '_FPDF_SYSTEMTIME'
+    - 'fpdf_.*'
+typedefs:
+  include:
+    - 'FPDF_.*'

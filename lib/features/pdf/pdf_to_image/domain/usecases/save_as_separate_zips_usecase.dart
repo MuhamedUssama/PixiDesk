@@ -1,4 +1,3 @@
-import 'dart:io';
 import 'package:injectable/injectable.dart';
 import 'package:pixi_desk/features/pdf/pdf_to_image/domain/repositories/pdf_to_image_repository.dart';
 
@@ -9,7 +8,7 @@ class SaveAsSeparateZipsUseCase {
   SaveAsSeparateZipsUseCase(this.repository);
 
   Future<void> call({
-    required Map<String, List<File>> groupedImages,
+    required Map<String, List<String>> groupedImages,
     required String destinationDirectory,
     Map<String, int>? rotations,
   }) async {

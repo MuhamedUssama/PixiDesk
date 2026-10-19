@@ -1,8 +1,8 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:pixi_desk/features/pdf/pdf_to_image/presentation/cubit/pdf_to_image_cubit.dart';
-import 'package:pixi_desk/features/pdf/pdf_to_image/presentation/cubit/pdf_to_image_state.dart';
+import 'package:pixi_desk/features/pdf/pdf_to_image/presentation/bloc/pdf_to_image_bloc.dart';
+import 'package:pixi_desk/features/pdf/pdf_to_image/presentation/bloc/pdf_to_image_state.dart';
 import 'package:pixi_desk/l10n/localization/app_localizations.dart';
 
 class ImageGridView extends StatelessWidget {
@@ -19,12 +19,12 @@ class ImageGridView extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
 
-    return BlocBuilder<PdfToImageCubit, PdfToImageState>(
+    return BlocBuilder<PdfToImageBloc, PdfToImageState>(
       builder: (context, state) {
         return GridView.builder(
           padding: const EdgeInsets.all(16),
-          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 4,
+          gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
+            maxCrossAxisExtent: 260,
             crossAxisSpacing: 16,
             mainAxisSpacing: 16,
             childAspectRatio: 0.8,
@@ -42,7 +42,7 @@ class ImageGridView extends StatelessWidget {
                     // If in selection mode (any selected), toggle selection
                     // Otherwise, open detail view
                     if (state.selectedImagePaths.isNotEmpty) {
-                      context.read<PdfToImageCubit>().toggleImageSelection(
+                      context.read<PdfToImageBloc>().toggleImageSelection(
                         file.path,
                       );
                     } else {
@@ -50,11 +50,13 @@ class ImageGridView extends StatelessWidget {
                     }
                   },
                   onLongPress: () {
-                    context.read<PdfToImageCubit>().toggleImageSelection(
+                    context.read<PdfToImageBloc>().toggleImageSelection(
                       file.path,
                     );
                   },
                   child: Container(
+                    width: double.infinity,
+                    height: double.infinity,
                     decoration: BoxDecoration(
                       border: isSelected
                           ? Border.all(
@@ -73,7 +75,7 @@ class ImageGridView extends StatelessWidget {
                         duration: const Duration(milliseconds: 300),
                         curve: Curves.easeInOut,
                         child: Image.file(
-                          file,
+                          File(state.thumbnailPaths[file.path] ?? file.path),
                           fit: BoxFit.contain,
                           cacheWidth: 400,
                         ),
@@ -86,7 +88,7 @@ class ImageGridView extends StatelessWidget {
                   right: 8,
                   child: GestureDetector(
                     onTap: () {
-                      context.read<PdfToImageCubit>().toggleImageSelection(
+                      context.read<PdfToImageBloc>().toggleImageSelection(
                         file.path,
                       );
                     },
@@ -120,7 +122,7 @@ class ImageGridView extends StatelessWidget {
                       foregroundColor: Colors.white,
                     ),
                     onPressed: () {
-                      context.read<PdfToImageCubit>().rotateImage(file.path);
+                      context.read<PdfToImageBloc>().rotateImage(file.path);
                     },
                   ),
                 ),

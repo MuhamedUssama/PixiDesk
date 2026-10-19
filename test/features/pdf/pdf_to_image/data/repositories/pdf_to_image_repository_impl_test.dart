@@ -1,26 +1,20 @@
-import 'package:pixi_desk/features/pdf/pdf_to_image/data/datasources/parallel_conversion_service.dart';
+import 'package:pixi_desk/features/pdf/pdf_to_image/data/pdfium/pdfium_conversion_service.dart';
 import 'dart:io';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
-import 'package:pixi_desk/features/pdf/pdf_to_image/data/datasources/poppler_service.dart';
 import 'package:pixi_desk/features/pdf/pdf_to_image/data/repositories/pdf_to_image_repository_impl.dart';
 import 'package:path/path.dart' as path;
 
-class MockParallelConversionService extends Mock
-    implements ParallelConversionService {}
-
-class MockPopplerService extends Mock implements PopplerService {}
+class MockPdfiumConversionService extends Mock
+    implements PdfiumConversionService {}
 
 void main() {
   late PdfToImageRepositoryImpl repository;
-  late MockPopplerService mockPopplerService;
+  late MockPdfiumConversionService mockConversionService;
 
   setUp(() {
-    mockPopplerService = MockPopplerService();
-    repository = PdfToImageRepositoryImpl(
-      mockPopplerService,
-      MockParallelConversionService(),
-    );
+    mockConversionService = MockPdfiumConversionService();
+    repository = PdfToImageRepositoryImpl(mockConversionService);
   });
 
   test('saveAsSeparateZips creates zip files for each group', () async {
@@ -33,8 +27,8 @@ void main() {
     final img2 = File(path.join(tempDir.path, 'img2.jpg'))..createSync();
 
     final groupedImages = {
-      sourceFile1.path: [img1],
-      sourceFile2.path: [img2],
+      sourceFile1.path: [img1.path],
+      sourceFile2.path: [img2.path],
     };
 
     final outputDir = await Directory.systemTemp.createTemp('test_output_');

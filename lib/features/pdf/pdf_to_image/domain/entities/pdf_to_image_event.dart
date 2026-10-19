@@ -1,4 +1,3 @@
-import 'dart:io';
 import 'package:equatable/equatable.dart';
 import 'package:pixi_desk/features/pdf/pdf_to_image/domain/entities/conversion_progress.dart';
 
@@ -19,11 +18,23 @@ class PdfToImageProgress extends PdfToImageEvent {
 }
 
 class PdfToImageCompleted extends PdfToImageEvent {
-  final List<File> images;
-  final Map<String, List<File>> groupedImages;
+  final List<String> imagePaths;
+  final Map<String, List<String>> groupedPaths;
 
-  const PdfToImageCompleted(this.images, {this.groupedImages = const {}});
+  final Map<String, String> previewPaths;
+  final Map<String, String> thumbnailPaths;
+  const PdfToImageCompleted(
+    this.imagePaths, {
+    this.groupedPaths = const {},
+    this.previewPaths = const {},
+    this.thumbnailPaths = const {},
+  });
 
   @override
-  List<Object?> get props => [images, groupedImages];
+  List<Object?> get props => [
+    imagePaths,
+    groupedPaths,
+    previewPaths,
+    thumbnailPaths,
+  ];
 }

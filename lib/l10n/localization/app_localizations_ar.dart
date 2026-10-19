@@ -975,4 +975,62 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get pdfExtractAction => 'استخرج صور الصفحات';
+
+  @override
+  String get pdfEngineUnavailable =>
+      'محرك PDF غير موجود أو غير متوافق. تحقّق من تثبيت ملفات PDFium.';
+
+  @override
+  String get pdfInvalidDocument =>
+      'تعذّر قراءة ملف PDF، أو أنه تالف أو يحتوي على نماذج غير مدعومة.';
+
+  @override
+  String get pdfPasswordRequired =>
+      'هذا الملف يحتاج إلى كلمة مرور. صدّر نسخة غير محمية وحاول مجددًا.';
+
+  @override
+  String get pdfInvalidSettings =>
+      'تحقّق من صيغة الإخراج والدقة والمستندات المحددة.';
+
+  @override
+  String get pdfResourceLimit =>
+      'هذه العملية تتجاوز حدود الصفحات أو الملفات أو الذاكرة. قلّل الدقة أو قسّم المستندات.';
+
+  @override
+  String get pdfSourceChanged =>
+      'تغيّر أحد الملفات أثناء تجهيزه. اختره مجددًا.';
+
+  @override
+  String get pdfWorkerFailed =>
+      'تعذّر تحويل المستند. لم يتم استبدال أي ملف أصلي.';
+
+  @override
+  String get pdfConversionTimedOut =>
+      'استغرق التحويل وقتًا أطول من المسموح وتوقّف. جرّب دقة أقل أو صفحات أقل.';
+
+  @override
+  String get pdfJobBusy =>
+      'توجد عملية تحويل قيد التشغيل. انتظر اكتمالها أو ألغِها.';
+
+  @override
+  String get pdfSaveFailed =>
+      'تعذّر حفظ كل النتائج. تحقّق من مجلد الحفظ والمساحة المتاحة.';
+
+  @override
+  String get pdfSaveZipTitle => 'حفظ الصفحات المحوّلة كملف ZIP';
+
+  @override
+  String get pdfClearAll => 'مسح الكل';
+
+  @override
+  String get pdfCancelling => 'جارٍ إيقاف التحويل…';
+
+  @override
+  String pdfDpiValue(int dpi) {
+    return '$dpi نقطة لكل بوصة';
+  }
+
+  @override
+  String get pdfPlatformUnsupported =>
+      'تحويل ملفات PDF على هذا الجهاز يتطلب macOS 13 أو أحدث.';
 }

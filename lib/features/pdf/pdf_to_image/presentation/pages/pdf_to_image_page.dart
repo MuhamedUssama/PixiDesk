@@ -1,173 +1,125 @@
-import 'dart:io';
-import 'package:desktop_drop/desktop_drop.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:pixi_desk/core/theme/app_colors.dart';
-import 'package:pixi_desk/features/pdf/pdf_to_image/presentation/cubit/pdf_to_image_cubit.dart';
-import 'package:pixi_desk/features/pdf/pdf_to_image/presentation/cubit/pdf_to_image_state.dart';
-import 'package:pixi_desk/features/pdf/pdf_to_image/presentation/widgets/conversion_settings_widget.dart';
-import 'package:pixi_desk/features/pdf/pdf_to_image/presentation/widgets/empty_state_widget.dart';
-import 'package:pixi_desk/features/pdf/pdf_to_image/presentation/widgets/pdf_to_image_appbar.dart';
-import 'package:pixi_desk/features/pdf/pdf_to_image/presentation/widgets/review_ui_widget.dart';
-import 'package:pixi_desk/features/pdf/pdf_to_image/presentation/widgets/selected_file_state.dart';
-import 'package:pixi_desk/l10n/localization/app_localizations.dart';
+import '../../../../../core/widgets/drop_zone_widget.dart';
+import '../../../../../l10n/localization/app_localizations.dart';
+import '../bloc/pdf_to_image_bloc.dart';
+import '../bloc/pdf_to_image_state.dart';
+import '../utils/pdf_failure_label.dart';
+import '../widgets/conversion_settings_widget.dart';
+import '../widgets/empty_state_widget.dart';
+import '../widgets/pdf_to_image_appbar.dart';
+import '../widgets/review_ui_widget.dart';
+import '../widgets/selected_file_state.dart';
 
 class PdfToImagePage extends StatelessWidget {
   const PdfToImagePage({super.key});
-
   @override
   Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context)!;
-
+    final localizations = AppLocalizations.of(context)!;
+    final bloc = context.read<PdfToImageBloc>();
     return Scaffold(
       appBar: const PdfToImageAppbar(),
-      body: BlocConsumer<PdfToImageCubit, PdfToImageState>(
+      body: BlocConsumer<PdfToImageBloc, PdfToImageState>(
+        listenWhen: (previous, current) =>
+            previous.messageId != current.messageId,
         listener: (context, state) {
-          if (state.status == PdfToImageStatus.error &&
-              state.errorMessage != null) {
+          if (state.failure != null) {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
-                content: Text(state.errorMessage!),
-                backgroundColor: AppColors.error,
+                content: Text(pdfFailureLabel(localizations, state.failure!)),
+                backgroundColor: Theme.of(context).colorScheme.error,
               ),
             );
-          } else if (state.status == PdfToImageStatus.savedSuccess &&
-              state.successMessage != null) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content: Text(state.successMessage!),
-                backgroundColor: Colors.green,
-              ),
-            );
+          } else if (state.success != null) {
+            ScaffoldMessenger.of(
+              context,
+            ).showSnackBar(SnackBar(content: Text(localizations.filesSaved)));
           }
         },
         builder: (context, state) {
-          return AnimatedSwitcher(
-            duration: const Duration(milliseconds: 500),
-            switchInCurve: Curves.easeInOut,
-            switchOutCurve: Curves.easeInOut,
-            child:
-                (state.status == PdfToImageStatus.review &&
-                    state.generatedImages != null)
-                ? ReviewUiWidget(
-                    key: const ValueKey('review'),
-                    state: state,
-                    l10n: l10n,
-                    onSaveAll: () =>
-                        context.read<PdfToImageCubit>().triggerSaveAll(),
-                  )
-                : Row(
-                    key: const ValueKey('main'),
+          if (state.generatedImages?.isNotEmpty ?? false) {
+            return ReviewUiWidget(
+              state: state,
+              l10n: localizations,
+              onSaveAll: bloc.triggerSaveAll,
+            );
+          }
+          final inputArea = DropZoneWidget(
+            enabled: !state.isBusy,
+            onDropped: (files) => bloc.selectFiles(
+              files
+                  .where((file) => file.path.toLowerCase().endsWith('.pdf'))
+                  .toList(),
+            ),
+            child: Center(
+              child: SingleChildScrollView(
+                padding: const EdgeInsets.all(24),
+                child: state.selectedFiles.isEmpty
+                    ? EmptyStateWidget(l10n: localizations)
+                    : SelectedFileState(state: state, l10n: localizations),
+              ),
+            ),
+          );
+          if (state.selectedFiles.isEmpty) return inputArea;
+          final inspector = Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              const ConversionSettingsWidget(),
+              const SizedBox(height: 16),
+              if (state.status == PdfToImageStatus.cancelling)
+                Padding(
+                  padding: const EdgeInsets.all(8),
+                  child: Text(localizations.pdfCancelling),
+                ),
+              Wrap(
+                spacing: 8,
+                runSpacing: 8,
+                children: [
+                  if (state.isBusy)
+                    OutlinedButton(
+                      onPressed: state.status == PdfToImageStatus.cancelling
+                          ? null
+                          : bloc.cancelConversion,
+                      child: Text(localizations.cancel),
+                    ),
+                  FilledButton.icon(
+                    onPressed: state.isBusy ? null : bloc.startConversion,
+                    icon: const Icon(Icons.image_outlined),
+                    label: Text(localizations.convert),
+                  ),
+                ],
+              ),
+            ],
+          );
+          return LayoutBuilder(
+            builder: (context, constraints) {
+              if (constraints.maxWidth < 850 || constraints.maxHeight < 400) {
+                return SingleChildScrollView(
+                  child: Column(
                     children: [
-                      Expanded(
-                        flex: 2,
-                        child: DropTarget(
-                          onDragDone: (details) {
-                            if (details.files.isNotEmpty) {
-                              final files = details.files
-                                  .map((f) => File(f.path))
-                                  .where(
-                                    (f) =>
-                                        f.path.toLowerCase().endsWith('.pdf'),
-                                  )
-                                  .toList();
-
-                              if (files.isNotEmpty) {
-                                context.read<PdfToImageCubit>().selectFiles(
-                                  files,
-                                );
-                              } else {
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(
-                                    content: Text(l10n.invalidPdfFile),
-                                    backgroundColor: AppColors.error,
-                                  ),
-                                );
-                              }
-                            }
-                          },
-                          child: Container(
-                            color: Colors.transparent,
-                            child: Center(
-                              child: state.selectedFiles.isEmpty
-                                  ? EmptyStateWidget(l10n: l10n)
-                                  : SelectedFileState(state: state, l10n: l10n),
-                            ),
-                          ),
-                        ),
+                      SizedBox(height: 280, child: inputArea),
+                      Padding(
+                        padding: const EdgeInsets.all(20),
+                        child: inspector,
                       ),
-                      if (state.selectedFiles.isNotEmpty)
-                        SizedBox(
-                              width: 300,
-                              child: Column(
-                                children: [
-                                  const ConversionSettingsWidget(),
-                                  const Spacer(),
-                                  Padding(
-                                    padding: const EdgeInsets.all(16.0),
-                                    child: SizedBox(
-                                      width: double.infinity,
-                                      child: Row(
-                                        children: [
-                                          if (state.status ==
-                                              PdfToImageStatus.converting)
-                                            Expanded(
-                                              child: Padding(
-                                                padding: const EdgeInsets.only(
-                                                  right: 8.0,
-                                                ),
-                                                child: ElevatedButton(
-                                                  onPressed: () {
-                                                    context
-                                                        .read<PdfToImageCubit>()
-                                                        .cancelConversion();
-                                                  },
-                                                  style:
-                                                      ElevatedButton.styleFrom(
-                                                        backgroundColor:
-                                                            AppColors.error,
-                                                        foregroundColor:
-                                                            Colors.white,
-                                                      ),
-                                                  child: Text(l10n.cancel),
-                                                ),
-                                              ),
-                                            ),
-                                          Expanded(
-                                            child: ElevatedButton(
-                                              onPressed:
-                                                  state.status ==
-                                                      PdfToImageStatus
-                                                          .converting
-                                                  ? null
-                                                  : () {
-                                                      context
-                                                          .read<
-                                                            PdfToImageCubit
-                                                          >()
-                                                          .startConversion();
-                                                    },
-                                              child: Text(l10n.convert),
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            )
-                            .animate()
-                            .slideX(
-                              begin: 1,
-                              end: 0,
-                              duration: 400.ms,
-                              curve: Curves.easeOutQuart,
-                            )
-                            .fadeIn(duration: 300.ms),
                     ],
                   ),
+                );
+              }
+              return Row(
+                children: [
+                  Expanded(child: inputArea),
+                  SizedBox(
+                    width: 340,
+                    child: SingleChildScrollView(
+                      padding: const EdgeInsets.all(20),
+                      child: inspector,
+                    ),
+                  ),
+                ],
+              );
+            },
           );
         },
       ),

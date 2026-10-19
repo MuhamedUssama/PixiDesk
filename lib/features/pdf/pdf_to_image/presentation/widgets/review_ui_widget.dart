@@ -3,11 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pixi_desk/core/theme/app_colors.dart';
-import 'package:pixi_desk/features/pdf/pdf_to_image/presentation/cubit/pdf_to_image_cubit.dart';
-import 'package:pixi_desk/features/pdf/pdf_to_image/presentation/cubit/pdf_to_image_state.dart';
+import 'package:pixi_desk/features/pdf/pdf_to_image/presentation/bloc/pdf_to_image_bloc.dart';
+import 'package:pixi_desk/features/pdf/pdf_to_image/presentation/bloc/pdf_to_image_state.dart';
 import 'package:pixi_desk/features/pdf/pdf_to_image/presentation/widgets/image_grid_view.dart';
 import 'package:pixi_desk/features/pdf/pdf_to_image/presentation/widgets/image_page_view.dart';
-import 'package:pixi_desk/core/utils/download_utils.dart';
+import '../utils/pdf_export_options_dialog.dart';
 import 'package:pixi_desk/l10n/localization/app_localizations.dart';
 
 class ReviewUiWidget extends StatefulWidget {
@@ -45,8 +45,11 @@ class _ReviewUiWidgetState extends State<ReviewUiWidget> {
             padding: const EdgeInsets.all(8.0),
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 12),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              child: Wrap(
+                alignment: WrapAlignment.spaceBetween,
+                spacing: 16,
+                runSpacing: 12,
+                crossAxisAlignment: WrapCrossAlignment.center,
                 children: [
                   Text(
                     widget.l10n.conversionResult,
@@ -54,25 +57,31 @@ class _ReviewUiWidgetState extends State<ReviewUiWidget> {
                       fontWeight: FontWeight.w600,
                     ),
                   ),
-                  Row(
+                  Wrap(
                     spacing: 12,
+                    runSpacing: 8,
+                    crossAxisAlignment: WrapCrossAlignment.center,
                     children: [
                       IconButton(
                         tooltip: widget.l10n.imageFromPdf,
                         icon: const Icon(Icons.tune),
-                        onPressed: () => Navigator.of(context).pushNamed(
-                          AppRouter.imageProcessingRoute,
-                          arguments: widget.state.generatedImages!
-                              .where(
-                                (file) =>
-                                    widget.state.selectedImagePaths.isEmpty ||
-                                    widget.state.selectedImagePaths.contains(
-                                      file.path,
-                                    ),
-                              )
-                              .map((file) => file.path)
-                              .toList(),
-                        ),
+                        onPressed: widget.state.isBusy
+                            ? null
+                            : () => Navigator.of(context).pushNamed(
+                                AppRouter.imageProcessingRoute,
+                                arguments: widget.state.generatedImages!
+                                    .where(
+                                      (file) =>
+                                          widget
+                                              .state
+                                              .selectedImagePaths
+                                              .isEmpty ||
+                                          widget.state.selectedImagePaths
+                                              .contains(file.path),
+                                    )
+                                    .map((file) => file.path)
+                                    .toList(),
+                              ),
                       ),
                       if (!_isGridView)
                         IconButton(
@@ -85,9 +94,13 @@ class _ReviewUiWidgetState extends State<ReviewUiWidget> {
                           },
                         ),
                       ElevatedButton.icon(
-                        onPressed: () {
-                          context.read<PdfToImageCubit>().saveAsZip();
-                        },
+                        onPressed: widget.state.isBusy
+                            ? null
+                            : () {
+                                context.read<PdfToImageBloc>().saveAsZip(
+                                  widget.l10n.pdfSaveZipTitle,
+                                );
+                              },
                         style: ElevatedButton.styleFrom(
                           minimumSize: const Size(0, 48),
                           padding: const EdgeInsets.symmetric(horizontal: 24),
@@ -96,15 +109,17 @@ class _ReviewUiWidgetState extends State<ReviewUiWidget> {
                         label: Text(widget.l10n.saveAsZip),
                       ),
                       ElevatedButton.icon(
-                        onPressed: () {
-                          DownloadUtils.handleDownloadFlow(
-                            context: context,
-                            cubit: context.read<PdfToImageCubit>(),
-                            l10n: widget.l10n,
-                            isMultipleFiles:
-                                widget.state.selectedFiles.length > 1,
-                          );
-                        },
+                        onPressed: widget.state.isBusy
+                            ? null
+                            : () {
+                                PdfExportOptionsDialog.show(
+                                  context: context,
+                                  bloc: context.read<PdfToImageBloc>(),
+                                  l10n: widget.l10n,
+                                  isMultipleFiles:
+                                      widget.state.selectedFiles.length > 1,
+                                );
+                              },
                         style: ElevatedButton.styleFrom(
                           minimumSize: const Size(0, 48),
                           padding: const EdgeInsets.symmetric(horizontal: 24),
@@ -146,9 +161,11 @@ class _ReviewUiWidgetState extends State<ReviewUiWidget> {
       floatingActionButton:
           _isGridView && widget.state.selectedImagePaths.isNotEmpty
           ? FloatingActionButton.extended(
-              onPressed: () {
-                context.read<PdfToImageCubit>().deleteSelectedImages();
-              },
+              onPressed: widget.state.isBusy
+                  ? null
+                  : () {
+                      context.read<PdfToImageBloc>().deleteSelectedImages();
+                    },
               backgroundColor: AppColors.error,
               icon: const Icon(Icons.delete, color: Colors.white),
               label: Text(

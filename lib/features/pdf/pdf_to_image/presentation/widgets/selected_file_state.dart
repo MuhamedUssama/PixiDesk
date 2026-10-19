@@ -4,8 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pixi_desk/core/theme/app_colors.dart';
-import 'package:pixi_desk/features/pdf/pdf_to_image/presentation/cubit/pdf_to_image_cubit.dart';
-import 'package:pixi_desk/features/pdf/pdf_to_image/presentation/cubit/pdf_to_image_state.dart';
+import 'package:pixi_desk/features/pdf/pdf_to_image/presentation/bloc/pdf_to_image_bloc.dart';
+import 'package:pixi_desk/features/pdf/pdf_to_image/presentation/bloc/pdf_to_image_state.dart';
 import 'package:pixi_desk/features/pdf/pdf_to_image/presentation/widgets/conversion_progress_widget.dart';
 import 'package:pixi_desk/l10n/localization/app_localizations.dart';
 
@@ -36,6 +36,7 @@ class SelectedFileState extends StatelessWidget {
                     .split(Platform.pathSeparator)
                     .last,
                 style: Theme.of(context).textTheme.headlineSmall,
+                textAlign: TextAlign.center,
               )
               .animate()
               .fadeIn(duration: 400.ms)
@@ -63,7 +64,7 @@ class SelectedFileState extends StatelessWidget {
                   trailing: IconButton(
                     icon: const Icon(Icons.close, size: 18),
                     onPressed: () =>
-                        context.read<PdfToImageCubit>().removeFile(file),
+                        context.read<PdfToImageBloc>().removeFile(file),
                   ),
                 );
               },
@@ -72,17 +73,19 @@ class SelectedFileState extends StatelessWidget {
         const SizedBox(height: 16),
         AnimatedSwitcher(
           duration: const Duration(milliseconds: 300),
-          child: state.status == PdfToImageStatus.converting
+          child:
+              (state.status == PdfToImageStatus.converting ||
+                  state.status == PdfToImageStatus.cancelling)
               ? SizedBox(
                   width: MediaQuery.of(context).size.width * .4,
                   child: const ConversionProgressWidget(),
                 )
               : TextButton.icon(
                   key: const ValueKey('clearAllButton'),
-                  onPressed: () => context.read<PdfToImageCubit>().clearFile(),
+                  onPressed: () => context.read<PdfToImageBloc>().clearFile(),
                   style: TextButton.styleFrom(foregroundColor: AppColors.error),
                   icon: const Icon(Icons.delete_sweep, color: AppColors.error),
-                  label: const Text('Clear All'),
+                  label: Text(l10n.pdfClearAll),
                 ),
         ),
       ],

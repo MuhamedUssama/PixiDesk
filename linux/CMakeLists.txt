@@ -127,5 +127,6 @@ if(NOT CMAKE_BUILD_TYPE MATCHES "Debug")
     COMPONENT Runtime)
 endif()
 
-set(PDFIUM_VERSION "4929" CACHE STRING "" FORCE)
-set(PDFIUM_ARCH "x64" CACHE STRING "" FORCE)
+
+# PixiDesk PDFium worker and verified desktop runtime.
+include("${CMAKE_CURRENT_SOURCE_DIR}/../native/pdfium/desktop.cmake")

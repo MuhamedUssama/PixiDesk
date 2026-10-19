@@ -46,3 +46,7 @@ app.*.map.json
 
 # Local architecture reviews and planning documents
 /docs/
+
+# Verified PDFium SDK downloads and generated worker artifacts
+/native/pdfium/runtime/
+/native/pdfium/worker/

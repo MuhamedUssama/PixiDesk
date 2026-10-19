@@ -7,7 +7,7 @@ class CancelConversionUseCase {
 
   CancelConversionUseCase(this._repository);
 
-  Future<void> call() async {
-    return _repository.cancelCurrentConversion();
+  Future<void> call(String jobId) async {
+    return _repository.cancelCurrentConversion(jobId);
   }
 }

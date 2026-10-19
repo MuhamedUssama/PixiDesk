@@ -10,7 +10,7 @@ import 'package:pixi_desk/features/pdf/pdf_compression/presentation/pages/pdf_co
 import 'package:pixi_desk/features/pdf/pdf_compression/presentation/pages/pdf_preview_page.dart';
 import 'package:pixi_desk/features/pdf/pdf_converter/presentation/cubit/pdf_converter_cubit.dart';
 import 'package:pixi_desk/features/pdf/pdf_converter/presentation/pages/pdf_converter_page.dart';
-import 'package:pixi_desk/features/pdf/pdf_to_image/presentation/cubit/pdf_to_image_cubit.dart';
+import 'package:pixi_desk/features/pdf/pdf_to_image/presentation/bloc/pdf_to_image_bloc.dart';
 import 'package:pixi_desk/features/pdf/pdf_to_image/presentation/pages/pdf_to_image_page.dart';
 import 'package:pixi_desk/features/pdf/pdf_tools_page.dart';
 
@@ -77,7 +77,7 @@ class AppRouter {
       case pdfToImageRoute:
         return MaterialPageRoute(
           builder: (context) => BlocProvider(
-            create: (context) => getIt<PdfToImageCubit>(),
+            create: (context) => getIt<PdfToImageBloc>(),
             child: const PdfToImagePage(),
           ),
         );

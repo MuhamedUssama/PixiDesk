@@ -390,5 +390,27 @@
   "pdfExtractDescription": "Give your pages a new format. Export PDF pages as images at your preferred resolution.",
   "pdfCreateAction": "Create a PDF",
   "pdfCompressAction": "Compress a document",
-  "pdfExtractAction": "Extract page images"
+  "pdfExtractAction": "Extract page images",
+  "pdfEngineUnavailable": "The PDF engine is missing or incompatible. Check the PDFium runtime installation.",
+  "pdfInvalidDocument": "This PDF is unreadable, damaged, or uses an unsupported form type.",
+  "pdfPasswordRequired": "This PDF requires a password. Export an unlocked copy and try again.",
+  "pdfInvalidSettings": "Check the output format, resolution, and selected documents.",
+  "pdfResourceLimit": "This job exceeds the supported page, file, or memory limits. Reduce the resolution or split the documents.",
+  "pdfSourceChanged": "A source file changed while it was being prepared. Select it again.",
+  "pdfWorkerFailed": "Unable to convert this document. No original files were replaced.",
+  "pdfConversionTimedOut": "Conversion took too long and was stopped. Try a lower resolution or fewer pages.",
+  "pdfJobBusy": "A conversion is already running. Wait for it to finish or cancel it.",
+  "pdfSaveFailed": "Unable to save all results. Check the destination folder and available space.",
+  "pdfSaveZipTitle": "Save converted pages as ZIP",
+  "pdfClearAll": "Clear all",
+  "pdfCancelling": "Stopping conversion…",
+  "pdfDpiValue": "{dpi} DPI",
+  "@pdfDpiValue": {
+    "placeholders": {
+      "dpi": {
+        "type": "int"
+      }
+    }
+  },
+  "pdfPlatformUnsupported": "PDF conversion requires macOS 13 or later on this device."
 }

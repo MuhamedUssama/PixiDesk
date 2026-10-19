@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:pixi_desk/features/pdf/pdf_to_image/presentation/cubit/pdf_to_image_cubit.dart';
-import 'package:pixi_desk/features/pdf/pdf_to_image/presentation/cubit/pdf_to_image_state.dart';
+import 'package:pixi_desk/features/pdf/pdf_to_image/presentation/bloc/pdf_to_image_bloc.dart';
+import 'package:pixi_desk/features/pdf/pdf_to_image/presentation/bloc/pdf_to_image_state.dart';
 import 'package:pixi_desk/l10n/localization/app_localizations.dart';
 
 class ConversionSettingsWidget extends StatelessWidget {
@@ -12,7 +12,7 @@ class ConversionSettingsWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
 
-    return BlocBuilder<PdfToImageCubit, PdfToImageState>(
+    return BlocBuilder<PdfToImageBloc, PdfToImageState>(
       builder: (context, state) {
         return Card(
           child: Padding(
@@ -26,6 +26,8 @@ class ConversionSettingsWidget extends StatelessWidget {
                 ),
                 const SizedBox(height: 16),
                 DropdownButtonFormField<String>(
+                  key: ValueKey(state.outputFormat),
+                  isExpanded: true,
                   decoration: InputDecoration(labelText: l10n.outputFormat),
                   initialValue: state.outputFormat,
                   items: ['jpg', 'png', 'tiff'].map((format) {
@@ -34,16 +36,19 @@ class ConversionSettingsWidget extends StatelessWidget {
                       child: Text(format.toUpperCase()),
                     );
                   }).toList(),
-                  onChanged: (value) {
-                    if (value != null) {
-                      context.read<PdfToImageCubit>().updateSettings(
-                        format: value,
-                      );
-                    }
-                  },
+                  onChanged: state.isBusy
+                      ? null
+                      : (value) {
+                          if (value != null) {
+                            context.read<PdfToImageBloc>().updateSettings(
+                              format: value,
+                            );
+                          }
+                        },
                 ),
                 const SizedBox(height: 16),
                 DropdownButtonFormField<int>(
+                  key: ValueKey(state.dpi),
                   isExpanded: true,
                   decoration: InputDecoration(labelText: l10n.qualityDpi),
                   initialValue: state.dpi,
@@ -51,18 +56,20 @@ class ConversionSettingsWidget extends StatelessWidget {
                     return DropdownMenuItem(
                       value: dpi,
                       child: Text(
-                        dpi == 1200 ? l10n.dpi1200Label : '$dpi DPI',
+                        dpi == 1200 ? l10n.dpi1200Label : l10n.pdfDpiValue(dpi),
                         overflow: TextOverflow.ellipsis,
                       ),
                     );
                   }).toList(),
-                  onChanged: (value) {
-                    if (value != null) {
-                      context.read<PdfToImageCubit>().updateSettings(
-                        dpi: value,
-                      );
-                    }
-                  },
+                  onChanged: state.isBusy
+                      ? null
+                      : (value) {
+                          if (value != null) {
+                            context.read<PdfToImageBloc>().updateSettings(
+                              dpi: value,
+                            );
+                          }
+                        },
                 ),
                 if (state.dpi == 1200) ...[
                   const SizedBox(height: 16),

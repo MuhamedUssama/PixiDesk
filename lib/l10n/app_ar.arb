@@ -380,5 +380,27 @@
   "pdfExtractDescription": "امنح صفحاتك صيغة جديدة. صدّر صفحات PDF كصور بالدقة التي تناسبك.",
   "pdfCreateAction": "أنشئ ملف PDF",
   "pdfCompressAction": "اضغط مستندًا",
-  "pdfExtractAction": "استخرج صور الصفحات"
+  "pdfExtractAction": "استخرج صور الصفحات",
+  "pdfEngineUnavailable": "محرك PDF غير موجود أو غير متوافق. تحقّق من تثبيت ملفات PDFium.",
+  "pdfInvalidDocument": "تعذّر قراءة ملف PDF، أو أنه تالف أو يحتوي على نماذج غير مدعومة.",
+  "pdfPasswordRequired": "هذا الملف يحتاج إلى كلمة مرور. صدّر نسخة غير محمية وحاول مجددًا.",
+  "pdfInvalidSettings": "تحقّق من صيغة الإخراج والدقة والمستندات المحددة.",
+  "pdfResourceLimit": "هذه العملية تتجاوز حدود الصفحات أو الملفات أو الذاكرة. قلّل الدقة أو قسّم المستندات.",
+  "pdfSourceChanged": "تغيّر أحد الملفات أثناء تجهيزه. اختره مجددًا.",
+  "pdfWorkerFailed": "تعذّر تحويل المستند. لم يتم استبدال أي ملف أصلي.",
+  "pdfConversionTimedOut": "استغرق التحويل وقتًا أطول من المسموح وتوقّف. جرّب دقة أقل أو صفحات أقل.",
+  "pdfJobBusy": "توجد عملية تحويل قيد التشغيل. انتظر اكتمالها أو ألغِها.",
+  "pdfSaveFailed": "تعذّر حفظ كل النتائج. تحقّق من مجلد الحفظ والمساحة المتاحة.",
+  "pdfSaveZipTitle": "حفظ الصفحات المحوّلة كملف ZIP",
+  "pdfClearAll": "مسح الكل",
+  "pdfCancelling": "جارٍ إيقاف التحويل…",
+  "pdfDpiValue": "{dpi} نقطة لكل بوصة",
+  "@pdfDpiValue": {
+    "placeholders": {
+      "dpi": {
+        "type": "int"
+      }
+    }
+  },
+  "pdfPlatformUnsupported": "تحويل ملفات PDF على هذا الجهاز يتطلب macOS 13 أو أحدث."
 }
