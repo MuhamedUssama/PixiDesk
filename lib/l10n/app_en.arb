@@ -412,5 +412,27 @@
       }
     }
   },
-  "pdfPlatformUnsupported": "PDF conversion requires macOS 13 or later on this device."
+  "pdfPlatformUnsupported": "PDF conversion requires macOS 13 or later on this device.",
+  "pdfDocuments": "Documents",
+  "pdfDocumentCount": "{count} selected",
+  "pdfDropMoreDocuments": "Drop more PDFs here, or use the upload button above.",
+  "pdfKeyboardNavigationHint": "Use the left and right arrow keys to browse pages.",
+  "pdfPageIndicator": "Page {current} of {total}",
+  "@pdfDocumentCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "@pdfPageIndicator": {
+    "placeholders": {
+      "current": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  }
 }

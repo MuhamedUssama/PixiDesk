@@ -402,5 +402,27 @@
       }
     }
   },
-  "pdfPlatformUnsupported": "تحويل ملفات PDF على هذا الجهاز يتطلب macOS 13 أو أحدث."
+  "pdfPlatformUnsupported": "تحويل ملفات PDF على هذا الجهاز يتطلب macOS 13 أو أحدث.",
+  "pdfDocuments": "المستندات",
+  "pdfDocumentCount": "تم اختيار {count}",
+  "pdfDropMoreDocuments": "اسحب ملفات PDF إضافية هنا، أو استخدم زر الإضافة بالأعلى.",
+  "pdfKeyboardNavigationHint": "استخدم سهمَي اليمين واليسار للتنقل بين الصفحات.",
+  "pdfPageIndicator": "صفحة {current} من {total}",
+  "@pdfDocumentCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "@pdfPageIndicator": {
+    "placeholders": {
+      "current": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  }
 }

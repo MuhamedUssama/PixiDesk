@@ -2017,6 +2017,36 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'PDF conversion requires macOS 13 or later on this device.'**
   String get pdfPlatformUnsupported;
+
+  /// No description provided for @pdfDocuments.
+  ///
+  /// In en, this message translates to:
+  /// **'Documents'**
+  String get pdfDocuments;
+
+  /// No description provided for @pdfDocumentCount.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} selected'**
+  String pdfDocumentCount(int count);
+
+  /// No description provided for @pdfDropMoreDocuments.
+  ///
+  /// In en, this message translates to:
+  /// **'Drop more PDFs here, or use the upload button above.'**
+  String get pdfDropMoreDocuments;
+
+  /// No description provided for @pdfKeyboardNavigationHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Use the left and right arrow keys to browse pages.'**
+  String get pdfKeyboardNavigationHint;
+
+  /// No description provided for @pdfPageIndicator.
+  ///
+  /// In en, this message translates to:
+  /// **'Page {current} of {total}'**
+  String pdfPageIndicator(int current, int total);
 }
 
 class _AppLocalizationsDelegate

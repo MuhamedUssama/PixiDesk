@@ -1,25 +1,19 @@
-import '../../../../../core/router/app_router.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:pixi_desk/core/theme/app_colors.dart';
-import 'package:pixi_desk/features/pdf/pdf_to_image/presentation/bloc/pdf_to_image_bloc.dart';
-import 'package:pixi_desk/features/pdf/pdf_to_image/presentation/bloc/pdf_to_image_state.dart';
-import 'package:pixi_desk/features/pdf/pdf_to_image/presentation/widgets/image_grid_view.dart';
-import 'package:pixi_desk/features/pdf/pdf_to_image/presentation/widgets/image_page_view.dart';
+import '../../../../../core/router/app_router.dart';
+import '../../../../../core/theme/app_surface_colors.dart';
+import '../../../../../core/theme/app_theme_metrics.dart';
+import '../../../../../l10n/localization/app_localizations.dart';
+import '../bloc/pdf_to_image_bloc.dart';
+import '../bloc/pdf_to_image_state.dart';
 import '../utils/pdf_export_options_dialog.dart';
-import 'package:pixi_desk/l10n/localization/app_localizations.dart';
+import 'image_grid_view.dart';
+import 'image_page_view.dart';
 
 class ReviewUiWidget extends StatefulWidget {
   final PdfToImageState state;
   final AppLocalizations l10n;
-  final Function() onSaveAll;
-  const ReviewUiWidget({
-    super.key,
-    required this.state,
-    required this.l10n,
-    required this.onSaveAll,
-  });
+  const ReviewUiWidget({super.key, required this.state, required this.l10n});
 
   @override
   State<ReviewUiWidget> createState() => _ReviewUiWidgetState();
@@ -31,149 +25,136 @@ class _ReviewUiWidgetState extends State<ReviewUiWidget> {
 
   @override
   Widget build(BuildContext context) {
-    if (widget.state.generatedImages == null ||
-        widget.state.generatedImages!.isEmpty) {
-      return const SizedBox.shrink();
-    }
-
-    return Scaffold(
-      backgroundColor: Colors.transparent,
-      body: Column(
-        children: [
-          // Top Bar
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 12),
-              child: Wrap(
-                alignment: WrapAlignment.spaceBetween,
-                spacing: 16,
-                runSpacing: 12,
-                crossAxisAlignment: WrapCrossAlignment.center,
-                children: [
-                  Text(
-                    widget.l10n.conversionResult,
-                    style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                  Wrap(
-                    spacing: 12,
-                    runSpacing: 8,
-                    crossAxisAlignment: WrapCrossAlignment.center,
-                    children: [
-                      IconButton(
-                        tooltip: widget.l10n.imageFromPdf,
-                        icon: const Icon(Icons.tune),
-                        onPressed: widget.state.isBusy
-                            ? null
-                            : () => Navigator.of(context).pushNamed(
-                                AppRouter.imageProcessingRoute,
-                                arguments: widget.state.generatedImages!
-                                    .where(
-                                      (file) =>
-                                          widget
-                                              .state
-                                              .selectedImagePaths
-                                              .isEmpty ||
-                                          widget.state.selectedImagePaths
-                                              .contains(file.path),
-                                    )
-                                    .map((file) => file.path)
-                                    .toList(),
-                              ),
-                      ),
-                      if (!_isGridView)
-                        IconButton(
-                          icon: const Icon(Icons.grid_view_rounded),
-                          tooltip: widget.l10n.gridView,
-                          onPressed: () {
-                            setState(() {
-                              _isGridView = true;
-                            });
-                          },
-                        ),
-                      ElevatedButton.icon(
-                        onPressed: widget.state.isBusy
-                            ? null
-                            : () {
-                                context.read<PdfToImageBloc>().saveAsZip(
-                                  widget.l10n.pdfSaveZipTitle,
-                                );
-                              },
-                        style: ElevatedButton.styleFrom(
-                          minimumSize: const Size(0, 48),
-                          padding: const EdgeInsets.symmetric(horizontal: 24),
-                        ),
-                        icon: const Icon(Icons.archive),
-                        label: Text(widget.l10n.saveAsZip),
-                      ),
-                      ElevatedButton.icon(
-                        onPressed: widget.state.isBusy
-                            ? null
-                            : () {
-                                PdfExportOptionsDialog.show(
-                                  context: context,
-                                  bloc: context.read<PdfToImageBloc>(),
-                                  l10n: widget.l10n,
-                                  isMultipleFiles:
-                                      widget.state.selectedFiles.length > 1,
-                                );
-                              },
-                        style: ElevatedButton.styleFrom(
-                          minimumSize: const Size(0, 48),
-                          padding: const EdgeInsets.symmetric(horizontal: 24),
-                        ),
-                        icon: const Icon(Icons.save),
-                        label: Text(widget.l10n.saveAll),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            ),
+    final images = widget.state.generatedImages;
+    if (images == null || images.isEmpty) return const SizedBox.shrink();
+    final surfaceColors = AppSurfaceColors.of(context);
+    final bloc = context.read<PdfToImageBloc>();
+    final actions = Wrap(
+      spacing: 8,
+      runSpacing: 8,
+      crossAxisAlignment: WrapCrossAlignment.center,
+      children: [
+        IconButton(
+          tooltip: widget.l10n.imageFromPdf,
+          icon: const Icon(Icons.tune_rounded),
+          onPressed: widget.state.isBusy
+              ? null
+              : () => Navigator.of(context).pushNamed(
+                  AppRouter.imageProcessingRoute,
+                  arguments: images
+                      .where(
+                        (file) =>
+                            widget.state.selectedImagePaths.isEmpty ||
+                            widget.state.selectedImagePaths.contains(file.path),
+                      )
+                      .map((file) => file.path)
+                      .toList(),
+                ),
+        ),
+        if (!_isGridView)
+          IconButton(
+            icon: const Icon(Icons.grid_view_rounded),
+            tooltip: widget.l10n.gridView,
+            onPressed: () => setState(() => _isGridView = true),
           ),
-
-          // Main Content
-          Expanded(
-            child: AnimatedSwitcher(
-              duration: const Duration(milliseconds: 300),
-              child: _isGridView
-                  ? ImageGridView(
-                      key: const ValueKey('gridView'),
-                      images: widget.state.generatedImages!,
-                      onImageTap: (index) {
-                        setState(() {
-                          _initialPageIndex = index;
-                          _isGridView = false;
-                        });
-                      },
-                    )
-                  : ImagePageView(
-                      key: const ValueKey('pageView'),
-                      images: widget.state.generatedImages!,
-                      initialIndex: _initialPageIndex,
-                    ),
-            ),
+        if (_isGridView && widget.state.selectedImagePaths.isNotEmpty)
+          OutlinedButton.icon(
+            onPressed: widget.state.isBusy ? null : bloc.deleteSelectedImages,
+            icon: const Icon(Icons.delete_outline_rounded, size: 18),
+            label: Text(widget.l10n.deleteSelected),
           ),
-        ],
-      ),
-      floatingActionButton:
-          _isGridView && widget.state.selectedImagePaths.isNotEmpty
-          ? FloatingActionButton.extended(
-              onPressed: widget.state.isBusy
-                  ? null
-                  : () {
-                      context.read<PdfToImageBloc>().deleteSelectedImages();
-                    },
-              backgroundColor: AppColors.error,
-              icon: const Icon(Icons.delete, color: Colors.white),
-              label: Text(
-                widget.l10n.deleteSelected,
-                style: const TextStyle(color: Colors.white),
+        OutlinedButton.icon(
+          onPressed: widget.state.isBusy
+              ? null
+              : () => bloc.saveAsZip(widget.l10n.pdfSaveZipTitle),
+          icon: const Icon(Icons.archive_outlined, size: 18),
+          label: Text(widget.l10n.saveAsZip),
+        ),
+        FilledButton.icon(
+          onPressed: widget.state.isBusy
+              ? null
+              : () => PdfExportOptionsDialog.show(
+                  context: context,
+                  bloc: bloc,
+                  l10n: widget.l10n,
+                  isMultipleFiles: widget.state.selectedFiles.length > 1,
+                ),
+          icon: const Icon(Icons.save_alt_rounded, size: 18),
+          label: Text(widget.l10n.saveAll),
+        ),
+      ],
+    );
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final isCompact = constraints.maxWidth < 850;
+        return Padding(
+          padding: EdgeInsets.fromLTRB(
+            isCompact ? 16 : 32,
+            16,
+            isCompact ? 16 : 32,
+            20,
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              if (isCompact)
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      widget.l10n.conversionResult,
+                      style: Theme.of(context).textTheme.titleLarge,
+                    ),
+                    const SizedBox(height: 12),
+                    actions,
+                  ],
+                )
+              else
+                Row(
+                  children: [
+                    Expanded(
+                      child: Text(
+                        widget.l10n.conversionResult,
+                        style: Theme.of(context).textTheme.titleLarge,
+                      ),
+                    ),
+                    Flexible(
+                      flex: 2,
+                      child: Align(
+                        alignment: AlignmentDirectional.centerEnd,
+                        child: actions,
+                      ),
+                    ),
+                  ],
+                ),
+              const SizedBox(height: 20),
+              Expanded(
+                child: _isGridView
+                    ? DecoratedBox(
+                        decoration: BoxDecoration(
+                          color: surfaceColors.canvasBackground,
+                          border: Border.all(color: surfaceColors.borderColor),
+                          borderRadius: BorderRadius.circular(
+                            AppThemeMetrics.cardRadius,
+                          ),
+                        ),
+                        child: ImageGridView(
+                          images: images,
+                          onImageTap: (pageIndex) => setState(() {
+                            _initialPageIndex = pageIndex;
+                            _isGridView = false;
+                          }),
+                        ),
+                      )
+                    : ImagePageView(
+                        images: images,
+                        initialIndex: _initialPageIndex,
+                      ),
               ),
-            ).animate().scale(duration: 300.ms, curve: Curves.easeOutBack)
-          : null,
+            ],
+          ),
+        );
+      },
     );
   }
 }

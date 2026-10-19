@@ -1038,4 +1038,25 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get pdfPlatformUnsupported =>
       'PDF conversion requires macOS 13 or later on this device.';
+
+  @override
+  String get pdfDocuments => 'Documents';
+
+  @override
+  String pdfDocumentCount(int count) {
+    return '$count selected';
+  }
+
+  @override
+  String get pdfDropMoreDocuments =>
+      'Drop more PDFs here, or use the upload button above.';
+
+  @override
+  String get pdfKeyboardNavigationHint =>
+      'Use the left and right arrow keys to browse pages.';
+
+  @override
+  String pdfPageIndicator(int current, int total) {
+    return 'Page $current of $total';
+  }
 }

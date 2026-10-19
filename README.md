@@ -52,6 +52,8 @@ PDF conversion uses pinned PDFium in isolated desktop helper processes, with
 Bloc and Freezed presentation state, bounded parallel work, true cancellation,
 PNG/JPEG/TIFF output, and collision-safe exports. It does not use `printing`
 for rendering. The existing image-to-PDF feature still uses that package.
+The review page supports left/right keyboard navigation in the current language
+direction, with themed navigation and rotation controls below the preview.
 
 Before source-mode PDF tests or development, download the verified host runtime
 (no compilation):

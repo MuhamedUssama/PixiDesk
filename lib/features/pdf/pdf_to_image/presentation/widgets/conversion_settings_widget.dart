@@ -18,7 +18,7 @@ class ConversionSettingsWidget extends StatelessWidget {
           child: Padding(
             padding: const EdgeInsets.all(16.0),
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 Text(
                   l10n.conversionSettings,
@@ -104,6 +104,29 @@ class ConversionSettingsWidget extends StatelessWidget {
                         duration: 300.ms,
                         curve: Curves.easeOut,
                       ),
+                ],
+                const SizedBox(height: 24),
+                const Divider(),
+                const SizedBox(height: 20),
+                FilledButton.icon(
+                  onPressed: state.isBusy || state.selectedFiles.isEmpty
+                      ? null
+                      : context.read<PdfToImageBloc>().startConversion,
+                  icon: const Icon(Icons.image_outlined, size: 18),
+                  label: Text(l10n.convert),
+                ),
+                if (state.isBusy) ...[
+                  const SizedBox(height: 8),
+                  OutlinedButton(
+                    onPressed: state.status == PdfToImageStatus.cancelling
+                        ? null
+                        : context.read<PdfToImageBloc>().cancelConversion,
+                    child: Text(
+                      state.status == PdfToImageStatus.cancelling
+                          ? l10n.pdfCancelling
+                          : l10n.cancel,
+                    ),
+                  ),
                 ],
               ],
             ),

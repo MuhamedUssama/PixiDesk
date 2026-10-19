@@ -1,4 +1,6 @@
 import 'dart:io';
+import '../../../../../core/theme/app_surface_colors.dart';
+import '../../../../../core/theme/app_theme_metrics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pixi_desk/features/pdf/pdf_to_image/presentation/bloc/pdf_to_image_bloc.dart';
@@ -17,6 +19,7 @@ class ImageGridView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final surfaceColors = AppSurfaceColors.of(context);
     final l10n = AppLocalizations.of(context)!;
 
     return BlocBuilder<PdfToImageBloc, PdfToImageState>(
@@ -63,13 +66,15 @@ class ImageGridView extends StatelessWidget {
                               color: Theme.of(context).primaryColor,
                               width: 3,
                             )
-                          : Border.all(
-                              color: Colors.grey.withValues(alpha: 0.3),
-                            ),
-                      borderRadius: BorderRadius.circular(8),
+                          : Border.all(color: surfaceColors.borderColor),
+                      borderRadius: BorderRadius.circular(
+                        AppThemeMetrics.controlRadius,
+                      ),
                     ),
                     child: ClipRRect(
-                      borderRadius: BorderRadius.circular(5),
+                      borderRadius: BorderRadius.circular(
+                        AppThemeMetrics.controlRadius - 1,
+                      ),
                       child: AnimatedRotation(
                         turns: rotation / 4.0,
                         duration: const Duration(milliseconds: 300),
@@ -118,12 +123,17 @@ class ImageGridView extends StatelessWidget {
                     icon: const Icon(Icons.rotate_right),
                     tooltip: l10n.rotateRight,
                     style: IconButton.styleFrom(
-                      backgroundColor: Colors.black54,
-                      foregroundColor: Colors.white,
+                      backgroundColor: surfaceColors.panelBackground,
+                      foregroundColor: surfaceColors.primaryText,
+                      side: BorderSide(color: surfaceColors.borderColor),
                     ),
-                    onPressed: () {
-                      context.read<PdfToImageBloc>().rotateImage(file.path);
-                    },
+                    onPressed: state.isBusy
+                        ? null
+                        : () {
+                            context.read<PdfToImageBloc>().rotateImage(
+                              file.path,
+                            );
+                          },
                   ),
                 ),
               ],

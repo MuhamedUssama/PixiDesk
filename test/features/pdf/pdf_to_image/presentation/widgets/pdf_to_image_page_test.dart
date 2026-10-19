@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:pixi_desk/features/pdf/pdf_to_image/presentation/widgets/conversion_settings_widget.dart';
 import 'package:image/image.dart' as image_codec;
 import 'package:pixi_desk/features/pdf/pdf_to_image/presentation/widgets/image_page_view.dart';
 import 'package:bloc_test/bloc_test.dart';
@@ -78,6 +79,12 @@ void main() {
                   supportedLocales: AppLocalizations.supportedLocales,
                   localizationsDelegates:
                       AppLocalizations.localizationsDelegates,
+                  builder: (context, child) => MediaQuery(
+                    data: MediaQuery.of(context).copyWith(
+                      textScaler: TextScaler.linear(size.width < 400 ? 1.3 : 1),
+                    ),
+                    child: child!,
+                  ),
                   home: const PdfToImagePage(),
                 ),
               ),
@@ -85,6 +92,21 @@ void main() {
             await tester.pump();
             await tester.pump(const Duration(seconds: 1));
             expect(tester.takeException(), isNull);
+            if (state.selectedFiles.isNotEmpty &&
+                state.status != PdfToImageStatus.review) {
+              final documentsBounds = tester.getRect(
+                find.byKey(const ValueKey('pdfDocumentsPanel')),
+              );
+              final settingsBounds = tester.getRect(
+                find.byType(ConversionSettingsWidget),
+              );
+              if (size.width >= 850) {
+                expect(documentsBounds.top, closeTo(settingsBounds.top, 1));
+                expect(documentsBounds.top, lessThan(250));
+              } else {
+                expect(settingsBounds.top, greaterThan(documentsBounds.bottom));
+              }
+            }
             if (state.status == PdfToImageStatus.review) {
               final gridImage = tester.widget<Image>(find.byType(Image).first);
               final thumbnail =
