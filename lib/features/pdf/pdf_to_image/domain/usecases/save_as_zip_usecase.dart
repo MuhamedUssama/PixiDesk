@@ -1,4 +1,3 @@
-import 'dart:io';
 import 'package:injectable/injectable.dart';
 
 import '../repositories/pdf_to_image_repository.dart';
@@ -10,7 +9,7 @@ class SaveAsZipUseCase {
   SaveAsZipUseCase(this.repository);
 
   Future<void> call({
-    required List<File> images,
+    required List<String> images,
     required String destinationPath,
     Map<String, int>? rotations,
   }) async {

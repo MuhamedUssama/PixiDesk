@@ -25,7 +25,6 @@ Requires Flutter **3.44 or newer** and Dart **3.12 or newer**. Native validation
 flutter pub get
 flutter gen-l10n
 dart run build_runner build
-flutter run -d macos
 ```
 
 The feature inherits PixiDesk's light/dark theme. All product copy is maintained in `lib/l10n/app_en.arb` and `lib/l10n/app_ar.arb`.
@@ -43,7 +42,27 @@ Presets, up to 200 completed results, and up to 1000 pending recovery records ar
 ```sh
 dart analyze lib test
 flutter test --no-pub
-flutter build macos --release --no-pub
 ```
 
 Local review documents and design captures under `docs/` are intentionally excluded from Git.
+
+## PDF to images
+
+PDF conversion uses pinned PDFium in isolated desktop helper processes, with
+Bloc and Freezed presentation state, bounded parallel work, true cancellation,
+PNG/JPEG/TIFF output, and collision-safe exports. It does not use `printing`
+for rendering. The existing image-to-PDF feature still uses that package.
+The review page supports left/right keyboard navigation in the current language
+direction, with themed navigation and rotation controls below the preview.
+
+Before source-mode PDF tests or development, download the verified host runtime
+(no compilation):
+
+```sh
+python3 tool/prepare_pdfium.py --target host
+```
+
+See [PDFium packaging and architecture](native/pdfium/README.md) for platform
+setup, notices, limits, and verification scope. Runtime downloads are ignored;
+production bundles carry their own PDFium library and AOT helper. Application
+builds and helper compilation require an explicit user request in this workspace.

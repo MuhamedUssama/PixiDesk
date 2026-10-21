@@ -980,4 +980,83 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get pdfExtractAction => 'Extract page images';
+
+  @override
+  String get pdfEngineUnavailable =>
+      'The PDF engine is missing or incompatible. Check the PDFium runtime installation.';
+
+  @override
+  String get pdfInvalidDocument =>
+      'This PDF is unreadable, damaged, or uses an unsupported form type.';
+
+  @override
+  String get pdfPasswordRequired =>
+      'This PDF requires a password. Export an unlocked copy and try again.';
+
+  @override
+  String get pdfInvalidSettings =>
+      'Check the output format, resolution, and selected documents.';
+
+  @override
+  String get pdfResourceLimit =>
+      'This job exceeds the supported page, file, or memory limits. Reduce the resolution or split the documents.';
+
+  @override
+  String get pdfSourceChanged =>
+      'A source file changed while it was being prepared. Select it again.';
+
+  @override
+  String get pdfWorkerFailed =>
+      'Unable to convert this document. No original files were replaced.';
+
+  @override
+  String get pdfConversionTimedOut =>
+      'Conversion took too long and was stopped. Try a lower resolution or fewer pages.';
+
+  @override
+  String get pdfJobBusy =>
+      'A conversion is already running. Wait for it to finish or cancel it.';
+
+  @override
+  String get pdfSaveFailed =>
+      'Unable to save all results. Check the destination folder and available space.';
+
+  @override
+  String get pdfSaveZipTitle => 'Save converted pages as ZIP';
+
+  @override
+  String get pdfClearAll => 'Clear all';
+
+  @override
+  String get pdfCancelling => 'Stopping conversion…';
+
+  @override
+  String pdfDpiValue(int dpi) {
+    return '$dpi DPI';
+  }
+
+  @override
+  String get pdfPlatformUnsupported =>
+      'PDF conversion requires macOS 13 or later on this device.';
+
+  @override
+  String get pdfDocuments => 'Documents';
+
+  @override
+  String pdfDocumentCount(int count) {
+    return '$count selected';
+  }
+
+  @override
+  String get pdfDropMoreDocuments =>
+      'Drop more PDFs here, or use the upload button above.';
+
+  @override
+  String get pdfKeyboardNavigationHint =>
+      'Use the left and right arrow keys to browse pages.';
+
+  @override
+  String pdfPageIndicator(int current, int total) {
+    return 'Page $current of $total';
+  }
 }

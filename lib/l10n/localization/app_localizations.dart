@@ -1927,6 +1927,126 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Extract page images'**
   String get pdfExtractAction;
+
+  /// No description provided for @pdfEngineUnavailable.
+  ///
+  /// In en, this message translates to:
+  /// **'The PDF engine is missing or incompatible. Check the PDFium runtime installation.'**
+  String get pdfEngineUnavailable;
+
+  /// No description provided for @pdfInvalidDocument.
+  ///
+  /// In en, this message translates to:
+  /// **'This PDF is unreadable, damaged, or uses an unsupported form type.'**
+  String get pdfInvalidDocument;
+
+  /// No description provided for @pdfPasswordRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'This PDF requires a password. Export an unlocked copy and try again.'**
+  String get pdfPasswordRequired;
+
+  /// No description provided for @pdfInvalidSettings.
+  ///
+  /// In en, this message translates to:
+  /// **'Check the output format, resolution, and selected documents.'**
+  String get pdfInvalidSettings;
+
+  /// No description provided for @pdfResourceLimit.
+  ///
+  /// In en, this message translates to:
+  /// **'This job exceeds the supported page, file, or memory limits. Reduce the resolution or split the documents.'**
+  String get pdfResourceLimit;
+
+  /// No description provided for @pdfSourceChanged.
+  ///
+  /// In en, this message translates to:
+  /// **'A source file changed while it was being prepared. Select it again.'**
+  String get pdfSourceChanged;
+
+  /// No description provided for @pdfWorkerFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Unable to convert this document. No original files were replaced.'**
+  String get pdfWorkerFailed;
+
+  /// No description provided for @pdfConversionTimedOut.
+  ///
+  /// In en, this message translates to:
+  /// **'Conversion took too long and was stopped. Try a lower resolution or fewer pages.'**
+  String get pdfConversionTimedOut;
+
+  /// No description provided for @pdfJobBusy.
+  ///
+  /// In en, this message translates to:
+  /// **'A conversion is already running. Wait for it to finish or cancel it.'**
+  String get pdfJobBusy;
+
+  /// No description provided for @pdfSaveFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Unable to save all results. Check the destination folder and available space.'**
+  String get pdfSaveFailed;
+
+  /// No description provided for @pdfSaveZipTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Save converted pages as ZIP'**
+  String get pdfSaveZipTitle;
+
+  /// No description provided for @pdfClearAll.
+  ///
+  /// In en, this message translates to:
+  /// **'Clear all'**
+  String get pdfClearAll;
+
+  /// No description provided for @pdfCancelling.
+  ///
+  /// In en, this message translates to:
+  /// **'Stopping conversion…'**
+  String get pdfCancelling;
+
+  /// No description provided for @pdfDpiValue.
+  ///
+  /// In en, this message translates to:
+  /// **'{dpi} DPI'**
+  String pdfDpiValue(int dpi);
+
+  /// No description provided for @pdfPlatformUnsupported.
+  ///
+  /// In en, this message translates to:
+  /// **'PDF conversion requires macOS 13 or later on this device.'**
+  String get pdfPlatformUnsupported;
+
+  /// No description provided for @pdfDocuments.
+  ///
+  /// In en, this message translates to:
+  /// **'Documents'**
+  String get pdfDocuments;
+
+  /// No description provided for @pdfDocumentCount.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} selected'**
+  String pdfDocumentCount(int count);
+
+  /// No description provided for @pdfDropMoreDocuments.
+  ///
+  /// In en, this message translates to:
+  /// **'Drop more PDFs here, or use the upload button above.'**
+  String get pdfDropMoreDocuments;
+
+  /// No description provided for @pdfKeyboardNavigationHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Use the left and right arrow keys to browse pages.'**
+  String get pdfKeyboardNavigationHint;
+
+  /// No description provided for @pdfPageIndicator.
+  ///
+  /// In en, this message translates to:
+  /// **'Page {current} of {total}'**
+  String pdfPageIndicator(int current, int total);
 }
 
 class _AppLocalizationsDelegate

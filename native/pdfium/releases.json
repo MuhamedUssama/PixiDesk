@@ -1,0 +1,11 @@
+{
+  "revision": "chromium/8100",
+  "source": "https://github.com/bblanchon/pdfium-binaries",
+  "targets": {
+    "macos": {"archive": "pdfium-mac-univ.tgz", "sha256": "f1c4b41e4b3d875b35ab29dbb366277af3ff99db13b7b1aaf0295a4e9da4e1d0", "library": "lib/libpdfium.dylib"},
+    "linux-x64": {"archive": "pdfium-linux-x64.tgz", "sha256": "1c1894a12d4d96ee01400c3874444126254180c5c7d2ab628576b67f8120320a", "library": "lib/libpdfium.so"},
+    "linux-arm64": {"archive": "pdfium-linux-arm64.tgz", "sha256": "58c87a95a40a24c914a9c755fae798843f46f06adf9e5e9f2c893302d4bdb040", "library": "lib/libpdfium.so"},
+    "windows-x64": {"archive": "pdfium-win-x64.tgz", "sha256": "51621bcc1d9be9ea448f4b84b0516862b928e3968d3fca899af1a6d6e2848d6d", "library": "bin/pdfium.dll"},
+    "windows-arm64": {"archive": "pdfium-win-arm64.tgz", "sha256": "cca9b28d406ae2a902b0b710a92ab699c4c2931564ab6efe44630014d492a9ca", "library": "bin/pdfium.dll"}
+  }
+}
