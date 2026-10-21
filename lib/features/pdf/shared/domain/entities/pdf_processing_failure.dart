@@ -1,4 +1,4 @@
-enum PdfConversionFailureCode {
+enum PdfProcessingFailureCode {
   engineUnavailable,
   unsupportedPlatform,
   invalidDocument,
@@ -15,7 +15,7 @@ enum PdfConversionFailureCode {
   saveFailed,
 }
 
-class PdfConversionFailure implements Exception {
-  final PdfConversionFailureCode code;
-  const PdfConversionFailure(this.code);
+class PdfProcessingFailure implements Exception {
+  final PdfProcessingFailureCode code;
+  const PdfProcessingFailure(this.code);
 }

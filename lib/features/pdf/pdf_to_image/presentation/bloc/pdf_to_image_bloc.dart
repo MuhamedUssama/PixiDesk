@@ -3,7 +3,7 @@ import 'package:bloc_concurrency/bloc_concurrency.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
 import 'package:uuid/uuid.dart';
-import '../../domain/entities/pdf_conversion_failure.dart';
+import '../../../shared/domain/entities/pdf_processing_failure.dart';
 import '../../domain/entities/pdf_to_image_event.dart';
 import '../../domain/entities/pdf_to_image_params.dart';
 import '../../domain/services/pdf_export_dialogs.dart';
@@ -219,7 +219,7 @@ class PdfToImageBloc extends Bloc<PdfToImageAction, PdfToImageState> {
             if (event.imagePaths.isEmpty) {
               return state.copyWith(
                 status: PdfToImageStatus.error,
-                failure: PdfConversionFailureCode.workerFailed,
+                failure: PdfProcessingFailureCode.workerFailed,
                 messageId: state.messageId + 1,
               );
             }
@@ -247,9 +247,9 @@ class PdfToImageBloc extends Bloc<PdfToImageAction, PdfToImageState> {
           return state.copyWith(
             status: PdfToImageStatus.error,
             progress: null,
-            failure: error is PdfConversionFailure
+            failure: error is PdfProcessingFailure
                 ? error.code
-                : PdfConversionFailureCode.workerFailed,
+                : PdfProcessingFailureCode.workerFailed,
             messageId: state.messageId + 1,
           );
         },
@@ -262,7 +262,7 @@ class PdfToImageBloc extends Bloc<PdfToImageAction, PdfToImageState> {
           state.copyWith(
             status: PdfToImageStatus.error,
             progress: null,
-            failure: PdfConversionFailureCode.workerFailed,
+            failure: PdfProcessingFailureCode.workerFailed,
             messageId: state.messageId + 1,
           ),
         );
@@ -275,9 +275,9 @@ class PdfToImageBloc extends Bloc<PdfToImageAction, PdfToImageState> {
           state.copyWith(
             status: PdfToImageStatus.error,
             progress: null,
-            failure: error is PdfConversionFailure
+            failure: error is PdfProcessingFailure
                 ? error.code
-                : PdfConversionFailureCode.workerFailed,
+                : PdfProcessingFailureCode.workerFailed,
             messageId: state.messageId + 1,
           ),
         );
@@ -362,9 +362,9 @@ class PdfToImageBloc extends Bloc<PdfToImageAction, PdfToImageState> {
         emit(
           state.copyWith(
             status: PdfToImageStatus.review,
-            failure: error is PdfConversionFailure
+            failure: error is PdfProcessingFailure
                 ? error.code
-                : PdfConversionFailureCode.saveFailed,
+                : PdfProcessingFailureCode.saveFailed,
             messageId: state.messageId + 1,
           ),
         );

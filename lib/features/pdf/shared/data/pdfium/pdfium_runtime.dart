@@ -4,7 +4,7 @@ import 'dart:io';
 import 'package:crypto/crypto.dart';
 import 'package:injectable/injectable.dart';
 import 'package:path/path.dart' as path;
-import '../../domain/entities/pdf_conversion_failure.dart';
+import '../../domain/entities/pdf_processing_failure.dart';
 
 class PdfiumRuntime {
   final String executable;
@@ -36,8 +36,8 @@ class PdfiumRuntimeLocator {
       ));
     } catch (_) {
       _resolved = null;
-      throw const PdfConversionFailure(
-        PdfConversionFailureCode.engineUnavailable,
+      throw const PdfProcessingFailure(
+        PdfProcessingFailureCode.engineUnavailable,
       );
     }
   }
@@ -52,8 +52,8 @@ class PdfiumRuntimeLocator {
           '',
     );
     if (major != null && major < 13) {
-      throw const PdfConversionFailure(
-        PdfConversionFailureCode.unsupportedPlatform,
+      throw const PdfProcessingFailure(
+        PdfProcessingFailureCode.unsupportedPlatform,
       );
     }
   }
@@ -66,8 +66,8 @@ class PdfiumRuntimeLocator {
   }) async {
     if (!['windows', 'macos', 'linux'].contains(operatingSystem) ||
         !['x64', 'arm64'].contains(architecture)) {
-      throw const PdfConversionFailure(
-        PdfConversionFailureCode.engineUnavailable,
+      throw const PdfProcessingFailure(
+        PdfProcessingFailureCode.engineUnavailable,
       );
     }
     final executableDirectory = path.dirname(executablePath);
@@ -123,8 +123,8 @@ class PdfiumRuntimeLocator {
         }
       }
     }
-    throw const PdfConversionFailure(
-      PdfConversionFailureCode.engineUnavailable,
+    throw const PdfProcessingFailure(
+      PdfProcessingFailureCode.engineUnavailable,
     );
   }
 

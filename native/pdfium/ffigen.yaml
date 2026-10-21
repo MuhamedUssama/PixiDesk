@@ -1,6 +1,6 @@
 name: PdfiumBindings
 description: 'Selected public PDFium APIs from pinned chromium/8100 headers. Regenerate with dart run ffigen --config native/pdfium/ffigen.yaml.'
-output: ../../lib/features/pdf/pdf_to_image/data/pdfium/pdfium_bindings.dart
+output: ../../lib/features/pdf/shared/data/pdfium/pdfium_bindings.dart
 headers:
   entry-points:
     - include/fpdfview.h

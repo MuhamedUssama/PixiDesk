@@ -434,5 +434,83 @@
         "type": "int"
       }
     }
-  }
+  },
+  "pdfMergeTitle": "Merge PDFs",
+  "pdfMergeDescription": "Bring documents together. Arrange files and pages, then save one PDF without changing image quality.",
+  "pdfMergeAction": "Merge PDFs",
+  "pdfMergeAddDocuments": "Add PDFs",
+  "pdfMergeDropHint": "Drop your PDFs here, or add documents to get started.",
+  "pdfMergeOrderHint": "Drag to reorder documents. Their selected pages are merged in the order shown.",
+  "pdfMergeSummary": "Merge settings",
+  "pdfMergeStructureNotice": "Selected page content is preserved. Existing bookmarks, attachments, accessibility tags, signatures and document-level metadata are not combined. The saved PDF is not password-protected.",
+  "pdfMergeAcknowledge": "I understand these document changes.",
+  "pdfMergePageRange": "Pages to include",
+  "pdfMergeRangeHint": "For example: 1-5,8,12 or 5-1",
+  "pdfMergeInvalidRange": "Enter valid page numbers or ranges within this document.",
+  "pdfMergeArrangePages": "Arrange pages",
+  "pdfMergeMoveEarlier": "Move document earlier",
+  "pdfMergeMoveLater": "Move document later",
+  "pdfMergeSelectAll": "Select all pages",
+  "pdfMergeIncluded": "Included",
+  "pdfMergeIncludePage": "Include page",
+  "pdfMergeClosePreview": "Close preview",
+  "pdfMergeSaveTitle": "Save merged PDF",
+  "pdfMergeSuccess": "Your merged PDF is ready",
+  "pdfMergeOpenResult": "Open PDF",
+  "pdfMergeRevealResult": "Show in folder",
+  "pdfMergeInspecting": "Reading documents…",
+  "pdfMergeWriting": "Writing merged PDF…",
+  "pdfMergeValidating": "Checking the result…",
+  "pdfMergeSaving": "Saving your PDF…",
+  "pdfMergePasswordTitle": "Unlock this document",
+  "pdfMergePasswordLabel": "PDF password",
+  "pdfMergePasswordRejected": "The password is missing or incorrect.",
+  "pdfMergeUnlock": "Unlock",
+  "pdfMergeUnsupportedDocument": "This PDF contains interactive forms or signed form fields. Save a flattened, unsigned copy before merging.",
+  "pdfMergeResourceLimit": "Use up to 100 documents, 20,000 selected pages and 4 GB total input. Each document must be no larger than 512 MB.",
+  "pdfMergeSourceProtected": "The source is protected, or the destination would replace an input document. Choose an allowed source and a new output file.",
+  "pdfMergeTimedOut": "The operation took too long and was stopped. Try fewer or smaller documents.",
+  "pdfMergeFailed": "Unable to merge these documents. Your original files were not replaced.",
+  "pdfMergeEngineUnavailable": "PDF merging is unavailable in this installation. Reinstall PixiDesk or contact support.",
+  "pdfMergePreviewUnavailable": "Preview is unavailable for this page. You can still merge the document if it passed inspection.",
+  "pdfMergeLaunchFailed": "Unable to open the saved PDF or its folder. The saved file is still available at the displayed path.",
+  "pdfMergeFileDetails": "{pages} pages · {megabytes} MB",
+  "pdfMergeSelectedPages": "{count} pages selected",
+  "pdfMergeDocumentSummary": "{documents} documents · {pages} output pages",
+  "pdfMergePageNumber": "Page {number}",
+  "@pdfMergeFileDetails": {
+    "placeholders": {
+      "pages": {
+        "type": "int"
+      },
+      "megabytes": {
+        "type": "String"
+      }
+    }
+  },
+  "@pdfMergeSelectedPages": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "@pdfMergeDocumentSummary": {
+    "placeholders": {
+      "documents": {
+        "type": "int"
+      },
+      "pages": {
+        "type": "int"
+      }
+    }
+  },
+  "@pdfMergePageNumber": {
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    }
+  },
+  "pdfMergeRemovePage": "Remove page"
 }

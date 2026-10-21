@@ -2,6 +2,7 @@
 *.class
 *.log
 *.pyc
+__pycache__/
 *.swp
 .DS_Store
 .atom/
@@ -50,3 +51,6 @@ app.*.map.json
 # Verified PDFium SDK downloads and generated worker artifacts
 /native/pdfium/runtime/
 /native/pdfium/worker/
+
+# Verified native PDF merge runtime downloads
+/native/qpdf/runtime/

@@ -424,5 +424,83 @@
         "type": "int"
       }
     }
-  }
+  },
+  "pdfMergeTitle": "دمج ملفات PDF",
+  "pdfMergeDescription": "اجمع مستنداتك في ملف واحد. رتّب الملفات والصفحات واحفظ PDF واحدًا مع الحفاظ على جودة الصور.",
+  "pdfMergeAction": "دمج الملفات",
+  "pdfMergeAddDocuments": "إضافة ملفات PDF",
+  "pdfMergeDropHint": "اسحب ملفات PDF هنا، أو أضف مستندات للبدء.",
+  "pdfMergeOrderHint": "اسحب لترتيب المستندات. تُدمج الصفحات المحددة بالترتيب المعروض.",
+  "pdfMergeSummary": "إعدادات الدمج",
+  "pdfMergeStructureNotice": "يُحفظ محتوى الصفحات المحددة. لا تُدمج الإشارات المرجعية والمرفقات وعلامات تسهيل الوصول والتوقيعات وبيانات المستند العامة. يُحفظ الناتج بدون حماية بكلمة مرور.",
+  "pdfMergeAcknowledge": "أفهم هذه التغييرات على المستند.",
+  "pdfMergePageRange": "الصفحات المطلوب تضمينها",
+  "pdfMergeRangeHint": "مثال: 1-5,8,12 أو 5-1",
+  "pdfMergeInvalidRange": "أدخل أرقام صفحات أو نطاقات صحيحة داخل هذا المستند.",
+  "pdfMergeArrangePages": "ترتيب الصفحات",
+  "pdfMergeMoveEarlier": "نقل المستند لأعلى",
+  "pdfMergeMoveLater": "نقل المستند لأسفل",
+  "pdfMergeSelectAll": "تحديد كل الصفحات",
+  "pdfMergeIncluded": "مُضمّنة",
+  "pdfMergeIncludePage": "تضمين الصفحة",
+  "pdfMergeClosePreview": "إغلاق المعاينة",
+  "pdfMergeSaveTitle": "حفظ ملف PDF المدمج",
+  "pdfMergeSuccess": "ملف PDF المدمج جاهز",
+  "pdfMergeOpenResult": "فتح PDF",
+  "pdfMergeRevealResult": "إظهار في المجلد",
+  "pdfMergeInspecting": "جارٍ قراءة المستندات…",
+  "pdfMergeWriting": "جارٍ كتابة ملف PDF المدمج…",
+  "pdfMergeValidating": "جارٍ التحقق من الناتج…",
+  "pdfMergeSaving": "جارٍ حفظ ملف PDF…",
+  "pdfMergePasswordTitle": "فتح المستند المحمي",
+  "pdfMergePasswordLabel": "كلمة مرور PDF",
+  "pdfMergePasswordRejected": "كلمة المرور مفقودة أو غير صحيحة.",
+  "pdfMergeUnlock": "فتح المستند",
+  "pdfMergeUnsupportedDocument": "يحتوي هذا الملف على نماذج تفاعلية أو حقول موقعة. احفظ نسخة مسطّحة بدون توقيع قبل الدمج.",
+  "pdfMergeResourceLimit": "استخدم حتى 100 مستند و20,000 صفحة محددة وإجمالي مدخلات 4 جيجابايت. يجب ألا يزيد حجم المستند الواحد عن 512 ميجابايت.",
+  "pdfMergeSourceProtected": "المصدر محمي أو الوجهة ستستبدل أحد المستندات الأصلية. اختر مصدرًا مسموحًا وملف ناتج جديدًا.",
+  "pdfMergeTimedOut": "استغرقت العملية وقتًا طويلًا وتم إيقافها. جرّب مستندات أقل أو أصغر.",
+  "pdfMergeFailed": "تعذّر دمج المستندات. لم يتم استبدال ملفاتك الأصلية.",
+  "pdfMergeEngineUnavailable": "دمج ملفات PDF غير متاح في النسخة المثبتة. أعد تثبيت PixiDesk أو تواصل مع الدعم.",
+  "pdfMergePreviewUnavailable": "المعاينة غير متاحة لهذه الصفحة. يمكنك دمج المستند إذا اجتاز الفحص.",
+  "pdfMergeLaunchFailed": "تعذّر فتح ملف PDF المحفوظ أو مجلده. ما زال الملف متاحًا في المسار المعروض.",
+  "pdfMergeFileDetails": "{pages} صفحات · {megabytes} ميجابايت",
+  "pdfMergeSelectedPages": "تم تحديد {count} صفحة",
+  "pdfMergeDocumentSummary": "{documents} مستندات · {pages} صفحات في الناتج",
+  "pdfMergePageNumber": "صفحة {number}",
+  "@pdfMergeFileDetails": {
+    "placeholders": {
+      "pages": {
+        "type": "int"
+      },
+      "megabytes": {
+        "type": "String"
+      }
+    }
+  },
+  "@pdfMergeSelectedPages": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "@pdfMergeDocumentSummary": {
+    "placeholders": {
+      "documents": {
+        "type": "int"
+      },
+      "pages": {
+        "type": "int"
+      }
+    }
+  },
+  "@pdfMergePageNumber": {
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    }
+  },
+  "pdfMergeRemovePage": "إزالة الصفحة"
 }

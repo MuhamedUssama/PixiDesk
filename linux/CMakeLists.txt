@@ -130,3 +130,4 @@ endif()
 
 # PixiDesk PDFium worker and verified desktop runtime.
 include("${CMAKE_CURRENT_SOURCE_DIR}/../native/pdfium/desktop.cmake")
+include("${CMAKE_CURRENT_SOURCE_DIR}/../native/qpdf/desktop.cmake")

@@ -2,7 +2,7 @@ import 'dart:io';
 import 'package:archive/archive_io.dart';
 import 'package:image/image.dart' as image_codec;
 import 'package:path/path.dart' as path;
-import '../../domain/entities/pdf_conversion_failure.dart';
+import '../../../shared/domain/entities/pdf_processing_failure.dart';
 
 enum PdfFileExportMode { images, archive, separateArchives }
 
@@ -28,8 +28,8 @@ Future<void> exportPdfImages(PdfFileExportRequest request) async {
     if (request.mode == PdfFileExportMode.images) {
       final directory = Directory(request.destination);
       if (!await directory.exists()) {
-        throw const PdfConversionFailure(
-          PdfConversionFailureCode.permissionDenied,
+        throw const PdfProcessingFailure(
+          PdfProcessingFailureCode.permissionDenied,
         );
       }
       for (final source in request.images) {
@@ -58,10 +58,10 @@ Future<void> exportPdfImages(PdfFileExportRequest request) async {
         );
       }
     }
-  } on PdfConversionFailure {
+  } on PdfProcessingFailure {
     rethrow;
   } catch (_) {
-    throw const PdfConversionFailure(PdfConversionFailureCode.saveFailed);
+    throw const PdfProcessingFailure(PdfProcessingFailureCode.saveFailed);
   }
 }
 
@@ -71,7 +71,7 @@ Future<void> _publish(
   Future<void> Function(String) write,
 ) async {
   if (!await directory.exists()) {
-    throw const PdfConversionFailure(PdfConversionFailureCode.permissionDenied);
+    throw const PdfProcessingFailure(PdfProcessingFailureCode.permissionDenied);
   }
   final stagingDirectory = await directory.createTemp('.pixidesk-export-');
   File? reservation;
@@ -80,7 +80,7 @@ Future<void> _publish(
     final stagedFile = File(path.join(stagingDirectory.path, 'payload'));
     await write(stagedFile.path);
     if (!await stagedFile.exists() || await stagedFile.length() == 0) {
-      throw const PdfConversionFailure(PdfConversionFailureCode.saveFailed);
+      throw const PdfProcessingFailure(PdfProcessingFailureCode.saveFailed);
     }
     for (var suffix = 0; suffix < 10000; suffix++) {
       final candidateName = suffix == 0
@@ -100,8 +100,8 @@ Future<void> _publish(
       }
     }
     if (reservation == null) {
-      throw const PdfConversionFailure(
-        PdfConversionFailureCode.destinationConflict,
+      throw const PdfProcessingFailure(
+        PdfProcessingFailureCode.destinationConflict,
       );
     }
     await stagedFile.rename(reservation.path);
@@ -128,14 +128,14 @@ Future<void> _writeImage(
   }
   final decoded = image_codec.decodeImage(await source.readAsBytes());
   if (decoded == null) {
-    throw const PdfConversionFailure(PdfConversionFailureCode.saveFailed);
+    throw const PdfProcessingFailure(PdfProcessingFailureCode.saveFailed);
   }
   final rotated = image_codec.copyRotate(decoded, angle: (rotation % 4) * 90);
   final bytes = switch (path.extension(sourcePath).toLowerCase()) {
     '.png' => image_codec.encodePng(rotated, level: 3),
     '.tiff' || '.tif' => image_codec.encodeTiff(rotated),
     '.jpg' || '.jpeg' => image_codec.encodeJpg(rotated, quality: 95),
-    _ => throw const PdfConversionFailure(PdfConversionFailureCode.saveFailed),
+    _ => throw const PdfProcessingFailure(PdfProcessingFailureCode.saveFailed),
   };
   await File(destination).writeAsBytes(bytes);
 }

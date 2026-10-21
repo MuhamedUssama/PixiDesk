@@ -1,27 +1,27 @@
 import '../../../../../l10n/localization/app_localizations.dart';
-import '../../domain/entities/pdf_conversion_failure.dart';
+import '../../../shared/domain/entities/pdf_processing_failure.dart';
 
 String pdfFailureLabel(
   AppLocalizations localizations,
-  PdfConversionFailureCode code,
+  PdfProcessingFailureCode code,
 ) => switch (code) {
-  PdfConversionFailureCode.unsupportedPlatform =>
+  PdfProcessingFailureCode.unsupportedPlatform =>
     localizations.pdfPlatformUnsupported,
-  PdfConversionFailureCode.engineUnavailable =>
+  PdfProcessingFailureCode.engineUnavailable =>
     localizations.pdfEngineUnavailable,
-  PdfConversionFailureCode.invalidDocument => localizations.pdfInvalidDocument,
-  PdfConversionFailureCode.passwordRequired =>
+  PdfProcessingFailureCode.invalidDocument => localizations.pdfInvalidDocument,
+  PdfProcessingFailureCode.passwordRequired =>
     localizations.pdfPasswordRequired,
-  PdfConversionFailureCode.invalidSettings => localizations.pdfInvalidSettings,
-  PdfConversionFailureCode.resourceLimit => localizations.pdfResourceLimit,
-  PdfConversionFailureCode.sourceChanged => localizations.pdfSourceChanged,
-  PdfConversionFailureCode.permissionDenied =>
+  PdfProcessingFailureCode.invalidSettings => localizations.pdfInvalidSettings,
+  PdfProcessingFailureCode.resourceLimit => localizations.pdfResourceLimit,
+  PdfProcessingFailureCode.sourceChanged => localizations.pdfSourceChanged,
+  PdfProcessingFailureCode.permissionDenied =>
     localizations.imagePermissionDenied,
-  PdfConversionFailureCode.destinationConflict =>
+  PdfProcessingFailureCode.destinationConflict =>
     localizations.imageDestinationConflict,
-  PdfConversionFailureCode.cancelled => localizations.imageCancelled,
-  PdfConversionFailureCode.busy => localizations.pdfJobBusy,
-  PdfConversionFailureCode.timedOut => localizations.pdfConversionTimedOut,
-  PdfConversionFailureCode.saveFailed => localizations.pdfSaveFailed,
-  PdfConversionFailureCode.workerFailed => localizations.pdfWorkerFailed,
+  PdfProcessingFailureCode.cancelled => localizations.imageCancelled,
+  PdfProcessingFailureCode.busy => localizations.pdfJobBusy,
+  PdfProcessingFailureCode.timedOut => localizations.pdfConversionTimedOut,
+  PdfProcessingFailureCode.saveFailed => localizations.pdfSaveFailed,
+  PdfProcessingFailureCode.workerFailed => localizations.pdfWorkerFailed,
 };

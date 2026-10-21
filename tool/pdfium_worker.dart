@@ -1,9 +1,9 @@
 import 'dart:convert';
 import 'dart:ffi';
 import 'dart:io';
-import 'package:pixi_desk/features/pdf/pdf_to_image/data/pdfium/pdfium_bindings.dart';
-import 'package:pixi_desk/features/pdf/pdf_to_image/data/pdfium/pdfium_document.dart';
-import 'package:pixi_desk/features/pdf/pdf_to_image/domain/entities/pdf_conversion_failure.dart';
+import 'package:pixi_desk/features/pdf/shared/data/pdfium/pdfium_bindings.dart';
+import 'package:pixi_desk/features/pdf/shared/data/pdfium/pdfium_document.dart';
+import 'package:pixi_desk/features/pdf/shared/domain/entities/pdf_processing_failure.dart';
 
 /// Serial JSON-lines protocol. One OS process owns one PDFium library instance.
 Future<void> main(List<String> arguments) async {
@@ -13,6 +13,7 @@ Future<void> main(List<String> arguments) async {
   }
   PdfiumDocument? document;
   String? currentSource;
+  String? currentPassword;
   final bindings = PdfiumBindings(DynamicLibrary.open(arguments.single));
   bindings.FPDF_InitLibrary();
   stdout.writeln(
@@ -29,12 +30,19 @@ Future<void> main(List<String> arguments) async {
       try {
         request = jsonDecode(line) as Map<String, dynamic>;
         final sourcePath = request['sourcePath'] as String;
-        if (sourcePath != currentSource) {
+        final password = request['password'] as String?;
+        if (sourcePath != currentSource || password != currentPassword) {
           document?.close();
           document = null;
           currentSource = null;
-          document = PdfiumDocument.open(bindings, sourcePath);
+          currentPassword = null;
+          document = PdfiumDocument.open(
+            bindings,
+            sourcePath,
+            password: password,
+          );
           currentSource = sourcePath;
+          currentPassword = password;
         }
         final result = switch (request['type']) {
           'inspect' => <String, Object>{'pages': document!.inspect()},
@@ -43,18 +51,20 @@ Future<void> main(List<String> arguments) async {
             request['dpi'] as int,
             request['format'] as String,
             request['outputPath'] as String,
+            maxDimension: request['maxDimension'] as int?,
+            includePreviewAssets: request['includePreviewAssets'] != false,
           ),
-          _ => throw const PdfConversionFailure(
-            PdfConversionFailureCode.invalidSettings,
+          _ => throw const PdfProcessingFailure(
+            PdfProcessingFailureCode.invalidSettings,
           ),
         };
         stdout.writeln(jsonEncode({'id': request['id'], 'result': result}));
       } catch (error) {
-        final code = error is PdfConversionFailure
+        final code = error is PdfProcessingFailure
             ? error.code
             : (error is FileSystemException
-                  ? PdfConversionFailureCode.permissionDenied
-                  : PdfConversionFailureCode.workerFailed);
+                  ? PdfProcessingFailureCode.permissionDenied
+                  : PdfProcessingFailureCode.workerFailed);
         stdout.writeln(jsonEncode({'id': request?['id'], 'error': code.name}));
       }
     }

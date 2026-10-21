@@ -2,7 +2,7 @@ import 'dart:ffi';
 import 'dart:io';
 import 'package:ffi/ffi.dart';
 import 'package:image/image.dart' as image_codec;
-import '../../domain/entities/pdf_conversion_failure.dart';
+import '../../domain/entities/pdf_processing_failure.dart';
 import 'pdfium_bindings.dart';
 
 /// Only loaded by the helper process. Flutter never invokes PDFium in-process.
@@ -17,8 +17,8 @@ class PdfiumDocument {
     if (bindings.FPDF_GetFormType(document) >= 2) {
       bindings.FPDF_CloseDocument(document);
       calloc.free(_formInfo);
-      throw const PdfConversionFailure(
-        PdfConversionFailureCode.invalidDocument,
+      throw const PdfProcessingFailure(
+        PdfProcessingFailureCode.invalidDocument,
       );
     }
     _formInfo.ref.version = 2;
@@ -28,41 +28,50 @@ class PdfiumDocument {
     );
   }
 
-  factory PdfiumDocument.open(PdfiumBindings bindings, String sourcePath) {
+  factory PdfiumDocument.open(
+    PdfiumBindings bindings,
+    String sourcePath, {
+    String? password,
+  }) {
     final nativePath = sourcePath.toNativeUtf8();
+    final nativePassword = password?.toNativeUtf8();
     try {
-      final document = bindings.FPDF_LoadDocument(nativePath.cast(), nullptr);
+      final document = bindings.FPDF_LoadDocument(
+        nativePath.cast(),
+        nativePassword?.cast() ?? nullptr,
+      );
       if (document == nullptr) {
-        throw PdfConversionFailure(
+        throw PdfProcessingFailure(
           bindings.FPDF_GetLastError() == 4
-              ? PdfConversionFailureCode.passwordRequired
-              : PdfConversionFailureCode.invalidDocument,
+              ? PdfProcessingFailureCode.passwordRequired
+              : PdfProcessingFailureCode.invalidDocument,
         );
       }
       return PdfiumDocument._(bindings, document, calloc<FPDF_FORMFILLINFO>());
     } finally {
       calloc.free(nativePath);
+      if (nativePassword != null) calloc.free(nativePassword);
     }
   }
 
   List<Map<String, double>> inspect() {
     final pageCount = bindings.FPDF_GetPageCount(document);
     if (pageCount < 1 || pageCount > 5000) {
-      throw const PdfConversionFailure(PdfConversionFailureCode.resourceLimit);
+      throw const PdfProcessingFailure(PdfProcessingFailureCode.resourceLimit);
     }
     return List.generate(pageCount, (pageIndex) {
       final page = bindings.FPDF_LoadPage(document, pageIndex);
       if (page == nullptr) {
-        throw const PdfConversionFailure(
-          PdfConversionFailureCode.invalidDocument,
+        throw const PdfProcessingFailure(
+          PdfProcessingFailureCode.invalidDocument,
         );
       }
       try {
         final width = bindings.FPDF_GetPageWidthF(page);
         final height = bindings.FPDF_GetPageHeightF(page);
         if (!width.isFinite || !height.isFinite || width <= 0 || height <= 0) {
-          throw const PdfConversionFailure(
-            PdfConversionFailureCode.invalidDocument,
+          throw const PdfProcessingFailure(
+            PdfProcessingFailureCode.invalidDocument,
           );
         }
         return {'width': width, 'height': height};
@@ -76,33 +85,48 @@ class PdfiumDocument {
     int pageIndex,
     int dpi,
     String format,
-    String outputPath,
-  ) {
+    String outputPath, {
+    int? maxDimension,
+    bool includePreviewAssets = true,
+  }) {
     if (!['png', 'jpg', 'tiff'].contains(format) || dpi < 72 || dpi > 1200) {
-      throw const PdfConversionFailure(
-        PdfConversionFailureCode.invalidSettings,
+      throw const PdfProcessingFailure(
+        PdfProcessingFailureCode.invalidSettings,
       );
     }
     final page = bindings.FPDF_LoadPage(document, pageIndex);
     if (page == nullptr) {
-      throw const PdfConversionFailure(
-        PdfConversionFailureCode.invalidDocument,
+      throw const PdfProcessingFailure(
+        PdfProcessingFailureCode.invalidDocument,
       );
     }
     FPDF_BITMAP bitmap = nullptr;
     var formPageLoaded = false;
     try {
-      final width = (bindings.FPDF_GetPageWidthF(page) * dpi / 72).ceil();
-      final height = (bindings.FPDF_GetPageHeightF(page) * dpi / 72).ceil();
+      var width = (bindings.FPDF_GetPageWidthF(page) * dpi / 72).ceil();
+      var height = (bindings.FPDF_GetPageHeightF(page) * dpi / 72).ceil();
+      if (maxDimension != null) {
+        if (maxDimension < 1 || maxDimension > 1400) {
+          throw const PdfProcessingFailure(
+            PdfProcessingFailureCode.invalidSettings,
+          );
+        }
+        final longestEdge = width > height ? width : height;
+        if (longestEdge > maxDimension) {
+          final scale = maxDimension / longestEdge;
+          width = (width * scale).round().clamp(1, maxDimension);
+          height = (height * scale).round().clamp(1, maxDimension);
+        }
+      }
       if (width <= 0 || height <= 0 || width * height > 160000000) {
-        throw const PdfConversionFailure(
-          PdfConversionFailureCode.resourceLimit,
+        throw const PdfProcessingFailure(
+          PdfProcessingFailureCode.resourceLimit,
         );
       }
       bitmap = bindings.FPDFBitmap_Create(width, height, 1);
       if (bitmap == nullptr) {
-        throw const PdfConversionFailure(
-          PdfConversionFailureCode.resourceLimit,
+        throw const PdfProcessingFailure(
+          PdfProcessingFailureCode.resourceLimit,
         );
       }
       bindings.FPDFBitmap_FillRect(bitmap, 0, 0, width, height, 0xffffffff);
@@ -158,13 +182,16 @@ class PdfiumDocument {
       try {
         stagingFile.writeAsBytesSync(encodedBytes);
         if (File(outputPath).existsSync()) {
-          throw const PdfConversionFailure(
-            PdfConversionFailureCode.destinationConflict,
+          throw const PdfProcessingFailure(
+            PdfProcessingFailureCode.destinationConflict,
           );
         }
         stagingFile.renameSync(outputPath);
       } finally {
         if (stagingFile.existsSync()) stagingFile.deleteSync();
+      }
+      if (!includePreviewAssets) {
+        return {'path': outputPath, 'width': width, 'height': height};
       }
       final previewPath = '$outputPath.preview.png';
       final thumbnailPath = '$outputPath.thumb.png';

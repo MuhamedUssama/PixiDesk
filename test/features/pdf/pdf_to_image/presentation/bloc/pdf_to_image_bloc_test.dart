@@ -4,7 +4,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:pixi_desk/features/pdf/pdf_to_image/domain/entities/pdf_to_image_params.dart';
 import 'package:pixi_desk/features/pdf/pdf_to_image/domain/entities/pdf_to_image_event.dart';
-import 'package:pixi_desk/features/pdf/pdf_to_image/domain/entities/pdf_conversion_failure.dart';
+import 'package:pixi_desk/features/pdf/shared/domain/entities/pdf_processing_failure.dart';
 import 'package:pixi_desk/features/pdf/pdf_to_image/domain/repositories/pdf_to_image_repository.dart';
 import 'package:pixi_desk/features/pdf/pdf_to_image/domain/services/pdf_export_dialogs.dart';
 import 'package:pixi_desk/features/pdf/pdf_to_image/domain/usecases/convert_pdf_to_images_usecase.dart';
@@ -180,20 +180,20 @@ void main() {
     () async {
       await start();
       conversion.addError(
-        const PdfConversionFailure(PdfConversionFailureCode.passwordRequired),
+        const PdfProcessingFailure(PdfProcessingFailureCode.passwordRequired),
       );
       await conversion.close();
       await drainEvents();
-      expect(bloc.state.failure, PdfConversionFailureCode.passwordRequired);
+      expect(bloc.state.failure, PdfProcessingFailureCode.passwordRequired);
       expect(bloc.state.status, PdfToImageStatus.error);
     },
   );
   test('synchronous backend failure cannot leave conversion stuck', () async {
     when(() => repository.convert(any())).thenThrow(
-      const PdfConversionFailure(PdfConversionFailureCode.engineUnavailable),
+      const PdfProcessingFailure(PdfProcessingFailureCode.engineUnavailable),
     );
     await start();
-    expect(bloc.state.failure, PdfConversionFailureCode.engineUnavailable);
+    expect(bloc.state.failure, PdfProcessingFailureCode.engineUnavailable);
     expect(bloc.state.status, PdfToImageStatus.error);
   });
   test('a completed stream with no pages becomes an error', () async {
@@ -202,6 +202,6 @@ void main() {
     await conversion.close();
     await drainEvents();
     expect(bloc.state.status, PdfToImageStatus.error);
-    expect(bloc.state.failure, PdfConversionFailureCode.workerFailed);
+    expect(bloc.state.failure, PdfProcessingFailureCode.workerFailed);
   });
 }

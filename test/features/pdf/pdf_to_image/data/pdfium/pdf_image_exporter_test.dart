@@ -4,7 +4,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:image/image.dart' as image_codec;
 import 'package:path/path.dart' as path;
 import 'package:pixi_desk/features/pdf/pdf_to_image/data/pdfium/pdf_image_exporter.dart';
-import 'package:pixi_desk/features/pdf/pdf_to_image/domain/entities/pdf_conversion_failure.dart';
+import 'package:pixi_desk/features/pdf/shared/domain/entities/pdf_processing_failure.dart';
 
 void main() {
   late Directory fixtures;
@@ -117,7 +117,7 @@ void main() {
             images: [path.join(fixtures.path, 'missing.png')],
           ),
         ),
-        throwsA(isA<PdfConversionFailure>()),
+        throwsA(isA<PdfProcessingFailure>()),
       );
       expect(output.listSync().length, 1);
       expect(existing.readAsStringSync(), 'existing');

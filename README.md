@@ -66,3 +66,21 @@ See [PDFium packaging and architecture](native/pdfium/README.md) for platform
 setup, notices, limits, and verification scope. Runtime downloads are ignored;
 production bundles carry their own PDFium library and AOT helper. Application
 builds and helper compilation require an explicit user request in this workspace.
+
+## Merge PDFs
+
+The PDF tools catalog includes a separate `/pdf-merge` workspace. Add or drop
+multiple PDFs, reorder documents/pages, select page ranges, rotate pages, and
+preview on demand. Native QPDF assembles a new PDF without rasterizing pages;
+PDFium handles previews. Bloc and Freezed manage progress, cancellation, and
+session ownership. English/Arabic and light/dark themes are supported.
+
+```sh
+python3 tool/prepare_qpdf.py --target host
+```
+
+Existing destinations and source aliases are protected. Interactive forms and
+signed form fields are rejected. Document-level bookmarks, attachments,
+accessibility tags, metadata, and signature validity are not combined, and output
+is unencrypted; the UI requires acknowledgment before export. See
+[QPDF setup, packaging, limits, and verification](native/qpdf/README.md).

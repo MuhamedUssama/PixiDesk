@@ -1,7 +1,7 @@
 import 'dart:io';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import '../../domain/entities/conversion_progress.dart';
-import '../../domain/entities/pdf_conversion_failure.dart';
+import '../../../shared/domain/entities/pdf_processing_failure.dart';
 part 'pdf_to_image_state.freezed.dart';
 
 enum PdfToImageStatus {
@@ -26,7 +26,7 @@ abstract class PdfToImageState with _$PdfToImageState {
     @Default(150) int dpi,
     ConversionProgress? progress,
     List<File>? generatedImages,
-    PdfConversionFailureCode? failure,
+    PdfProcessingFailureCode? failure,
     PdfExportSuccess? success,
     @Default(0) int messageId,
     @Default({}) Map<String, String> previewPaths,

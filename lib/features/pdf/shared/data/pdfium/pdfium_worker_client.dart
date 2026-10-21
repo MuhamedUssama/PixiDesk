@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
-import '../../domain/entities/pdf_conversion_failure.dart';
+import '../../domain/entities/pdf_processing_failure.dart';
 import 'pdfium_runtime.dart';
 
 class PdfiumWorkerClient {
@@ -19,15 +19,15 @@ class PdfiumWorkerClient {
         .listen(
           _onLine,
           onError: (Object error) =>
-              _fail(PdfConversionFailureCode.workerFailed),
+              _fail(PdfProcessingFailureCode.workerFailed),
         );
     _errors = _process.stderr.listen((_) {}, onError: (Object error) {});
     unawaited(
       _process.exitCode.then(
         (_) => _fail(
           _stopping == null
-              ? PdfConversionFailureCode.workerFailed
-              : PdfConversionFailureCode.cancelled,
+              ? PdfProcessingFailureCode.workerFailed
+              : PdfProcessingFailureCode.cancelled,
         ),
       ),
     );
@@ -52,8 +52,8 @@ class PdfiumWorkerClient {
       return worker;
     } catch (_) {
       await worker?.stop();
-      throw const PdfConversionFailure(
-        PdfConversionFailureCode.engineUnavailable,
+      throw const PdfProcessingFailure(
+        PdfProcessingFailureCode.engineUnavailable,
       );
     }
   }
@@ -80,16 +80,16 @@ class PdfiumWorkerClient {
       }
       if (message['error'] != null) {
         final code =
-            PdfConversionFailureCode.values
+            PdfProcessingFailureCode.values
                 .where((value) => value.name == message['error'])
                 .firstOrNull ??
-            PdfConversionFailureCode.workerFailed;
-        pending.completeError(PdfConversionFailure(code));
+            PdfProcessingFailureCode.workerFailed;
+        pending.completeError(PdfProcessingFailure(code));
       } else {
         pending.complete(message['result'] as Map<String, dynamic>);
       }
     } catch (_) {
-      _fail(PdfConversionFailureCode.workerFailed);
+      _fail(PdfProcessingFailureCode.workerFailed);
       unawaited(stop());
     }
   }
@@ -99,10 +99,10 @@ class PdfiumWorkerClient {
     Duration timeout = const Duration(minutes: 2),
   }) async {
     if (_stopping != null) {
-      throw const PdfConversionFailure(PdfConversionFailureCode.cancelled);
+      throw const PdfProcessingFailure(PdfProcessingFailureCode.cancelled);
     }
     if (_pending != null) {
-      throw const PdfConversionFailure(PdfConversionFailureCode.busy);
+      throw const PdfProcessingFailure(PdfProcessingFailureCode.busy);
     }
     final response = Completer<Map<String, dynamic>>();
     _pending = response;
@@ -112,14 +112,14 @@ class PdfiumWorkerClient {
       return await response.future.timeout(timeout);
     } on TimeoutException {
       await stop();
-      throw const PdfConversionFailure(PdfConversionFailureCode.timedOut);
+      throw const PdfProcessingFailure(PdfProcessingFailureCode.timedOut);
     } finally {
       _pending = null;
     }
   }
 
-  void _fail(PdfConversionFailureCode code) {
-    final error = PdfConversionFailure(code);
+  void _fail(PdfProcessingFailureCode code) {
+    final error = PdfProcessingFailure(code);
     if (!_ready.isCompleted) _ready.completeError(error);
     if (_pending case final pending? when !pending.isCompleted) {
       pending.completeError(error);
@@ -128,7 +128,7 @@ class PdfiumWorkerClient {
 
   Future<void> stop() => _stopping ??= _stop();
   Future<void> _stop() async {
-    _fail(PdfConversionFailureCode.cancelled);
+    _fail(PdfProcessingFailureCode.cancelled);
     _process.kill(ProcessSignal.sigkill);
     try {
       await _process.exitCode.timeout(const Duration(seconds: 5));

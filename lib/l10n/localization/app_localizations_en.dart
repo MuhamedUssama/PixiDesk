@@ -1059,4 +1059,158 @@ class AppLocalizationsEn extends AppLocalizations {
   String pdfPageIndicator(int current, int total) {
     return 'Page $current of $total';
   }
+
+  @override
+  String get pdfMergeTitle => 'Merge PDFs';
+
+  @override
+  String get pdfMergeDescription =>
+      'Bring documents together. Arrange files and pages, then save one PDF without changing image quality.';
+
+  @override
+  String get pdfMergeAction => 'Merge PDFs';
+
+  @override
+  String get pdfMergeAddDocuments => 'Add PDFs';
+
+  @override
+  String get pdfMergeDropHint =>
+      'Drop your PDFs here, or add documents to get started.';
+
+  @override
+  String get pdfMergeOrderHint =>
+      'Drag to reorder documents. Their selected pages are merged in the order shown.';
+
+  @override
+  String get pdfMergeSummary => 'Merge settings';
+
+  @override
+  String get pdfMergeStructureNotice =>
+      'Selected page content is preserved. Existing bookmarks, attachments, accessibility tags, signatures and document-level metadata are not combined. The saved PDF is not password-protected.';
+
+  @override
+  String get pdfMergeAcknowledge => 'I understand these document changes.';
+
+  @override
+  String get pdfMergePageRange => 'Pages to include';
+
+  @override
+  String get pdfMergeRangeHint => 'For example: 1-5,8,12 or 5-1';
+
+  @override
+  String get pdfMergeInvalidRange =>
+      'Enter valid page numbers or ranges within this document.';
+
+  @override
+  String get pdfMergeArrangePages => 'Arrange pages';
+
+  @override
+  String get pdfMergeMoveEarlier => 'Move document earlier';
+
+  @override
+  String get pdfMergeMoveLater => 'Move document later';
+
+  @override
+  String get pdfMergeSelectAll => 'Select all pages';
+
+  @override
+  String get pdfMergeIncluded => 'Included';
+
+  @override
+  String get pdfMergeIncludePage => 'Include page';
+
+  @override
+  String get pdfMergeClosePreview => 'Close preview';
+
+  @override
+  String get pdfMergeSaveTitle => 'Save merged PDF';
+
+  @override
+  String get pdfMergeSuccess => 'Your merged PDF is ready';
+
+  @override
+  String get pdfMergeOpenResult => 'Open PDF';
+
+  @override
+  String get pdfMergeRevealResult => 'Show in folder';
+
+  @override
+  String get pdfMergeInspecting => 'Reading documents…';
+
+  @override
+  String get pdfMergeWriting => 'Writing merged PDF…';
+
+  @override
+  String get pdfMergeValidating => 'Checking the result…';
+
+  @override
+  String get pdfMergeSaving => 'Saving your PDF…';
+
+  @override
+  String get pdfMergePasswordTitle => 'Unlock this document';
+
+  @override
+  String get pdfMergePasswordLabel => 'PDF password';
+
+  @override
+  String get pdfMergePasswordRejected =>
+      'The password is missing or incorrect.';
+
+  @override
+  String get pdfMergeUnlock => 'Unlock';
+
+  @override
+  String get pdfMergeUnsupportedDocument =>
+      'This PDF contains interactive forms or signed form fields. Save a flattened, unsigned copy before merging.';
+
+  @override
+  String get pdfMergeResourceLimit =>
+      'Use up to 100 documents, 20,000 selected pages and 4 GB total input. Each document must be no larger than 512 MB.';
+
+  @override
+  String get pdfMergeSourceProtected =>
+      'The source is protected, or the destination would replace an input document. Choose an allowed source and a new output file.';
+
+  @override
+  String get pdfMergeTimedOut =>
+      'The operation took too long and was stopped. Try fewer or smaller documents.';
+
+  @override
+  String get pdfMergeFailed =>
+      'Unable to merge these documents. Your original files were not replaced.';
+
+  @override
+  String get pdfMergeEngineUnavailable =>
+      'PDF merging is unavailable in this installation. Reinstall PixiDesk or contact support.';
+
+  @override
+  String get pdfMergePreviewUnavailable =>
+      'Preview is unavailable for this page. You can still merge the document if it passed inspection.';
+
+  @override
+  String get pdfMergeLaunchFailed =>
+      'Unable to open the saved PDF or its folder. The saved file is still available at the displayed path.';
+
+  @override
+  String pdfMergeFileDetails(int pages, String megabytes) {
+    return '$pages pages · $megabytes MB';
+  }
+
+  @override
+  String pdfMergeSelectedPages(int count) {
+    return '$count pages selected';
+  }
+
+  @override
+  String pdfMergeDocumentSummary(int documents, int pages) {
+    return '$documents documents · $pages output pages';
+  }
+
+  @override
+  String pdfMergePageNumber(int number) {
+    return 'Page $number';
+  }
+
+  @override
+  String get pdfMergeRemovePage => 'Remove page';
 }

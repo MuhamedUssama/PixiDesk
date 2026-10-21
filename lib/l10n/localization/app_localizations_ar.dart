@@ -1054,4 +1054,156 @@ class AppLocalizationsAr extends AppLocalizations {
   String pdfPageIndicator(int current, int total) {
     return 'صفحة $current من $total';
   }
+
+  @override
+  String get pdfMergeTitle => 'دمج ملفات PDF';
+
+  @override
+  String get pdfMergeDescription =>
+      'اجمع مستنداتك في ملف واحد. رتّب الملفات والصفحات واحفظ PDF واحدًا مع الحفاظ على جودة الصور.';
+
+  @override
+  String get pdfMergeAction => 'دمج الملفات';
+
+  @override
+  String get pdfMergeAddDocuments => 'إضافة ملفات PDF';
+
+  @override
+  String get pdfMergeDropHint => 'اسحب ملفات PDF هنا، أو أضف مستندات للبدء.';
+
+  @override
+  String get pdfMergeOrderHint =>
+      'اسحب لترتيب المستندات. تُدمج الصفحات المحددة بالترتيب المعروض.';
+
+  @override
+  String get pdfMergeSummary => 'إعدادات الدمج';
+
+  @override
+  String get pdfMergeStructureNotice =>
+      'يُحفظ محتوى الصفحات المحددة. لا تُدمج الإشارات المرجعية والمرفقات وعلامات تسهيل الوصول والتوقيعات وبيانات المستند العامة. يُحفظ الناتج بدون حماية بكلمة مرور.';
+
+  @override
+  String get pdfMergeAcknowledge => 'أفهم هذه التغييرات على المستند.';
+
+  @override
+  String get pdfMergePageRange => 'الصفحات المطلوب تضمينها';
+
+  @override
+  String get pdfMergeRangeHint => 'مثال: 1-5,8,12 أو 5-1';
+
+  @override
+  String get pdfMergeInvalidRange =>
+      'أدخل أرقام صفحات أو نطاقات صحيحة داخل هذا المستند.';
+
+  @override
+  String get pdfMergeArrangePages => 'ترتيب الصفحات';
+
+  @override
+  String get pdfMergeMoveEarlier => 'نقل المستند لأعلى';
+
+  @override
+  String get pdfMergeMoveLater => 'نقل المستند لأسفل';
+
+  @override
+  String get pdfMergeSelectAll => 'تحديد كل الصفحات';
+
+  @override
+  String get pdfMergeIncluded => 'مُضمّنة';
+
+  @override
+  String get pdfMergeIncludePage => 'تضمين الصفحة';
+
+  @override
+  String get pdfMergeClosePreview => 'إغلاق المعاينة';
+
+  @override
+  String get pdfMergeSaveTitle => 'حفظ ملف PDF المدمج';
+
+  @override
+  String get pdfMergeSuccess => 'ملف PDF المدمج جاهز';
+
+  @override
+  String get pdfMergeOpenResult => 'فتح PDF';
+
+  @override
+  String get pdfMergeRevealResult => 'إظهار في المجلد';
+
+  @override
+  String get pdfMergeInspecting => 'جارٍ قراءة المستندات…';
+
+  @override
+  String get pdfMergeWriting => 'جارٍ كتابة ملف PDF المدمج…';
+
+  @override
+  String get pdfMergeValidating => 'جارٍ التحقق من الناتج…';
+
+  @override
+  String get pdfMergeSaving => 'جارٍ حفظ ملف PDF…';
+
+  @override
+  String get pdfMergePasswordTitle => 'فتح المستند المحمي';
+
+  @override
+  String get pdfMergePasswordLabel => 'كلمة مرور PDF';
+
+  @override
+  String get pdfMergePasswordRejected => 'كلمة المرور مفقودة أو غير صحيحة.';
+
+  @override
+  String get pdfMergeUnlock => 'فتح المستند';
+
+  @override
+  String get pdfMergeUnsupportedDocument =>
+      'يحتوي هذا الملف على نماذج تفاعلية أو حقول موقعة. احفظ نسخة مسطّحة بدون توقيع قبل الدمج.';
+
+  @override
+  String get pdfMergeResourceLimit =>
+      'استخدم حتى 100 مستند و20,000 صفحة محددة وإجمالي مدخلات 4 جيجابايت. يجب ألا يزيد حجم المستند الواحد عن 512 ميجابايت.';
+
+  @override
+  String get pdfMergeSourceProtected =>
+      'المصدر محمي أو الوجهة ستستبدل أحد المستندات الأصلية. اختر مصدرًا مسموحًا وملف ناتج جديدًا.';
+
+  @override
+  String get pdfMergeTimedOut =>
+      'استغرقت العملية وقتًا طويلًا وتم إيقافها. جرّب مستندات أقل أو أصغر.';
+
+  @override
+  String get pdfMergeFailed =>
+      'تعذّر دمج المستندات. لم يتم استبدال ملفاتك الأصلية.';
+
+  @override
+  String get pdfMergeEngineUnavailable =>
+      'دمج ملفات PDF غير متاح في النسخة المثبتة. أعد تثبيت PixiDesk أو تواصل مع الدعم.';
+
+  @override
+  String get pdfMergePreviewUnavailable =>
+      'المعاينة غير متاحة لهذه الصفحة. يمكنك دمج المستند إذا اجتاز الفحص.';
+
+  @override
+  String get pdfMergeLaunchFailed =>
+      'تعذّر فتح ملف PDF المحفوظ أو مجلده. ما زال الملف متاحًا في المسار المعروض.';
+
+  @override
+  String pdfMergeFileDetails(int pages, String megabytes) {
+    return '$pages صفحات · $megabytes ميجابايت';
+  }
+
+  @override
+  String pdfMergeSelectedPages(int count) {
+    return 'تم تحديد $count صفحة';
+  }
+
+  @override
+  String pdfMergeDocumentSummary(int documents, int pages) {
+    return '$documents مستندات · $pages صفحات في الناتج';
+  }
+
+  @override
+  String pdfMergePageNumber(int number) {
+    return 'صفحة $number';
+  }
+
+  @override
+  String get pdfMergeRemovePage => 'إزالة الصفحة';
 }

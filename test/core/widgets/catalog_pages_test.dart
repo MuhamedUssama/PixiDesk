@@ -84,7 +84,7 @@ void main() {
               final cardFinder = find.byType(AppToolCard);
               expect(
                 cardFinder,
-                findsNWidgets(page is MainLandingPage ? 2 : 3),
+                findsNWidgets(page is MainLandingPage ? 2 : 4),
               );
               for (
                 var cardIndex = 0;
@@ -115,6 +115,7 @@ void main() {
                 AppRouter.pdfConverterRoute,
                 AppRouter.pdfCompressionRoute,
                 AppRouter.pdfToImageRoute,
+                AppRouter.pdfMergeRoute,
               ];
         await tester.pumpWidget(
           _testApplication(

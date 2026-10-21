@@ -2,9 +2,9 @@ import 'dart:async';
 import 'dart:io';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:path/path.dart' as path;
-import 'package:pixi_desk/features/pdf/pdf_to_image/data/pdfium/pdfium_runtime.dart';
-import 'package:pixi_desk/features/pdf/pdf_to_image/data/pdfium/pdfium_worker_client.dart';
-import 'package:pixi_desk/features/pdf/pdf_to_image/domain/entities/pdf_conversion_failure.dart';
+import 'package:pixi_desk/features/pdf/shared/data/pdfium/pdfium_runtime.dart';
+import 'package:pixi_desk/features/pdf/shared/data/pdfium/pdfium_worker_client.dart';
+import 'package:pixi_desk/features/pdf/shared/domain/entities/pdf_processing_failure.dart';
 
 void main() {
   late Directory fixtures;
@@ -44,10 +44,10 @@ void main() {
       await expectLater(
         worker.request({'type': 'inspect'}),
         throwsA(
-          isA<PdfConversionFailure>().having(
+          isA<PdfProcessingFailure>().having(
             (failure) => failure.code,
             'code',
-            PdfConversionFailureCode.workerFailed,
+            PdfProcessingFailureCode.workerFailed,
           ),
         ),
       );
@@ -63,10 +63,10 @@ void main() {
       await expectLater(
         worker.request({'type': 'inspect'}),
         throwsA(
-          isA<PdfConversionFailure>().having(
+          isA<PdfProcessingFailure>().having(
             (failure) => failure.code,
             'code',
-            PdfConversionFailureCode.workerFailed,
+            PdfProcessingFailureCode.workerFailed,
           ),
         ),
       );
@@ -84,10 +84,10 @@ void main() {
         'type': 'inspect',
       }, timeout: const Duration(milliseconds: 100)),
       throwsA(
-        isA<PdfConversionFailure>().having(
+        isA<PdfProcessingFailure>().having(
           (failure) => failure.code,
           'code',
-          PdfConversionFailureCode.timedOut,
+          PdfProcessingFailureCode.timedOut,
         ),
       ),
     );
@@ -103,7 +103,7 @@ void main() {
         runtime,
         onSpawn: (worker) => unawaited(worker.stop()),
       ),
-      throwsA(isA<PdfConversionFailure>()),
+      throwsA(isA<PdfProcessingFailure>()),
     );
     expect(watch.elapsed, lessThan(const Duration(seconds: 5)));
   });

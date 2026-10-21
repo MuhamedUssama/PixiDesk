@@ -14,7 +14,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$PdfToImageState {
 
- PdfToImageStatus get status; List<File> get selectedFiles; String get outputFormat; int get dpi; ConversionProgress? get progress; List<File>? get generatedImages; PdfConversionFailureCode? get failure; PdfExportSuccess? get success; int get messageId; Map<String, String> get previewPaths; Map<String, String> get thumbnailPaths; Set<String> get selectedImagePaths; Map<String, int> get imageRotations; Map<String, List<File>> get groupedImages;
+ PdfToImageStatus get status; List<File> get selectedFiles; String get outputFormat; int get dpi; ConversionProgress? get progress; List<File>? get generatedImages; PdfProcessingFailureCode? get failure; PdfExportSuccess? get success; int get messageId; Map<String, String> get previewPaths; Map<String, String> get thumbnailPaths; Set<String> get selectedImagePaths; Map<String, int> get imageRotations; Map<String, List<File>> get groupedImages;
 /// Create a copy of PdfToImageState
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -45,7 +45,7 @@ abstract mixin class $PdfToImageStateCopyWith<$Res>  {
   factory $PdfToImageStateCopyWith(PdfToImageState value, $Res Function(PdfToImageState) _then) = _$PdfToImageStateCopyWithImpl;
 @useResult
 $Res call({
- PdfToImageStatus status, List<File> selectedFiles, String outputFormat, int dpi, ConversionProgress? progress, List<File>? generatedImages, PdfConversionFailureCode? failure, PdfExportSuccess? success, int messageId, Map<String, String> previewPaths, Map<String, String> thumbnailPaths, Set<String> selectedImagePaths, Map<String, int> imageRotations, Map<String, List<File>> groupedImages
+ PdfToImageStatus status, List<File> selectedFiles, String outputFormat, int dpi, ConversionProgress? progress, List<File>? generatedImages, PdfProcessingFailureCode? failure, PdfExportSuccess? success, int messageId, Map<String, String> previewPaths, Map<String, String> thumbnailPaths, Set<String> selectedImagePaths, Map<String, int> imageRotations, Map<String, List<File>> groupedImages
 });
 
 
@@ -71,7 +71,7 @@ as String,dpi: null == dpi ? _self.dpi : dpi // ignore: cast_nullable_to_non_nul
 as int,progress: freezed == progress ? _self.progress : progress // ignore: cast_nullable_to_non_nullable
 as ConversionProgress?,generatedImages: freezed == generatedImages ? _self.generatedImages : generatedImages // ignore: cast_nullable_to_non_nullable
 as List<File>?,failure: freezed == failure ? _self.failure : failure // ignore: cast_nullable_to_non_nullable
-as PdfConversionFailureCode?,success: freezed == success ? _self.success : success // ignore: cast_nullable_to_non_nullable
+as PdfProcessingFailureCode?,success: freezed == success ? _self.success : success // ignore: cast_nullable_to_non_nullable
 as PdfExportSuccess?,messageId: null == messageId ? _self.messageId : messageId // ignore: cast_nullable_to_non_nullable
 as int,previewPaths: null == previewPaths ? _self.previewPaths : previewPaths // ignore: cast_nullable_to_non_nullable
 as Map<String, String>,thumbnailPaths: null == thumbnailPaths ? _self.thumbnailPaths : thumbnailPaths // ignore: cast_nullable_to_non_nullable
@@ -163,7 +163,7 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( PdfToImageStatus status,  List<File> selectedFiles,  String outputFormat,  int dpi,  ConversionProgress? progress,  List<File>? generatedImages,  PdfConversionFailureCode? failure,  PdfExportSuccess? success,  int messageId,  Map<String, String> previewPaths,  Map<String, String> thumbnailPaths,  Set<String> selectedImagePaths,  Map<String, int> imageRotations,  Map<String, List<File>> groupedImages)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( PdfToImageStatus status,  List<File> selectedFiles,  String outputFormat,  int dpi,  ConversionProgress? progress,  List<File>? generatedImages,  PdfProcessingFailureCode? failure,  PdfExportSuccess? success,  int messageId,  Map<String, String> previewPaths,  Map<String, String> thumbnailPaths,  Set<String> selectedImagePaths,  Map<String, int> imageRotations,  Map<String, List<File>> groupedImages)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _PdfToImageState() when $default != null:
 return $default(_that.status,_that.selectedFiles,_that.outputFormat,_that.dpi,_that.progress,_that.generatedImages,_that.failure,_that.success,_that.messageId,_that.previewPaths,_that.thumbnailPaths,_that.selectedImagePaths,_that.imageRotations,_that.groupedImages);case _:
@@ -184,7 +184,7 @@ return $default(_that.status,_that.selectedFiles,_that.outputFormat,_that.dpi,_t
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( PdfToImageStatus status,  List<File> selectedFiles,  String outputFormat,  int dpi,  ConversionProgress? progress,  List<File>? generatedImages,  PdfConversionFailureCode? failure,  PdfExportSuccess? success,  int messageId,  Map<String, String> previewPaths,  Map<String, String> thumbnailPaths,  Set<String> selectedImagePaths,  Map<String, int> imageRotations,  Map<String, List<File>> groupedImages)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( PdfToImageStatus status,  List<File> selectedFiles,  String outputFormat,  int dpi,  ConversionProgress? progress,  List<File>? generatedImages,  PdfProcessingFailureCode? failure,  PdfExportSuccess? success,  int messageId,  Map<String, String> previewPaths,  Map<String, String> thumbnailPaths,  Set<String> selectedImagePaths,  Map<String, int> imageRotations,  Map<String, List<File>> groupedImages)  $default,) {final _that = this;
 switch (_that) {
 case _PdfToImageState():
 return $default(_that.status,_that.selectedFiles,_that.outputFormat,_that.dpi,_that.progress,_that.generatedImages,_that.failure,_that.success,_that.messageId,_that.previewPaths,_that.thumbnailPaths,_that.selectedImagePaths,_that.imageRotations,_that.groupedImages);case _:
@@ -204,7 +204,7 @@ return $default(_that.status,_that.selectedFiles,_that.outputFormat,_that.dpi,_t
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( PdfToImageStatus status,  List<File> selectedFiles,  String outputFormat,  int dpi,  ConversionProgress? progress,  List<File>? generatedImages,  PdfConversionFailureCode? failure,  PdfExportSuccess? success,  int messageId,  Map<String, String> previewPaths,  Map<String, String> thumbnailPaths,  Set<String> selectedImagePaths,  Map<String, int> imageRotations,  Map<String, List<File>> groupedImages)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( PdfToImageStatus status,  List<File> selectedFiles,  String outputFormat,  int dpi,  ConversionProgress? progress,  List<File>? generatedImages,  PdfProcessingFailureCode? failure,  PdfExportSuccess? success,  int messageId,  Map<String, String> previewPaths,  Map<String, String> thumbnailPaths,  Set<String> selectedImagePaths,  Map<String, int> imageRotations,  Map<String, List<File>> groupedImages)?  $default,) {final _that = this;
 switch (_that) {
 case _PdfToImageState() when $default != null:
 return $default(_that.status,_that.selectedFiles,_that.outputFormat,_that.dpi,_that.progress,_that.generatedImages,_that.failure,_that.success,_that.messageId,_that.previewPaths,_that.thumbnailPaths,_that.selectedImagePaths,_that.imageRotations,_that.groupedImages);case _:
@@ -242,7 +242,7 @@ class _PdfToImageState extends PdfToImageState {
   return EqualUnmodifiableListView(value);
 }
 
-@override final  PdfConversionFailureCode? failure;
+@override final  PdfProcessingFailureCode? failure;
 @override final  PdfExportSuccess? success;
 @override@JsonKey() final  int messageId;
  final  Map<String, String> _previewPaths;
@@ -311,7 +311,7 @@ abstract mixin class _$PdfToImageStateCopyWith<$Res> implements $PdfToImageState
   factory _$PdfToImageStateCopyWith(_PdfToImageState value, $Res Function(_PdfToImageState) _then) = __$PdfToImageStateCopyWithImpl;
 @override @useResult
 $Res call({
- PdfToImageStatus status, List<File> selectedFiles, String outputFormat, int dpi, ConversionProgress? progress, List<File>? generatedImages, PdfConversionFailureCode? failure, PdfExportSuccess? success, int messageId, Map<String, String> previewPaths, Map<String, String> thumbnailPaths, Set<String> selectedImagePaths, Map<String, int> imageRotations, Map<String, List<File>> groupedImages
+ PdfToImageStatus status, List<File> selectedFiles, String outputFormat, int dpi, ConversionProgress? progress, List<File>? generatedImages, PdfProcessingFailureCode? failure, PdfExportSuccess? success, int messageId, Map<String, String> previewPaths, Map<String, String> thumbnailPaths, Set<String> selectedImagePaths, Map<String, int> imageRotations, Map<String, List<File>> groupedImages
 });
 
 
@@ -337,7 +337,7 @@ as String,dpi: null == dpi ? _self.dpi : dpi // ignore: cast_nullable_to_non_nul
 as int,progress: freezed == progress ? _self.progress : progress // ignore: cast_nullable_to_non_nullable
 as ConversionProgress?,generatedImages: freezed == generatedImages ? _self._generatedImages : generatedImages // ignore: cast_nullable_to_non_nullable
 as List<File>?,failure: freezed == failure ? _self.failure : failure // ignore: cast_nullable_to_non_nullable
-as PdfConversionFailureCode?,success: freezed == success ? _self.success : success // ignore: cast_nullable_to_non_nullable
+as PdfProcessingFailureCode?,success: freezed == success ? _self.success : success // ignore: cast_nullable_to_non_nullable
 as PdfExportSuccess?,messageId: null == messageId ? _self.messageId : messageId // ignore: cast_nullable_to_non_nullable
 as int,previewPaths: null == previewPaths ? _self._previewPaths : previewPaths // ignore: cast_nullable_to_non_nullable
 as Map<String, String>,thumbnailPaths: null == thumbnailPaths ? _self._thumbnailPaths : thumbnailPaths // ignore: cast_nullable_to_non_nullable

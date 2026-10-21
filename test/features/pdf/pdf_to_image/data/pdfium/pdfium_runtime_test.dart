@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:crypto/crypto.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:path/path.dart' as path;
-import 'package:pixi_desk/features/pdf/pdf_to_image/data/pdfium/pdfium_runtime.dart';
+import 'package:pixi_desk/features/pdf/shared/data/pdfium/pdfium_runtime.dart';
 
 void main() {
   late Directory fixtures;

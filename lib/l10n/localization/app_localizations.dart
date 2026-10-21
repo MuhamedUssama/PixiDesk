@@ -2047,6 +2047,270 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Page {current} of {total}'**
   String pdfPageIndicator(int current, int total);
+
+  /// No description provided for @pdfMergeTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Merge PDFs'**
+  String get pdfMergeTitle;
+
+  /// No description provided for @pdfMergeDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Bring documents together. Arrange files and pages, then save one PDF without changing image quality.'**
+  String get pdfMergeDescription;
+
+  /// No description provided for @pdfMergeAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Merge PDFs'**
+  String get pdfMergeAction;
+
+  /// No description provided for @pdfMergeAddDocuments.
+  ///
+  /// In en, this message translates to:
+  /// **'Add PDFs'**
+  String get pdfMergeAddDocuments;
+
+  /// No description provided for @pdfMergeDropHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Drop your PDFs here, or add documents to get started.'**
+  String get pdfMergeDropHint;
+
+  /// No description provided for @pdfMergeOrderHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Drag to reorder documents. Their selected pages are merged in the order shown.'**
+  String get pdfMergeOrderHint;
+
+  /// No description provided for @pdfMergeSummary.
+  ///
+  /// In en, this message translates to:
+  /// **'Merge settings'**
+  String get pdfMergeSummary;
+
+  /// No description provided for @pdfMergeStructureNotice.
+  ///
+  /// In en, this message translates to:
+  /// **'Selected page content is preserved. Existing bookmarks, attachments, accessibility tags, signatures and document-level metadata are not combined. The saved PDF is not password-protected.'**
+  String get pdfMergeStructureNotice;
+
+  /// No description provided for @pdfMergeAcknowledge.
+  ///
+  /// In en, this message translates to:
+  /// **'I understand these document changes.'**
+  String get pdfMergeAcknowledge;
+
+  /// No description provided for @pdfMergePageRange.
+  ///
+  /// In en, this message translates to:
+  /// **'Pages to include'**
+  String get pdfMergePageRange;
+
+  /// No description provided for @pdfMergeRangeHint.
+  ///
+  /// In en, this message translates to:
+  /// **'For example: 1-5,8,12 or 5-1'**
+  String get pdfMergeRangeHint;
+
+  /// No description provided for @pdfMergeInvalidRange.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter valid page numbers or ranges within this document.'**
+  String get pdfMergeInvalidRange;
+
+  /// No description provided for @pdfMergeArrangePages.
+  ///
+  /// In en, this message translates to:
+  /// **'Arrange pages'**
+  String get pdfMergeArrangePages;
+
+  /// No description provided for @pdfMergeMoveEarlier.
+  ///
+  /// In en, this message translates to:
+  /// **'Move document earlier'**
+  String get pdfMergeMoveEarlier;
+
+  /// No description provided for @pdfMergeMoveLater.
+  ///
+  /// In en, this message translates to:
+  /// **'Move document later'**
+  String get pdfMergeMoveLater;
+
+  /// No description provided for @pdfMergeSelectAll.
+  ///
+  /// In en, this message translates to:
+  /// **'Select all pages'**
+  String get pdfMergeSelectAll;
+
+  /// No description provided for @pdfMergeIncluded.
+  ///
+  /// In en, this message translates to:
+  /// **'Included'**
+  String get pdfMergeIncluded;
+
+  /// No description provided for @pdfMergeIncludePage.
+  ///
+  /// In en, this message translates to:
+  /// **'Include page'**
+  String get pdfMergeIncludePage;
+
+  /// No description provided for @pdfMergeClosePreview.
+  ///
+  /// In en, this message translates to:
+  /// **'Close preview'**
+  String get pdfMergeClosePreview;
+
+  /// No description provided for @pdfMergeSaveTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Save merged PDF'**
+  String get pdfMergeSaveTitle;
+
+  /// No description provided for @pdfMergeSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'Your merged PDF is ready'**
+  String get pdfMergeSuccess;
+
+  /// No description provided for @pdfMergeOpenResult.
+  ///
+  /// In en, this message translates to:
+  /// **'Open PDF'**
+  String get pdfMergeOpenResult;
+
+  /// No description provided for @pdfMergeRevealResult.
+  ///
+  /// In en, this message translates to:
+  /// **'Show in folder'**
+  String get pdfMergeRevealResult;
+
+  /// No description provided for @pdfMergeInspecting.
+  ///
+  /// In en, this message translates to:
+  /// **'Reading documents…'**
+  String get pdfMergeInspecting;
+
+  /// No description provided for @pdfMergeWriting.
+  ///
+  /// In en, this message translates to:
+  /// **'Writing merged PDF…'**
+  String get pdfMergeWriting;
+
+  /// No description provided for @pdfMergeValidating.
+  ///
+  /// In en, this message translates to:
+  /// **'Checking the result…'**
+  String get pdfMergeValidating;
+
+  /// No description provided for @pdfMergeSaving.
+  ///
+  /// In en, this message translates to:
+  /// **'Saving your PDF…'**
+  String get pdfMergeSaving;
+
+  /// No description provided for @pdfMergePasswordTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Unlock this document'**
+  String get pdfMergePasswordTitle;
+
+  /// No description provided for @pdfMergePasswordLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'PDF password'**
+  String get pdfMergePasswordLabel;
+
+  /// No description provided for @pdfMergePasswordRejected.
+  ///
+  /// In en, this message translates to:
+  /// **'The password is missing or incorrect.'**
+  String get pdfMergePasswordRejected;
+
+  /// No description provided for @pdfMergeUnlock.
+  ///
+  /// In en, this message translates to:
+  /// **'Unlock'**
+  String get pdfMergeUnlock;
+
+  /// No description provided for @pdfMergeUnsupportedDocument.
+  ///
+  /// In en, this message translates to:
+  /// **'This PDF contains interactive forms or signed form fields. Save a flattened, unsigned copy before merging.'**
+  String get pdfMergeUnsupportedDocument;
+
+  /// No description provided for @pdfMergeResourceLimit.
+  ///
+  /// In en, this message translates to:
+  /// **'Use up to 100 documents, 20,000 selected pages and 4 GB total input. Each document must be no larger than 512 MB.'**
+  String get pdfMergeResourceLimit;
+
+  /// No description provided for @pdfMergeSourceProtected.
+  ///
+  /// In en, this message translates to:
+  /// **'The source is protected, or the destination would replace an input document. Choose an allowed source and a new output file.'**
+  String get pdfMergeSourceProtected;
+
+  /// No description provided for @pdfMergeTimedOut.
+  ///
+  /// In en, this message translates to:
+  /// **'The operation took too long and was stopped. Try fewer or smaller documents.'**
+  String get pdfMergeTimedOut;
+
+  /// No description provided for @pdfMergeFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Unable to merge these documents. Your original files were not replaced.'**
+  String get pdfMergeFailed;
+
+  /// No description provided for @pdfMergeEngineUnavailable.
+  ///
+  /// In en, this message translates to:
+  /// **'PDF merging is unavailable in this installation. Reinstall PixiDesk or contact support.'**
+  String get pdfMergeEngineUnavailable;
+
+  /// No description provided for @pdfMergePreviewUnavailable.
+  ///
+  /// In en, this message translates to:
+  /// **'Preview is unavailable for this page. You can still merge the document if it passed inspection.'**
+  String get pdfMergePreviewUnavailable;
+
+  /// No description provided for @pdfMergeLaunchFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Unable to open the saved PDF or its folder. The saved file is still available at the displayed path.'**
+  String get pdfMergeLaunchFailed;
+
+  /// No description provided for @pdfMergeFileDetails.
+  ///
+  /// In en, this message translates to:
+  /// **'{pages} pages · {megabytes} MB'**
+  String pdfMergeFileDetails(int pages, String megabytes);
+
+  /// No description provided for @pdfMergeSelectedPages.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} pages selected'**
+  String pdfMergeSelectedPages(int count);
+
+  /// No description provided for @pdfMergeDocumentSummary.
+  ///
+  /// In en, this message translates to:
+  /// **'{documents} documents · {pages} output pages'**
+  String pdfMergeDocumentSummary(int documents, int pages);
+
+  /// No description provided for @pdfMergePageNumber.
+  ///
+  /// In en, this message translates to:
+  /// **'Page {number}'**
+  String pdfMergePageNumber(int number);
+
+  /// No description provided for @pdfMergeRemovePage.
+  ///
+  /// In en, this message translates to:
+  /// **'Remove page'**
+  String get pdfMergeRemovePage;
 }
 
 class _AppLocalizationsDelegate

@@ -54,6 +54,18 @@ class PdfToolsPage extends StatelessWidget {
           onPressed: () =>
               Navigator.pushNamed(context, AppRouter.pdfToImageRoute),
         ),
+        PdfToolItem(
+          icon: Icons.merge_rounded,
+          title: localizations.pdfMergeTitle,
+          description: localizations.pdfMergeDescription,
+          actionLabel: localizations.pdfMergeAction,
+          capabilityLabels: [
+            localizations.catalogArrange,
+            localizations.catalogPreview,
+          ],
+          onPressed: () =>
+              Navigator.pushNamed(context, AppRouter.pdfMergeRoute),
+        ),
       ],
     );
   }

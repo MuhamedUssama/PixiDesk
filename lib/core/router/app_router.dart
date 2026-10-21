@@ -1,4 +1,6 @@
 import 'dart:io';
+import '../../features/pdf/pdf_merge/presentation/bloc/pdf_merge_bloc.dart';
+import '../../features/pdf/pdf_merge/presentation/pages/pdf_merge_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pixi_desk/core/di/injection.dart';
@@ -22,6 +24,7 @@ class AppRouter {
   static const String pdfCompressionRoute = '/pdf-compression';
   static const String pdfPreviewRoute = '/pdf-preview';
   static const String pdfToImageRoute = '/pdf-to-image';
+  static const String pdfMergeRoute = '/pdf-merge';
 
   static Route<dynamic> onGenerateRoute(RouteSettings settings) {
     switch (settings.name) {
@@ -72,6 +75,14 @@ class AppRouter {
           builder: (context) => BlocProvider.value(
             value: args.cubit,
             child: PdfPreviewPage(pdfFile: args.file),
+          ),
+        );
+      case pdfMergeRoute:
+        return MaterialPageRoute(
+          settings: settings,
+          builder: (context) => BlocProvider(
+            create: (context) => getIt<PdfMergeBloc>(),
+            child: const PdfMergePage(),
           ),
         );
       case pdfToImageRoute:

@@ -4,11 +4,11 @@ import 'dart:math' as math;
 import 'package:injectable/injectable.dart';
 import 'package:path/path.dart' as path;
 import '../../domain/entities/conversion_progress.dart';
-import '../../domain/entities/pdf_conversion_failure.dart';
+import '../../../shared/domain/entities/pdf_processing_failure.dart';
 import '../../domain/entities/pdf_to_image_event.dart';
 import '../../domain/entities/pdf_to_image_params.dart';
-import 'pdfium_runtime.dart';
-import 'pdfium_worker_client.dart';
+import '../../../shared/data/pdfium/pdfium_runtime.dart';
+import '../../../shared/data/pdfium/pdfium_worker_client.dart';
 
 @lazySingleton
 class PdfiumConversionService {
@@ -36,7 +36,7 @@ class PdfiumConversionService {
       onListen: () {
         if (_running || _jobs.containsKey(parameters.jobId)) {
           controller.addError(
-            const PdfConversionFailure(PdfConversionFailureCode.busy),
+            const PdfProcessingFailure(PdfProcessingFailureCode.busy),
           );
           unawaited(controller.close());
           return;
@@ -63,8 +63,8 @@ class PdfiumConversionService {
           !['jpg', 'png', 'tiff'].contains(parameters.outputFormat) ||
           parameters.dpi < 72 ||
           parameters.dpi > 1200) {
-        throw const PdfConversionFailure(
-          PdfConversionFailureCode.invalidSettings,
+        throw const PdfProcessingFailure(
+          PdfProcessingFailureCode.invalidSettings,
         );
       }
       final runtime = await _runtimeLocator.resolve();
@@ -87,14 +87,14 @@ class PdfiumConversionService {
         final before = await source.stat();
         totalInputBytes += before.size;
         if (before.type != FileSystemEntityType.file || before.size < 1) {
-          throw const PdfConversionFailure(
-            PdfConversionFailureCode.invalidDocument,
+          throw const PdfProcessingFailure(
+            PdfProcessingFailureCode.invalidDocument,
           );
         }
         if (before.size > 256 * 1024 * 1024 ||
             totalInputBytes > 2 * 1024 * 1024 * 1024) {
-          throw const PdfConversionFailure(
-            PdfConversionFailureCode.resourceLimit,
+          throw const PdfProcessingFailure(
+            PdfProcessingFailureCode.resourceLimit,
           );
         }
         final snapshot = await source.copy(
@@ -102,8 +102,8 @@ class PdfiumConversionService {
         );
         final after = await source.stat();
         if (before.modified != after.modified || before.size != after.size) {
-          throw const PdfConversionFailure(
-            PdfConversionFailureCode.sourceChanged,
+          throw const PdfProcessingFailure(
+            PdfProcessingFailureCode.sourceChanged,
           );
         }
         job.check();
@@ -116,8 +116,8 @@ class PdfiumConversionService {
         if (dimensions.isEmpty ||
             dimensions.length > 5000 ||
             pages.length + dimensions.length > 10000) {
-          throw const PdfConversionFailure(
-            PdfConversionFailureCode.resourceLimit,
+          throw const PdfProcessingFailure(
+            PdfProcessingFailureCode.resourceLimit,
           );
         }
         final sourceName = String.fromCharCodes(
@@ -139,8 +139,8 @@ class PdfiumConversionService {
                       72)
                   .ceil();
           if (width <= 0 || height <= 0 || width * height > 160000000) {
-            throw const PdfConversionFailure(
-              PdfConversionFailureCode.resourceLimit,
+            throw const PdfProcessingFailure(
+              PdfProcessingFailureCode.resourceLimit,
             );
           }
           final outputPath = path.join(
@@ -163,8 +163,8 @@ class PdfiumConversionService {
       final largestPage = pages.map((page) => page.pixelCount).reduce(math.max);
       final estimatedPerWorker = largestPage * 16 + 256 * 1024 * 1024;
       if (estimatedPerWorker > budget) {
-        throw const PdfConversionFailure(
-          PdfConversionFailureCode.resourceLimit,
+        throw const PdfProcessingFailure(
+          PdfProcessingFailureCode.resourceLimit,
         );
       }
       final workerCount = math.min(
@@ -210,8 +210,8 @@ class PdfiumConversionService {
                   !await _isNonemptyFile(task.outputPath) ||
                   !await _isNonemptyFile('${task.outputPath}.preview.png') ||
                   !await _isNonemptyFile('${task.outputPath}.thumb.png')) {
-                throw const PdfConversionFailure(
-                  PdfConversionFailureCode.workerFailed,
+                throw const PdfProcessingFailure(
+                  PdfProcessingFailureCode.workerFailed,
                 );
               }
               finishedPages++;
@@ -234,7 +234,7 @@ class PdfiumConversionService {
       job.check();
       if (workerError != null) throw workerError!;
       if (finishedPages != pages.length) {
-        throw const PdfConversionFailure(PdfConversionFailureCode.workerFailed);
+        throw const PdfProcessingFailure(PdfProcessingFailureCode.workerFailed);
       }
       final grouped = <String, List<String>>{};
       for (final page in pages) {
@@ -271,13 +271,13 @@ class PdfiumConversionService {
     } catch (error, stack) {
       if (!job.cancelled || job.timedOut) {
         final failure = job.timedOut
-            ? const PdfConversionFailure(PdfConversionFailureCode.timedOut)
-            : error is PdfConversionFailure
+            ? const PdfProcessingFailure(PdfProcessingFailureCode.timedOut)
+            : error is PdfProcessingFailure
             ? error
-            : PdfConversionFailure(
+            : PdfProcessingFailure(
                 error is FileSystemException
-                    ? PdfConversionFailureCode.permissionDenied
-                    : PdfConversionFailureCode.workerFailed,
+                    ? PdfProcessingFailureCode.permissionDenied
+                    : PdfProcessingFailureCode.workerFailed,
               );
         job.controller.addError(failure, stack);
       }
@@ -394,7 +394,7 @@ class _PdfConversionJob {
   _PdfConversionJob(this.parameters, this.controller);
   void check() {
     if (cancelled) {
-      throw const PdfConversionFailure(PdfConversionFailureCode.cancelled);
+      throw const PdfProcessingFailure(PdfProcessingFailureCode.cancelled);
     }
   }
 
